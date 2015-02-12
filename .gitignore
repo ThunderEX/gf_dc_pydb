@@ -1,0 +1,4 @@
+*.mdb
+*.pyc
+*.log
+tools
