@@ -92,20 +92,20 @@ field_types = {
         }
 
 #factory数据库
-factory_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=c:/local/Workspace/DCIII_V03.07.0a_int/cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
+factory_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
 #DisplayFactory数据库
-display_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=c:/local/Workspace/DCIII_V03.07.0a_int/cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
+display_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
 #language数据库
-language_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=c:/local/Workspace/DCIII_V03.07.0a_int/cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
+language_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
 
 output_file = open('tables.py', 'w')
 template = """# -*- coding: utf-8 -*-
 import os, sys
 from peewee import *
 
-factory_database = 'c:/local/Workspace/DCIII_V03.07.0a_int/cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
-display_database = 'c:/local/Workspace/DCIII_V03.07.0a_int/cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
-language_database = 'c:/local/Workspace/DCIII_V03.07.0a_int/cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
+factory_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
+display_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
+language_database = '../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
 
 class FBaseModel(Model):
     database = Database(factory_database)
@@ -174,57 +174,3 @@ for tb in Language_TableNames:
             output_file.write(str)
     output_file.write('\n')
 
-
-
-
-
-
-
-
-
-
-
-"""
-for row in cur.fetchall():
-    for field in row: 
-        print field,
-    print ''
-"""
-
-"""
-import pyodbc
- 
-#DBfile = 'c:/local/Workspace/DCIII_V03.07.0a_int/cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
-#conn = pyodbc.connect('DRIVER={Microsoft Access Driver (*.mdb)};DBQ='+DBfile)
-#cur = conn.cursor()
- 
-SQL = 'SELECT * from DisplayComponent'
-cur.execute(SQL)
-for row in cur.fetchall():
-    for field in row: 
-        print field,
-    print ''
-cur.close()
-conn.close()
-
-connection_string = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=test.mdb'
-conn = pyodbc.connect(connection_string)
-cur = conn.cursor()
-
-#sql = 'INSERT INTO blog (id, title) VALUES(?, ?)'
-#cur.execute(sql, (1, 'a'))
-#sql = 'INSERT INTO blog (id, title) VALUES(1, "a")'
-#sql = "insert into blog(id, title) values (25, 'awesome library')"
-sql = "select * from blog"
-#sql = "SELECT MSysObjects.*, MSysObjects.Type FROM MSysObjects WHERE (((MSysObjects.Type)=1)) OR (((MSysObjects.Type)=6))"
-cur.execute(sql)
-print cur.description
-#num_fields = len(cur.description)
-#field_names = [i[0] for i in cur.description]
-#print field_names
-for row in cur.fetchall():
-    for field in row: 
-        print field,
-    print ''
-#cur.commit()
-"""

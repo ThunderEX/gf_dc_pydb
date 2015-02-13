@@ -29,7 +29,7 @@ def add_DisplayComponent(component_name, component_type_name):
         log("错误！！！无法加入DisplayComponent")
         raise e
 
-def add_stringdefines(string_definename, type_name):
+def add_StringDefines(string_definename, type_name):
     #################### 操作表StringDefines ####################
     # 添加DefineName，都是以'SID_'开头
     sd_string = StringDefines()
@@ -54,7 +54,7 @@ def add_stringdefines(string_definename, type_name):
         log("错误！！！无法加入string definename: " + string_definename)
         raise e
 
-def add_strings(str, langs=['DEV_LANGUAGE', 'UK_LANGUAGE']):
+def add_Strings(str, langs=['DEV_LANGUAGE', 'UK_LANGUAGE']):
     #################### 操作表Strings ####################
     # 默认添加DEV_LANGUAGE和UK_LANGUAGE
     strings = Strings()
@@ -78,7 +78,7 @@ def add_strings(str, langs=['DEV_LANGUAGE', 'UK_LANGUAGE']):
             log("错误！！！无法加入string: " + str)
             raise e
 
-def add_displaylabel(lable_name, string_definename):
+def add_DisplayLabel(lable_name, string_definename):
     #################### 操作表DisplayLabel ####################
     displaylabel = DisplayLabel()
     #1. 从DisplayComponent中取出刚才加的label的id
@@ -97,7 +97,7 @@ def add_displaylabel(lable_name, string_definename):
         log("错误！！！无法加入display label")
         raise e
 
-def add_displaytext(component_name, align_method, left_margin=0, right_margin=0):
+def add_DisplayText(component_name, align_method, left_margin=0, right_margin=0, font='DEFAULT_FONT_13_LANGUAGE_DEP'):
     align = {
             "TOP_LEFT"        : 0,
             "TOP_RIGHT"       : 1,
@@ -116,7 +116,7 @@ def add_displaytext(component_name, align_method, left_margin=0, right_margin=0)
         displaytext.id = i.id
     displaytext.texttoshow = ' '
     displaytext.align = align[align_method]
-    r = DisplayFont.select().where(fontname='DEFAULT_FONT_13_LANGUAGE_DEP')
+    r = DisplayFont.select().where(fontname=font)
     for i in r:
         displaytext.fontid = i.id      #字体id
     displaytext.leftmargin = left_margin
@@ -131,7 +131,7 @@ def add_displaytext(component_name, align_method, left_margin=0, right_margin=0)
         raise e
 
 
-def add_DisplayNumberQuantity(nq_name, unit, digits):
+def add_DisplayNumberQuantity(nq_name, unit, digits, number_font = 'DEFAULT_FONT_13_LANGUAGE_DEP', quantity_font = 'DEFAULT_FONT_13_LANGUAGE_DEP'):
     #################### 操作表DisplayNumberQuantity ####################
     displaynumberquantity = DisplayNumberQuantity()
     #1. 从DisplayComponent中取出刚才加的nq的id
@@ -144,9 +144,11 @@ def add_DisplayNumberQuantity(nq_name, unit, digits):
         displaynumberquantity.quantitytype = i.id
     displaynumberquantity.numberofdigits = digits
     #3. 从DisplayFont中取出相应字体的id
-    r = DisplayFont.select().where(fontname='DEFAULT_FONT_13_LANGUAGE_DEP')
+    r = DisplayFont.select().where(fontname=number_font)
     for i in r:
         displaynumberquantity.numberfontid = i.id      #数量字体
+    r = DisplayFont.select().where(fontname=quantity_font)
+    for i in r:
         displaynumberquantity.quantityfontid = i.id    #单位字体
     displaynumberquantity.comment = ' '
     try:
@@ -269,9 +271,9 @@ if __name__ == '__main__':
     #加新的单位类型
     add_QuantityType(ppm_quantity_name)
     #加ppm的字符串定义
-    add_stringdefines(ppm_string_define, 'Quantity Unit')
+    add_StringDefines(ppm_string_define, 'Quantity Unit')
     #加ppm相应的字符串
-    add_strings(ppm_string)
+    add_Strings(ppm_string)
     #SubjectRelation里的MpcUnits要加上Q_PARTS_PER_MILLION
     add_SubjectRelation('MpcUnits', ppm_quantity_name)
 
@@ -295,17 +297,17 @@ if __name__ == '__main__':
     #2. 添加数值
     add_DisplayComponent(h2s_nq_name, 'NumberQuantity')
     #3. 加字符串定义
-    add_stringdefines(h2s_string_define, 'Value type')
+    add_StringDefines(h2s_string_define, 'Value type')
     #4. label加相应的字符串
-    add_strings(h2s_string)
+    add_Strings(h2s_string)
     #5. 将字符串和label对应起来
-    add_displaylabel(h2s_label_name, h2s_string_define)
+    add_DisplayLabel(h2s_label_name, h2s_string_define)
     #6. 定义label的text排列方式
-    add_displaytext(h2s_label_name, 'VCENTER_LEFT', 2, 0)
+    add_DisplayText(h2s_label_name, 'VCENTER_LEFT', 2, 0)
     #7. 定义数值的text排列方式
-    add_displaytext(h2s_nq_name, 'VCENTER_LEFT', 0, 0)
+    add_DisplayText(h2s_nq_name, 'VCENTER_LEFT', 0, 0)
     #8. 数值与新加单位'ppm'对应
-    add_DisplayNumberQuantity(h2s_nq_name, ppm_quantity_name, 3)
+    add_DisplayNumberQuantity(h2s_nq_name, ppm_quantity_name, 3, 'DEFAULT_FONT_13_LANGUAGE_INDEP', 'DEFAULT_FONT_13_LANGUAGE_INDEP')
     #9. 数值与subject对应
     #TODO 先用已有的subject数据total_energy_j_for_display
     add_DisplayObserverSingleSubject(h2s_nq_name, 'total_energy_j_for_display', 'Read')
