@@ -1,425 +1,308 @@
 # -*- coding: utf-8 -*-
-import os, sys
-from peewee import *
+from util.peewee import *
+from util.log import *
+from models import *
 
-factory_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
-display_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
-language_database = '../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
+class TableBase(object):
+    """table base"""
+    def __init__(self, model, *args, **kwargs):
+        """init with model"""
+        self.model = model
+        self.fill_fields(**kwargs)
+        self.foreignkey_items = self.get_foreignkey_items(**kwargs)
 
-class FBaseModel(Model):
-    database = Database(factory_database)
+    def fill_fields(self, **kwargs):
+        """填充各个field属性值，没有的则为None"""
+        for k, v in kwargs.items():
+            if hasattr(self.model, k):
+                setattr(self.model, k, v)
 
-class DBaseModel(Model):
-    database = Database(display_database)
+    def fill_default_fileds(self, defaults, **kwargs):
+        """填充如comment的field属性值"""
+        for k, v in defaults.items():
+            if k not in kwargs.keys() and hasattr(self.model, k):
+                setattr(self.model, k, v)
 
-class LBaseModel(Model):
-    database = Database(language_database)
+    def delete_attr(self, attr_list):
+        """ 如果MSSQL返回错误
+        1. You cannot add or change a record because a related record is required in table 'Subject'
+        2. xxx cannot be a zero-length string
+        这是因为peewee里这些field如果不赋值，会有默认的值，例如0或''，sql语句里会有，此时要删除这些field
+        要从_meta.fields里删除field
+        """
+        #TODO Bug:如果连续使用一张table，第二次就没有comment这个field了
+        for attr in attr_list:
+            if hasattr(self.model, attr) and getattr(self.model, attr) == None:
+                #print self.model._meta.fields[attr]
+                if self.model._meta.fields.has_key(attr):
+                    self.model._meta.fields.pop(attr)
 
-#Factor Database Models
-class AlarmConfig(FBaseModel):
-    alarmconfigid = IntegerField()
-    sms1enabled = BooleanField()
-    sms2enabled = BooleanField()
-    sms3enabled = BooleanField()
-    scadaenabled = BooleanField()
-    customrelayforalarmenabled = BooleanField()
-    customrelayforwarningenabled = BooleanField()
-    alarmenabled = BooleanField()
-    warningenabled = BooleanField()
-    autoack = BooleanField()
-    alarmtype = CharField()
-    alarmcriteria = CharField()
-    alarmlimit = CharField()
-    warninglimit = CharField()
-    minlimit = CharField()
-    maxlimit = CharField()
-    quantitytypeid = IntegerField()
-    verified = BooleanField()
-    comment = CharField()
+    def get_foreignkey_items(self, **kwargs):
+        """查找外键，存入字典里"""
+        field_types = self.model.get_field_type()
+        foreignkey_items = {}
+        for k, v in kwargs.items():
+            if hasattr(self.model, k):
+                #如果类型不同，则提取外键（一般是用描述性字符串代替外键的id）
+                if type(v) != field_types[k]:
+                    foreignkey_items[k] = v
+        return foreignkey_items
 
-class AlarmDataPoint(FBaseModel):
-    id = IntegerField()
-    alarmconfigid = IntegerField()
-    alarmconfig2id = IntegerField()
-    erroneousunittypeid = IntegerField()
-    erroneousunitnumber = IntegerField()
-    alarmid = IntegerField()
-    comment = CharField()
+    def get_max_id(self):
+        id_list = []
+        r = self.model.select()
+        for i in r:
+            id_list.append(i.id)
+        log("max id in %s table is %d" %(self.model.__class__.__name__, max(id_list)))
+        self.model.id = max(id_list) + 1
+    
+    def convert_foreignkey(self, attr_name, foreign_model, foreign_search_attr_name, foreign_attr_name='id'):
+        """ 转换外键
+            attr_name: 要转换的外键field名
+            foreign_model: 关联表
+            foreign_search_attr_name: 关联表搜索的field
+            foreign_attr_name: 得到的关联表field
+        """
+        if not hasattr(self.model, attr_name):
+            log(("没有Field: %s" %(attr_name)).decode("utf-8"))
+            raise NameError
+        if attr_name in self.foreignkey_items.keys():
+            r = foreign_model.get(**{foreign_search_attr_name : getattr(self.model, attr_name)})
+            log(("转换外键%s" %(attr_name)).decode("utf-8"))
+            setattr(self.model, attr_name, getattr(r, foreign_attr_name))
 
-class BoolDataPoint(FBaseModel):
-    id = IntegerField()
-    value = IntegerField()
-    comment = CharField()
+    #@classmethod
+    def add(self):
+        if self.model.check_exist():
+            log(("记录已存在，跳过......").decode("utf-8"))
+            return
+        self.model.save()
 
-class EnumDataPoint(FBaseModel):
-    id = IntegerField()
-    enumtypename = CharField()
-    value = CharField()
-    comment = CharField()
+#Factory Database Models       
+class Observer_Table(TableBase):
+    """操作表Observer"""
+    def __init__(self, *args, **kwargs):
+        self.model = Observer()
+        super(Observer_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('taskid', Task, 'name', 'id')
+        attr_list = ['comment', 'subjectid', 'constructorargs']
+        self.delete_attr(attr_list)
 
-class EnumTypes(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
+class ObserverSubjects_Table(TableBase):
+    """操作表ObserverSubjects"""
+    def __init__(self, *args, **kwargs):
+        self.model = ObserverSubjects()
+        super(ObserverSubjects_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('subjectid', Subject, 'name', 'id')
+        self.convert_foreignkey('observerid', Observer, 'name', 'id')
+        self.convert_foreignkey('subjectrelationid', SubjectRelation, 'name', 'id')
+        self.convert_foreignkey('subjectaccess', SubjectAccessType, 'name', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class ErroneousUnitType(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
+class Subject_Table(TableBase):
+    """操作表Subject
+    save : '-', 'All', 'Value'
+    """
+    def __init__(self, *args, **kwargs):
+        self.model = Subject()
+        super(Subject_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('typeid', SubjectTypes, 'name', 'id')
+        self.convert_foreignkey('Save', SaveTypes, 'name', 'id')
+        self.convert_foreignkey('flashblock', FlashBlockTypes, 'name', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class FloatDataPoint(FBaseModel):
-    id = IntegerField()
-    quantitytype = IntegerField()
-    comment = CharField()
+class SubjectRelation_Table(TableBase):
+    """操作表SubjectRelation"""
+    def __init__(self, *args, **kwargs):
+        """ 
+        SubjectRelation.name - 用于组成SubjectPointer，前面加SP_和ObserverType里的ShortName，如SP_UNITS_XXX
+        """
+        self.model = SubjectRelation()
+        super(SubjectRelation_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('observertypeid', ObserverType, 'name', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class GeniAppIf(FBaseModel):
-    genivarname = CharField()
-    geniclass = IntegerField()
-    geniid = IntegerField()
-    subjectid = IntegerField()
-    geniconvertid = IntegerField()
-    autogenerate = BooleanField()
-    comment = CharField()
+#Display Database Models       
+class DisplayComponent_Table(TableBase):
+    """操作表DisplayComponent"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayComponent()
+        super(DisplayComponent_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('componenttype', DisplayComponentTypes, 'name', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class GeniConvert(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
-    geninasupport = BooleanField()
-    geniinfo = CharField()
+class DisplayLabel_Table(TableBase):
+    """操作表DisplayLabel"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayLabel()
+        super(DisplayLabel_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent, 'name', 'id')
+        self.convert_foreignkey('stringid', StringDefines, 'definename', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class IntDataPoint(FBaseModel):
-    id = IntegerField()
-    type = CharField()
-    min = CharField()
-    max = CharField()
-    value = CharField()
-    quantitytype = IntegerField()
-    comment = CharField()
-    verified = BooleanField()
+class DisplayListViewItem_Table(TableBase):
+    """操作表DisplayListViewItem"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayListViewItem()
+        super(DisplayListViewItem_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('listviewid', DisplayComponent, 'name', 'id')
+        self.get_max_id()
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class IntDataPointTypes(FBaseModel):
-    type = CharField()
-    comment = CharField()
+    def get_max_id(self):
+        #找出同一个listview下的item有多少个，选出最大的index
+        r = DisplayListViewItem.select().where(listviewid=self.model.listviewid)
+        idx_list = []
+        for i in r:
+            idx_list.append(i.index)
+        max_idx = max(idx_list)
+        log("max index in DisplayListViewItem table and id=%d is %d" %(self.model.listviewid, max_idx))
+        self.model.index = max_idx + 1
 
-class Observer(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    typeid = IntegerField()
-    constructorargs = CharField()
-    taskid = IntegerField()
-    taskorder = IntegerField()
-    subjectid = IntegerField()
-    comment = CharField()
+    def get_listviewid_index(self):
+        return self.model.listviewid, self.model.index
 
-class ObserverSubjects(FBaseModel):
-    id = IntegerField()
-    subjectid = IntegerField()
-    observerid = IntegerField()
-    subjectrelationid = IntegerField()
-    subjectaccess = IntegerField()
-    comment = CharField()
+class DisplayListViewItemComponents_Table(TableBase):
+    """操作表DisplayListViewItemComponents"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayListViewItemComponents()
+        super(DisplayListViewItemComponents_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('componentid', DisplayComponent, 'name', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class ObserverType(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    shortname = CharField()
-    namespace = CharField()
-    issingleton = BooleanField()
-    issubject = BooleanField()
-    comment = CharField()
+class DisplayNumberQuantity_Table(TableBase):
+    """操作表DisplayNumberQuantity"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayNumberQuantity()
+        super(DisplayNumberQuantity_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent, 'name', 'id')
+        self.convert_foreignkey('quantitytype', QuantityType, 'name', 'id')
+        self.convert_foreignkey('numberfontid', DisplayFont, 'fontname', 'id')
+        self.convert_foreignkey('quantityfontid', DisplayFont, 'fontname', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class QuantityType(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
+class DisplayObserverSingleSubject_Table(TableBase):
+    """操作表DisplayObserverSingleSubject"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayObserverSingleSubject()
+        super(DisplayObserverSingleSubject_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent, 'name', 'id')
+        self.convert_foreignkey('subjectid', Subject, 'name', 'id')
+        self.convert_foreignkey('subjectaccess', SubjectAccessType, 'name', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class ResetType(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
+class QuantityType_Table(TableBase):
+    """操作表QuantityType"""
+    def __init__(self, *args, **kwargs):
+        self.model = QuantityType()
+        super(QuantityType_Table, self).__init__(self.model, *args, **kwargs)
+        self.get_max_id()
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class StringDataPoint(FBaseModel):
-    id = IntegerField()
-    value = CharField()
-    maxlen = IntegerField()
-    comment = CharField()
+    def get_max_id(self):
+        r = self.model.select()
+        id_list = []
+        for i in r:
+            id_list.append(i.id)
+        id_list.sort()
+        #最后一个是Q_LAST_UNIT，100，要从倒数第二个+1
+        self.model.id = id_list[-2] + 1
+        log("new quantitytype id is: %d" %(self.model.id))
 
-class Subject(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    typeid = IntegerField()
-    geniappif = BooleanField()
-    save = IntegerField()
-    flashblock = IntegerField()
-    verified = BooleanField()
-    comment = CharField()
+    def add(self):
+        stored_id = self.model.id
+        self.model.id = None
+        if self.model.check_exist():
+            log(("记录已存在，跳过......").decode("utf-8"))
+            return
+        self.model.id = stored_id 
+        self.model.save()
 
-class SubjectRelation(FBaseModel):
-    id = IntegerField()
-    observertypeid = IntegerField()
-    name = CharField()
-    comment = CharField()
+class DisplayText_Table(TableBase):
+    """操作表DisplayText"""
+    def __init__(self, *args, **kwargs):
+        aligns = {
+                "TOP_LEFT"        : 0,
+                "TOP_RIGHT"       : 1,
+                "TOP_HCENTER"     : 2,
+                "BOTTOM_LEFT"     : 4,
+                "BOTTOM_RIGHT"    : 5,
+                "BOTTOM_HCENTER"  : 6,
+                "VCENTER_LEFT"    : 12,
+                "VCENTER_RIGHT"   : 13,
+                "VCENTER_HCENTER" : 14,
+                }
+        self.model = DisplayText()
+        super(DisplayText_Table, self).__init__(self.model, *args, **kwargs)
+        self.model.align = aligns[kwargs['align']]
+        self.convert_foreignkey('id', DisplayComponent, 'name', 'id')
+        self.convert_foreignkey('fontid', DisplayFont, 'fontname', 'id')
+        attr_list = ['comment']
+        self.delete_attr(attr_list)
 
-class SubjectTypes(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
+    def add(self):
+        """id在这张表里是唯一的，用id检查记录是否存在"""
+        #r = self.model.get(id=self.model.id)
+        r = self.model.select().where(id=self.model.id)
+        if r:
+            log(("记录已存在，跳过......").decode("utf-8"))
+            return
+        self.model.save()
+            
+#Language Database 
+class StringDefines_Table(TableBase):
+    """操作表StringDefines"""
+    def __init__(self, *args, **kwargs):
+        self.model = StringDefines()
+        super(StringDefines_Table, self).__init__(self.model, *args, **kwargs)
+        self.get_max_id()
+        self.convert_foreignkey('typeid', StringTypes, 'type', 'id')
+        attr_list = ['location', 'ukdescription', 'displaynumbers']
+        self.delete_attr(attr_list)
 
-class SubjectAccessType(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
+    def add(self):
+        stored_id = self.model.id
+        self.model.id = None
+        if self.model.check_exist():
+            log(("记录已存在，跳过......").decode("utf-8"))
+            return
+        self.model.id =stored_id 
+        self.model.save()
 
-class Task(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    type = IntegerField()
-    comment = CharField()
+class Strings_Table(TableBase):
+    def __init__(self, *args, **kwargs):
+        self.model = Strings()
+        super(Strings_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('languageid', Languages, 'language', 'id')
+        self.get_strings_max_id(kwargs['string'])
 
-class TaskType(FBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
+    def get_strings_max_id(self, str):
+        r = Strings.select().where(string=str)
+        if r:
+            for i in r:
+                if i.id:
+                    self.model.id = i.id
+                    log("string %s exist, id is %d" %(str, i.id))
+                    return
+        self.get_max_id()
 
-class VectorDataPoint(FBaseModel):
-    id = IntegerField()
-    type = CharField()
-    initialsize = IntegerField()
-    maxsize = IntegerField()
-    defaultvalue = CharField()
-    comment = CharField()
+class StringTypes_Table(TableBase):
+    def __init__(self, *args, **kwargs):
+        self.model = StringTypes()
+        super(StringTypes_Table, self).__init__(self.model, *args, **kwargs)
 
-class VectorDataPointTypes(FBaseModel):
-    type = CharField()
-    comment = CharField()
-
-#Display Database Models
-class Colours(DBaseModel):
-    colour = CharField()
-
-class Display(DBaseModel):
-    id = IntegerField()
-    rootgroupid = IntegerField()
-    displaynumber = CharField()
-    name = IntegerField()
-    focuscomponentid = IntegerField()
-    abletoshow = BooleanField()
-    show = BooleanField()
-    firstwizarddisplay = BooleanField()
-    comment = CharField()
-
-class DisplayAlarmStrings(DBaseModel):
-    alarmid = IntegerField()
-    stringid = IntegerField()
-    comment = CharField()
-
-class DisplayAvailable(DBaseModel):
-    id = IntegerField()
-    checkstate = IntegerField()
-    comment = CharField()
-
-class DisplayComponent(DBaseModel):
-    id = IntegerField()
-    name = CharField()
-    componenttype = IntegerField()
-    parentcomponent = IntegerField()
-    visible = BooleanField()
-    readonly = BooleanField()
-    x1 = IntegerField()
-    y1 = IntegerField()
-    x2 = IntegerField()
-    y2 = IntegerField()
-    displayid = IntegerField()
-    helpstring = IntegerField()
-    transparent = BooleanField()
-    comment = CharField()
-
-class DisplayComponentColour(DBaseModel):
-    id = IntegerField()
-    foregroundcolour = CharField()
-    backgroundcolour = CharField()
-
-class DisplayComponentTypes(DBaseModel):
-    id = IntegerField()
-    name = CharField()
-    isobserver = BooleanField()
-    hassinglesubject = BooleanField()
-    comment = CharField()
-
-class DisplayFont(DBaseModel):
-    id = IntegerField()
-    fontname = CharField()
-    comment = CharField()
-
-class DisplayFrame(DBaseModel):
-    id = IntegerField()
-    drawframe = BooleanField()
-    fillbackground = BooleanField()
-    comment = CharField()
-
-class DisplayImage(DBaseModel):
-    componentid = IntegerField()
-    imagesid = IntegerField()
-    comment = CharField()
-
-class DisplayImages(DBaseModel):
-    id = IntegerField()
-    name = CharField()
-    comment = CharField()
-
-class DisplayLabel(DBaseModel):
-    id = IntegerField()
-    stringid = IntegerField()
-    comment = CharField()
-
-class DisplayListView(DBaseModel):
-    id = IntegerField()
-    rowheight = IntegerField()
-    selectedrow = IntegerField()
-    nextlistid = IntegerField()
-    prevlistid = IntegerField()
-    comment = CharField()
-
-class DisplayListViewColumns(DBaseModel):
-    columnindex = IntegerField()
-    listviewid = IntegerField()
-    columnwidth = IntegerField()
-    comment = CharField()
-
-class DisplayListViewItem(DBaseModel):
-    id = IntegerField()
-    listviewid = IntegerField()
-    index = IntegerField()
-    excludefromfactory = BooleanField()
-    comment = CharField()
-
-class DisplayListViewItemComponents(DBaseModel):
-    id = IntegerField()
-    listviewitemid = IntegerField()
-    columnindex = IntegerField()
-    componentid = IntegerField()
-    comment = CharField()
-
-class DisplayMenuTab(DBaseModel):
-    id = IntegerField()
-    stringid = IntegerField()
-    selectioncolour = IntegerField()
-    selectionbackgroundcolour = IntegerField()
-    comment = CharField()
-
-class DisplayModeCheckBox(DBaseModel):
-    id = IntegerField()
-    checkstate = IntegerField()
-    comment = CharField()
-
-class DisplayMultiNumber(DBaseModel):
-    id = IntegerField()
-    fieldcount = IntegerField()
-    fieldminvalue = IntegerField()
-    fieldmaxvalue = IntegerField()
-    comment = CharField()
-
-class DisplayNumber(DBaseModel):
-    id = IntegerField()
-    numberofdigits = IntegerField()
-    comment = CharField()
-
-class DisplayNumberQuantity(DBaseModel):
-    id = IntegerField()
-    quantitytype = IntegerField()
-    numberofdigits = IntegerField()
-    numberfontid = IntegerField()
-    quantityfontid = IntegerField()
-    comment = CharField()
-
-class DisplayObserver(DBaseModel):
-    id = IntegerField()
-    observerid = IntegerField()
-    comment = CharField()
-
-class DisplayObserverSingleSubject(DBaseModel):
-    id = IntegerField()
-    subjectid = IntegerField()
-    subjectaccess = IntegerField()
-    comment = CharField()
-
-class DisplayOnOffCheckBox(DBaseModel):
-    id = IntegerField()
-    onvalue = IntegerField()
-    offvalue = IntegerField()
-    comment = CharField()
-
-class DisplayText(DBaseModel):
-    id = IntegerField()
-    texttoshow = CharField()
-    align = IntegerField()
-    fontid = IntegerField()
-    leftmargin = IntegerField()
-    rightmargin = IntegerField()
-    wordwrap = BooleanField()
-    comment = CharField()
-
-class DisplayUnitStrings(DBaseModel):
-    unittype = IntegerField()
-    unitnumber = IntegerField()
-    stringid = IntegerField()
-    comment = CharField()
-
-class WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay(DBaseModel):
-    id = IntegerField()
-    writestate = IntegerField()
-    comment = CharField()
-
-#Language Database Models
-class excel_import(LBaseModel):
-    l_0 = CharField()
-    l_1 = CharField()
-    l_2 = CharField()
-    l_3 = CharField()
-    l_4 = CharField()
-    l_5 = CharField()
-    l_6 = CharField()
-    l_7 = CharField()
-    l_8 = CharField()
-    l_9 = CharField()
-    l_10 = CharField()
-    l_11 = CharField()
-    l_12 = CharField()
-    l_13 = CharField()
-    l_14 = CharField()
-    l_15 = CharField()
-    l_16 = CharField()
-    l_17 = CharField()
-    l_18 = CharField()
-    l_19 = CharField()
-    l_20 = CharField()
-    l_21 = CharField()
-    l_22 = CharField()
-    l_23 = CharField()
-
-class Languages(LBaseModel):
-    id = IntegerField()
-    language = CharField()
-    iso_name = CharField()
-    uk_name = CharField()
-
-class StringDefines(LBaseModel):
-    id = IntegerField()
-    definename = CharField()
-    location = CharField()
-    ukdescription = CharField()
-    typeid = IntegerField()
-    displaynumbers = CharField()
-
-class Strings(LBaseModel):
-    id = IntegerField()
-    languageid = IntegerField()
-    string = CharField()
-    status = CharField()
-
-class StringTypes(LBaseModel):
-    id = IntegerField()
-    type = CharField()
-    description = CharField()
+class Languages_Table(TableBase):
+    def __init__(self, *args, **kwargs):
+        self.model = Languages()
+        super(Languages_Table, self).__init__(self.model, *args, **kwargs)
 

@@ -1,28 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-import logging
 import os
 import re
-import sqlite3
 import pypyodbc
-import pyodbc
 import time
-
-logging.basicConfig(level=logging.DEBUG,
-                format='%(asctime)s %(filename)s [line:%(lineno)d]    %(message)s',
-                datefmt='%Y/%m/%d %H:%M:%S',
-                filename='dblog.log',
-                filemode='w')
-#定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
-formatter = logging.Formatter('%(filename)s [line:%(lineno)d]     %(message)s')
-console.setFormatter(formatter)
-logging.getLogger('').addHandler(console)
-
-def log(str):
-    str = str.decode("utf-8")
-    logging.info(str)
+from log import log, debug
 
 #DATABASE_NAME = os.environ.get('PEEWEE_DATABASE', 'peewee.db')
 #DATABASE_NAME = "test.mdb"
@@ -36,7 +18,7 @@ class Database(object):
     
     def get_connection(self):
         if os.path.isfile(self.database):
-            log("connect database: " + self.database)
+            debug(("连接数据库: " + self.database).decode('utf-8'))
             return pypyodbc.connect(DATABASE_ENGINE + self.database)
         else:
             log("create database: " + self.database)
@@ -46,7 +28,7 @@ class Database(object):
     
     def execute(self, sql, commit=False):
         cursor = self.conn.cursor()
-        log(sql)
+        debug(sql)
         res = cursor.execute(sql)
         if commit:
             self.conn.commit()
@@ -434,7 +416,6 @@ class InsertQuery(BaseQuery):
             cols.append(k)
             vals.append(str(field.lookup_value(None, v)))
         
-        print cols, vals
         return cols, vals
     
     def sql(self):
@@ -490,9 +471,17 @@ class Field(object):
     def lookup_value(self, lookup_type, value):
         return self.db_value(value)
 
+    def get_type(self):
+        return None
 
 class BooleanField(Field):
     db_field = 'YESNO'
+
+    def db_value(self, value):
+        return value or False
+
+    def get_type(self):
+        return type(True)
 
 class CharField(Field):
     db_field = 'VARCHAR'
@@ -511,6 +500,8 @@ class CharField(Field):
         else:
             return '"%s"' % self.db_value(value)
     
+    def get_type(self):
+        return type('')
 
 class TextField(Field):
     db_field = 'TEXT'
@@ -524,6 +515,8 @@ class TextField(Field):
         else:
             return '"%s"' % self.db_value(value)
 
+    def get_type(self):
+        return type('')
 
 class DateTimeField(Field):
     db_field = 'DATETIME'
@@ -538,6 +531,8 @@ class DateTimeField(Field):
             return '"%s"' % value.strftime('%Y-%m-%d %H:%M:%S')
         return "NULL"
 
+    def get_type(self):
+        return type('')
 
 class IntegerField(Field):
     db_field = 'INTEGER'
@@ -549,6 +544,8 @@ class IntegerField(Field):
     def python_value(self, value):
         return int(value or 0)
 
+    def get_type(self):
+        return type(0)
 
 class FloatField(Field):
     db_field = 'REAL'
@@ -560,6 +557,8 @@ class FloatField(Field):
     def python_value(self, value):
         return float(value or 0)
 
+    def get_type(self):
+        return type(0.0)
 
 class PrimaryKeyField(IntegerField):
     field_template = "%(db_field)s NOT NULL PRIMARY KEY"
@@ -654,6 +653,8 @@ class BaseModel(type):
         setattr(cls, '_meta', _meta)
         
         _meta.db_table = re.sub('[^a-z]+', '_', cls.__name__.lower())
+        ##在后面加了Model，去掉
+        #_meta.db_table = _meta.db_table.replace('Model', '')
         
         has_primary_key = False
 
@@ -689,7 +690,16 @@ class Model(object):
     
     def get_field_dict(self):
         field_val = lambda f: (f.name, getattr(self, f.name))
+        #print type(self._meta.fields)
         pairs = map(field_val, self._meta.fields.values())
+        return dict(pairs)
+
+    def get_field_type(self):
+        """ 得到各个field的类型 """
+        field_val = lambda f: (f.name, f.get_type())
+        pairs = map(field_val, self._meta.fields.values())
+        #for v in self._meta.fields.values():
+            #print (v.get_type())
         return dict(pairs)
     
     @classmethod
@@ -719,25 +729,33 @@ class Model(object):
     @classmethod            
     def get(cls, **query):
         return cls.select().where(**query).execute().next()
-    
-    def save(self, force_insert=False):
+
+    def check_exist(self):
         field_dict = self.get_field_dict()
-        #加个强制insert，否则有同名id时又改成update了
-        if force_insert:
-            # 当id为0或none时，删除id键值，否则id会insert到数据库里，引起错误
-            if self.id == None or self.id == 0:
-                field_dict.pop('id') #删除id键值
-            insert = self.insert(**field_dict)
-            self.id = insert.execute()
-            return
-        if self.id and self.select().where(id=self.id).count():
-            #只有在有id并且能在数据库里找到该id时用update方法
+        for k,v in field_dict.items():
+            if getattr(self, k) == None:
+                field_dict.pop(k)
+        rs = self.select().where(**field_dict)
+        count = 0
+        if rs:
+            for r in rs:
+                count = count + 1  #SelectQuery支持迭代，但没有len方法，count()又出错，只能用蠢办法算结果数量
+        log(("找到%d条记录" %(count)).decode('utf-8'))
+        return count
+
+    def validate(self):
+        pass
+
+    def save(self):
+        field_dict = self.get_field_dict()
+        # 当id为0或none时，删除id键值，否则id会insert到数据库里，引起错误
+        if self.id == None or self.id == 0:
             field_dict.pop('id') #删除id键值
-            update = self.update(**field_dict).where(id=self.id)
-            update.execute()
-        else:
-            # 当id为0或none时，删除id键值，否则id会insert到数据库里，引起错误
-            if self.id == None or self.id == 0:
-                field_dict.pop('id') #删除id键值
-            insert = self.insert(**field_dict)
+        insert = self.insert(**field_dict)
+        try:
             self.id = insert.execute()
+            log(("表%s成功添加记录!" %(self.__class__.__name__)).decode('utf-8'))
+        except Exception as e:
+            log(("！！！错误！！！表%s无法添加记录" %(self.__class__.__name__)).decode('utf-8'))
+            raise e
+        return

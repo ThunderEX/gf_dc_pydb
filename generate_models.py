@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, sys
-import pypyodbc 
+from util import pypyodbc 
 
 DisplayFactory_TableNames = [
         "Colours",
@@ -29,6 +29,7 @@ DisplayFactory_TableNames = [
         "DisplayOnOffCheckBox",
         "DisplayText",
         "DisplayUnitStrings",
+        "display_ids",
         #"Paste Errors",            #这张表名有空格
         "WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay",
 ]
@@ -41,6 +42,7 @@ Factory_TablesNames = [
         "EnumDataPoint",
         "EnumTypes",
         "ErroneousUnitType",
+        "FlashBlockTypes",
         "FloatDataPoint",
         "GeniAppIf",
         "GeniConvert",
@@ -51,6 +53,7 @@ Factory_TablesNames = [
         "ObserverType",
         "QuantityType",
         "ResetType",
+        "SaveTypes",
         "StringDataPoint",
         "Subject",
         "SubjectRelation",
@@ -80,11 +83,6 @@ STRING_TYPE = type("string")
 UNICODE_TYPE = type(u"string")
 BOOL_TYPE = type(True)
 
-field_types = {"AutoNumber": INT_TYPE,
-        "Short Text": UNICODE_TYPE,
-        "Number": INT_TYPE,
-        "Yes/No": BOOL_TYPE
-        }
 field_types = {
         UNICODE_TYPE: "CharField()",
         INT_TYPE: "IntegerField()",
@@ -96,16 +94,16 @@ factory_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_S
 #DisplayFactory数据库
 display_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
 #language数据库
-language_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
+language_connection ='Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
 
-output_file = open('tables.py', 'w')
+output_file = open('models.py', 'w')
 template = """# -*- coding: utf-8 -*-
 import os, sys
-from peewee import *
+from util.peewee import *
 
 factory_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
 display_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
-language_database = '../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
+language_database ='../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
 
 class FBaseModel(Model):
     database = Database(factory_database)
@@ -135,6 +133,8 @@ for tb in Factory_TablesNames:
         #这个域虽然定义了，但不能写，不知道为什么
         if name == 'field1':
             continue
+        if name == 'save':       #save是model的函数，不得已改成大写的Save
+            name = 'Save'
         if type in field_types.keys():
             str = "    " + name + " = " + field_types[type] + "\n"
             output_file.write(str)
@@ -152,6 +152,8 @@ for tb in DisplayFactory_TableNames:
     for descrip in cur.description:
         name = descrip[0]
         type = descrip[1]
+        if name == 'save':
+            name = 'Save'
         if type in field_types.keys():
             str = "    " + name + " = " + field_types[type] + "\n"
             output_file.write(str)
