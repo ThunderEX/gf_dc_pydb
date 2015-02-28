@@ -21,9 +21,11 @@ class Database(object):
             debug(("连接数据库: " + self.database).decode('utf-8'))
             return pypyodbc.connect(DATABASE_ENGINE + self.database)
         else:
-            log("create database: " + self.database)
-            pypyodbc.win_create_mdb(self.database)
-            return pypyodbc.connect(DATABASE_ENGINE + self.database)
+            #TODO 先不生成数据库
+            #log("create database: " + self.database)
+            #pypyodbc.win_create_mdb(self.database)
+            #return pypyodbc.connect(DATABASE_ENGINE + self.database)
+            pass
         #return sqlite3.connect(self.database)
     
     def execute(self, sql, commit=False):
@@ -411,8 +413,8 @@ class InsertQuery(BaseQuery):
         for k, v in self.insert_query.iteritems():
             field = self.model._meta.get_field_by_name(k)
             #string是MSSQL保留字，会报语法错误，需要用[]包起来
-            if k == "string":
-                k = "[string]"
+            if k in ['string', 'value']:
+                k = "[" + k + "]"
             cols.append(k)
             vals.append(str(field.lookup_value(None, v)))
         

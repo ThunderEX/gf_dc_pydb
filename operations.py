@@ -43,6 +43,16 @@ def add_label(label_parameters):
     handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
 
 def add_data(parameters, type='normal'):
+    '''
+        数据库添加数据
+    
+    Parameters
+    ----------
+    parameters : list
+        参数
+    type : 
+        类型
+    '''
     if type.lower() == 'label':
         add_label(parameters)
     else:
