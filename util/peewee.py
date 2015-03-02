@@ -37,7 +37,7 @@ class Database(object):
         return res
     
     def last_insert_id(self):
-        result = self.execute("SELECT last_insert_rowid();")
+        result = self.execute("SELECT @@IDENTITY;")
         return result.fetchone()[0]
     
     def create_table(self, model_class):
@@ -436,8 +436,9 @@ class InsertQuery(BaseQuery):
     
     def execute(self):
         result = self.raw_execute()
+        return self.database.last_insert_id()
         #print result.rowcount
-        return 0
+        #return 0
 
 
 class Field(object):
@@ -634,7 +635,8 @@ class BaseModel(type):
             def get_field_by_name(self, name):
                 if name in self.fields:
                     return self.fields[name]
-                raise AttributeError('Field named %s not found' % name)
+                print 'Field name <%s> not found' % name
+                raise AttributeError
             
             def get_related_field_for_model(self, model):
                 for field in self.fields.values():
@@ -756,7 +758,7 @@ class Model(object):
         insert = self.insert(**field_dict)
         try:
             self.id = insert.execute()
-            log(("表%s成功添加记录!" %(self.__class__.__name__)).decode('utf-8'))
+            log(("表%s成功添加记录，id=%d!" %((self.__class__.__name__), self.id)).decode('utf-8'))
         except Exception as e:
             log(("！！！错误！！！表%s无法添加记录" %(self.__class__.__name__)).decode('utf-8'))
             raise e

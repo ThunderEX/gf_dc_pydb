@@ -93,8 +93,33 @@ class TableBase(object):
             raise NameError
         if attr_name in self.foreignkey_items.keys():
             r = foreign_model.get(**{foreign_search_attr_name : getattr(self.model, attr_name)})
-            debug(("转换外键%s" %(attr_name)).decode("utf-8"))
-            setattr(self.model, attr_name, getattr(r, foreign_attr_name))
+            value = getattr(r, foreign_attr_name)
+            debug(("转换外键%s = %s" %(attr_name, str(value))).decode("utf-8"))
+            setattr(self.model, attr_name, value)
+
+    def query(self, id=None):
+        _id = id
+        field_dict = self.model.get_field_dict()
+        field_names = field_dict.keys()
+        print '\t'.join(field_names)
+        if _id:
+            results = self.model.select().where(id=_id)
+        else:
+            results = self.model.select()
+        if results:
+            for result in results:
+                olist = []
+                for field in field_names:
+                    olist.append(str(getattr(result, field)))
+                output = '\t'.join(olist)
+                print output
+                #log(("记录已存在，跳过......").decode("utf-8"))
+
+    def update(self, id=0, **kwargs):
+        _id = id
+        if _id:
+            self.model.update(**kwargs).where(id=_id).execute()
+            log(("更新记录%d" %(_id)).decode("utf-8"))
 
     #@classmethod
     def add(self):
@@ -102,6 +127,7 @@ class TableBase(object):
             log(("记录已存在，跳过......").decode("utf-8"))
             return
         self.model.save()
+        return self.model.id
 
 
 #Factory Database Models
@@ -205,12 +231,21 @@ class VectorDataPoint_Table(TableBase):
 
 
 #Display Database Models
+class Display_Table(TableBase):
+    """操作表Display"""
+    def __init__(self, *args, **kwargs):
+        self.model = Display()
+        super(Display_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('rootgroupid', DisplayComponent, 'name', 'id')
+        self.convert_foreignkey('name', Strings, 'string', 'id')
+
 class DisplayComponent_Table(TableBase):
     """操作表DisplayComponent"""
     def __init__(self, *args, **kwargs):
         self.model = DisplayComponent()
         super(DisplayComponent_Table, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('componenttype', DisplayComponentTypes, 'name', 'id')
+        #self.convert_foreignkey('displayid', Display, 'name', 'id')
 
 
 class DisplayLabel_Table(TableBase):
@@ -220,6 +255,16 @@ class DisplayLabel_Table(TableBase):
         super(DisplayLabel_Table, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('id', DisplayComponent, 'name', 'id')
         self.convert_foreignkey('stringid', StringDefines, 'definename', 'id')
+
+
+class DisplayListView_Table(TableBase):
+    """操作表DisplayLabel"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayListView()
+        super(DisplayListView_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent, 'name', 'id')
+        self.convert_foreignkey('nextlistid', DisplayComponent, 'name', 'id')
+        self.convert_foreignkey('prevlistid', DisplayComponent, 'name', 'id')
 
 
 class DisplayListViewItem_Table(TableBase):
@@ -298,6 +343,7 @@ class QuantityType_Table(TableBase):
             return
         self.model.id = stored_id
         self.model.save()
+        return self.model.id
 
 
 class DisplayText_Table(TableBase):
@@ -328,6 +374,7 @@ class DisplayText_Table(TableBase):
             log(("记录已存在，跳过......").decode("utf-8"))
             return
         self.model.save()
+        return self.model.id
 
 
 #Language Database
@@ -348,6 +395,7 @@ class StringDefines_Table(TableBase):
             return
         self.model.id = stored_id
         self.model.save()
+        return self.model.id
 
 
 class Strings_Table(TableBase):

@@ -5,6 +5,7 @@ from models import *
 from tables import *
 from parameters import *
 
+
 def handle_DisplayListViewItemAndComponents(display_listview_item_table, display_listview_item_components_table_list):
     """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
     #index 从0开始遍历一遍
@@ -27,7 +28,9 @@ def handle_DisplayListViewItemAndComponents(display_listview_item_table, display
         x.model.listviewitemid = r.id
         x.add()
 
+
 def add_label(label_parameters):
+    rtn = []
     display_listview_item_components_list = []
     for para in label_parameters:
         table = para[0]
@@ -40,24 +43,27 @@ def add_label(label_parameters):
             display_listview_item_components_list.append(x)
             continue
         x.add()
+        rtn.append(x)
     handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
+    return rtn
+
 
 def add_data(parameters, type='normal'):
     '''
         数据库添加数据
     
-    Parameters
-    ----------
-    parameters : list
-        参数
-    type : 
-        类型
+    :param parameters: 参数list
+    :param type: 类型
+    :return: tables实例形成的list
     '''
+    rtn = []
     if type.lower() == 'label':
-        add_label(parameters)
+        rtn = add_label(parameters)
     else:
         for para in parameters:
             table = para[0]
             kwargs = para[1]
             x = table(**kwargs)
             x.add()
+            rtn.append(x)
+    return rtn

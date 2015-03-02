@@ -12,7 +12,7 @@ from tables import *
     ),
 """
 
-h2s_quantity_parameters = [
+h2s_level_quantity_parameters = [
     #1. 加新的单位类型
     (QuantityType_Table, 
      {
@@ -50,7 +50,7 @@ h2s_quantity_parameters = [
      ),
 ]
 
-h2s_label_parameters = [
+h2s_level_label_parameters = [
     #1. 添加h2s label
     (DisplayComponent_Table,
      {
@@ -173,6 +173,143 @@ h2s_label_parameters = [
      {
          'componentid' : '1.1 SystemStatus l1 h2s level nq',
          'columnindex' : 0,
+     }
+     ),
+]
+
+
+h2s_control_label_parameters = [
+    #1. 添加h2s label
+    (DisplayComponent_Table,
+     {
+         'name'            : '4.2 AdvancedFunc h2scontol',
+         'componenttype'   : 'Label',
+         'parentcomponent' : 0,
+         'visible'         : True,
+         'readonly'        : True,
+         'x1'              : 0,
+         'x2'              : 0,
+         'y1'              : 0,
+         'y2'              : 0,
+         'displayid'       : 0,         #DisplayComponent_Table里displayid为0，需要指向要显示的group
+         'helpstring'      : 0,
+         'transparent'     : False,
+     }
+     ),
+    #2. 加字符串定义
+    (StringDefines_Table,
+     {
+         'definename' : 'SID_H2S_CONTROL',
+         'typeid'     : 'Display name',
+     }
+     ),
+    #3. label加相应的字符串
+    (Strings_Table,
+     {
+         'string'     : 'H2S Control',
+         'languageid' : 'DEV_LANGUAGE',
+         'status'     : 'UnEdit',
+     }
+     ),
+    (Strings_Table,
+     {
+         'string'     : 'H2S Control',
+         'languageid' : 'UK_LANGUAGE',
+         'status'     : 'UnEdit',
+     }
+     ),
+    #4. 将字符串和label对应起来
+    (DisplayLabel_Table,
+     {
+         'id'       : '4.2 AdvancedFunc h2scontol',
+         'stringid' : 'SID_H2S_CONTROL',
+     }
+     ),
+    #5. 定义label的text排列方式
+    (DisplayText_Table,
+     {
+         'id'          : '4.2 AdvancedFunc h2scontol',
+         'align'       : 'VCENTER_LEFT',
+         'fontid'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'leftmargin'  : 8,
+         'rightmargin' : 0,
+         'wordwrap'    : False,
+     }
+     ),
+    #6. 在对应的listview下面新加一个item
+    (DisplayListViewItem_Table,
+     {
+         'listviewid' : '4.2 AdvancedFunc List 1',
+     }
+     ),
+    #7. 在新加的item下面添加label
+    (DisplayListViewItemComponents_Table,
+     {
+         'componentid' : '4.2 AdvancedFunc h2scontol',
+         'columnindex' : 0,
+     }
+     ),
+]
+
+
+h2s_control_group_parameters = [
+    #1. 
+    (DisplayComponent_Table,
+     {
+         'name'            : '4.2.14 H2SContol Group',
+         'componenttype'   : 'Group',
+         'parentcomponent' : 0,
+         'visible'         : True,
+         'readonly'        : False,
+         'x1'              : 33,
+         'x2'              : 239,
+         'y1'              : 0,
+         'y2'              : 305,
+         'displayid'       : 0,
+         'helpstring'      : 0,
+         'transparent'     : False,
+     }
+     ),
+]
+
+h2s_control_display_parameters = [
+    (Display_Table,
+     {
+         'rootgroupid': '4.2.14 H2SContol Group',
+         'displaynumber': '4.2.14',
+         'name': 'H2S Control',
+         'focuscomponentid':0,   #set from listview later
+         'abletoshow': True,
+         'show':False,
+         'firstwizarddisplay':False,
+     }
+     ),
+]
+
+h2s_control_listview_parameters = [
+    (DisplayComponent_Table,
+     {
+         'name'            : '4.2.14 H2SContol List',
+         'componenttype'   : 'ListView',
+         'parentcomponent' : 0,                          #set later
+         'visible'         : True,
+         'readonly'        : False,
+         'x1'              : 15,
+         'x2'              : 239,
+         'y1'              : 0,
+         'y2'              : 271,
+         'displayid'       : 0,
+         'helpstring'      : 0,
+         'transparent'     : False,
+     }
+     ),
+    (DisplayListView_Table,
+     {
+         'id'          : '4.2.14 H2SContol List',
+         'rowheight'   : 15,
+         'selectedrow' : 0,
+         'nextlistid'  : 0,  # - None -
+         'prevlistid'  : 0,  # - None -
      }
      ),
 ]
