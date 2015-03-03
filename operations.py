@@ -48,6 +48,32 @@ def add_label(label_parameters):
     return rtn
 
 
+def add_observer(parameters):
+    rtn = []
+    display_listview_item_components_list = []
+    for para in parameters:
+        table = para[0]
+        kwargs = para[1]
+        x = table(**kwargs)
+        if table == ObserverType_Table:
+            x.add()
+            rtn.append(x)
+            typeid = x.model.id
+            continue
+        if table == Observer_Table:
+            try:
+                x.model.typeid = typeid
+                x.add()
+                rtn.append(x)
+            except:
+                comment('需先定义添加ObserverType!!')
+                return
+            continue
+        x.add()
+        rtn.append(x)
+    return rtn
+
+
 def add_data(parameters, type='normal'):
     '''
         数据库添加数据
@@ -59,6 +85,8 @@ def add_data(parameters, type='normal'):
     rtn = []
     if type.lower() == 'label':
         rtn = add_label(parameters)
+    elif type.lower() == 'observer':
+        rtn = add_observer(parameters)
     else:
         for para in parameters:
             table = para[0]

@@ -3,6 +3,7 @@ import shutil
 from operations import *
 from parameters import *
 from tables import *
+from util.log import *
 
 def copy_database():
     f_database = r'.\v3.07\Factory.mdb'
@@ -37,17 +38,23 @@ def update_h2s_control(args):
     h2scontol_display_table.update(h2scontol_display_table.model.id, focuscomponentid=_focuscomponentid)
     h2scontol_listview_table.update(h2scontol_listview_table.model.id, parentcomponent=_parentcomponent)
 
+
 if __name__ == '__main__':
     copy_database()
-    add_data(h2s_level_quantity_parameters, type='quantity')
+    #comment('********** 添加h2s level label于1.1 System Status **********')
+    #add_data(h2s_level_quantity_parameters, type='quantity')
     #add_data(h2s_level_label_parameters, type='label')
-    #add_data(h2s_subject_parameters)
-    #add_data(h2s_observer_parameters)
-    #添加h2scontol
+    #comment('********** 添加h2scontol于4.2 Advanced Functions **********')
     #h2scontol1 = add_data(h2s_control_label_parameters, type='label')
     #h2scontol2 = add_data(h2s_control_group_parameters)
     #h2scontol3 = add_data(h2s_control_display_parameters)
     #h2scontol4 = add_data(h2s_control_listview_parameters)
     #update_h2s_control([h2scontol1, h2scontol2, h2scontol3, h2scontol4])
+    comment('********** 添加Observer **********')
+    add_data(h2s_observer_parameters, type='observer')
+    comment('********** 添加Subject **********')
+    add_data(h2s_subject_parameters)
+    comment('********** 连接Observer与Subject **********')
+    add_data(h2s_observer_subject_parameters)
     #x = DisplayListView_Table()
     #x.query(id=5838)

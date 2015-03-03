@@ -2,6 +2,11 @@
 from models import *
 from tables import *
 
+Yes = True
+No = False
+yes = True
+no = False
+
 """
 格式：
    （表名+ _Table，
@@ -12,6 +17,7 @@ from tables import *
     ),
 """
 
+#############################################################Display部分##########################################################
 h2s_level_quantity_parameters = [
     #1. 加新的单位类型
     (QuantityType_Table, 
@@ -172,14 +178,13 @@ h2s_level_label_parameters = [
     (DisplayListViewItemComponents_Table,
      {
          'componentid' : '1.1 SystemStatus l1 h2s level nq',
-         'columnindex' : 0,
+         'columnindex' : 2,
      }
      ),
 ]
 
-
 h2s_control_label_parameters = [
-    #1. 添加h2s label
+    #1. 添加h2s control label
     (DisplayComponent_Table,
      {
          'name'            : '4.2 AdvancedFunc h2scontol',
@@ -191,7 +196,7 @@ h2s_control_label_parameters = [
          'x2'              : 0,
          'y1'              : 0,
          'y2'              : 0,
-         'displayid'       : 0,         #DisplayComponent_Table里displayid为0，需要指向要显示的group
+         #'displayid'       : 0,         #DisplayComponent_Table里displayid为0，需要指向要显示的group
          'helpstring'      : 0,
          'transparent'     : False,
      }
@@ -251,9 +256,8 @@ h2s_control_label_parameters = [
      ),
 ]
 
-
 h2s_control_group_parameters = [
-    #1. 
+    #1. 添加group，也就是另起一页
     (DisplayComponent_Table,
      {
          'name'            : '4.2.14 H2SContol Group',
@@ -273,12 +277,13 @@ h2s_control_group_parameters = [
 ]
 
 h2s_control_display_parameters = [
+    #Display
     (Display_Table,
      {
          'rootgroupid': '4.2.14 H2SContol Group',
          'displaynumber': '4.2.14',
          'name': 'H2S Control',
-         'focuscomponentid':0,   #set from listview later
+         #'focuscomponentid':0,   #set from listview later
          'abletoshow': True,
          'show':False,
          'firstwizarddisplay':False,
@@ -291,7 +296,7 @@ h2s_control_listview_parameters = [
      {
          'name'            : '4.2.14 H2SContol List',
          'componenttype'   : 'ListView',
-         'parentcomponent' : 0,                          #set later
+         #'parentcomponent' : 0,                          #set later
          'visible'         : True,
          'readonly'        : False,
          'x1'              : 15,
@@ -312,15 +317,46 @@ h2s_control_listview_parameters = [
          'prevlistid'  : 0,  # - None -
      }
      ),
+    (DisplayListViewColumns_Table,
+     {
+         'listviewid'  : '4.2.14 H2SContol List',
+         'columnindex' : 0,
+         'columnwidth' : 160,
+     }
+     ),
+    (DisplayListViewColumns_Table,
+     {
+         'listviewid'  : '4.2.14 H2SContol List',
+         'columnindex' : 1,
+         'columnwidth' : 64,
+     }
+     ),
+    (DisplayListViewColumns_Table,
+     {
+         'listviewid'  : '4.2.14 H2SContol List',
+         'columnindex' : 2,
+         'columnwidth' : 0,
+     }
+     ),
 ]
 
-#TODO test
+
+#############################################################Factor部分##########################################################
 h2s_observer_parameters = [
-    #1. 加Observer
+    #1. 加ObserverType
+    (ObserverType_Table,
+     {
+         'name'        : 'DDACtrl',
+         'shortname'   : 'DDA',
+         'issingleton' : False,
+         'issubject'   : False,
+     }
+     ),
+    #2. 加Observer
     (Observer_Table,
      {
-         'name'            : 'test1111',
-         'typeid'          : 96,
+         'name'            : 'dosing_pump_ctrl',
+         #'typeid'          : 96,      #set from ObserverType
          'taskid'          : 'LowPrioPeriodicTask',
          #'taskorder'       : None,
          #'subjectid'       : None,
@@ -333,14 +369,45 @@ h2s_subject_parameters = [
     #1. 加Subject
     (Subject_Table,
      {
-         'name'       : 'test',
-         'typeid'     : 'IntDataPoint',
+         'name'       : 'dda control enabled',
+         'typeid'     : 'BoolDataPoint',
          'geniappif'  : False,
-         'Save'       : '-',              #save是model的函数，要用大写的Save
-         'flashblock' : '-',
+         'Save'       : 'Value',              #save是model的函数，要用大写的Save
+         'flashblock' : 'Config',
          'verified'   : False,
      }
      ),
+     #2. 对应的DataPoint也要添加
+    (BoolDataPoint_Table,
+     {
+         'id'           : 'dda control enabled',
+         'value'        : 0,
+     }
+     ),
+]
+
+h2s_observer_subject_parameters = [
+    #1. 先添加SubjectRelation
+    (SubjectRelation_Table, 
+     {
+         'name'           : 'dda control enabled'.upper(),    #必须用大写字母
+         'observertypeid' : 'DDACtrl',
+     }
+     ),
+    #2. 再添加ObserverSubjects，会用到SubjectRelation添加的name
+    (ObserverSubjects_Table, 
+     {
+         'subjectid'         : 'dda control enabled',
+         'observerid'        : 'dosing_pump_ctrl',
+         'observertypeid'    : 'DDACtrl',
+         'subjectrelationid' : 'dda control enabled'.upper(),
+         'subjectaccess'     : 'Read',
+     }
+     ),
+]
+
+#TODO test
+test_parameters = [
     (IntDataPoint_Table,
      {
          'id'           : 'test',
@@ -350,12 +417,6 @@ h2s_subject_parameters = [
          'value'        : '0',
          'quantitytype' : 'Q_NO_UNIT',
          'verified'     : False,
-     }
-     ),
-    (BoolDataPoint_Table,
-     {
-         'id'           : 'test',
-         'value'        : 0,
      }
      ),
 ]

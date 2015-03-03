@@ -196,6 +196,14 @@ class ObserverSubjects_Table(TableBase):
         self.convert_foreignkey('subjectaccess', SubjectAccessType, 'name', 'id')
 
 
+class ObserverType_Table(TableBase):
+    """操作表ObserverType"""
+    def __init__(self, *args, **kwargs):
+        self.model = ObserverType()
+        super(ObserverType_Table, self).__init__(self.model, *args, **kwargs)
+        self.delete_attr(['comment', 'namespace'])
+
+
 class Subject_Table(TableBase):
     """操作表Subject
     save : '-', 'All', 'Value'
@@ -265,6 +273,14 @@ class DisplayListView_Table(TableBase):
         self.convert_foreignkey('id', DisplayComponent, 'name', 'id')
         self.convert_foreignkey('nextlistid', DisplayComponent, 'name', 'id')
         self.convert_foreignkey('prevlistid', DisplayComponent, 'name', 'id')
+
+
+class DisplayListViewColumns_Table(TableBase):
+    """操作表DisplayListViewColumns"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayListViewColumns()
+        super(DisplayListViewColumns_Table, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('listviewid', DisplayComponent, 'name', 'id')
 
 
 class DisplayListViewItem_Table(TableBase):
@@ -371,8 +387,9 @@ class DisplayText_Table(TableBase):
         #r = self.model.get(id=self.model.id)
         r = self.model.select().where(id=self.model.id)
         if r:
-            log(("记录已存在，跳过......").decode("utf-8"))
-            return
+            for i in r:
+                log(("记录已存在id=%d，跳过......" %(i.id)).decode("utf-8"))
+                return
         self.model.save()
         return self.model.id
 
