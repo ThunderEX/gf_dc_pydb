@@ -90,6 +90,11 @@ class QueryResultWrapper(object):
         row = self.cursor.fetchone()
         if row:
             row_dict = self._row_to_dict(row, self.cursor)
+            #强行将id改为小写的键
+            for key in row_dict.keys():
+                if key in ['id', 'ID', 'Id', 'iD']:
+                    row_dict['id'] = row_dict[key]
+                    row_dict.pop(key)
             return self.model_from_rowset(self.model, row_dict)
         else:
             raise StopIteration
@@ -413,7 +418,7 @@ class InsertQuery(BaseQuery):
         for k, v in self.insert_query.iteritems():
             field = self.model._meta.get_field_by_name(k)
             #string是MSSQL保留字，会报语法错误，需要用[]包起来
-            if k in ['string', 'value']:
+            if k.lower() in ['string', 'value']:
                 k = "[" + k + "]"
             cols.append(k)
             vals.append(str(field.lookup_value(None, v)))
@@ -656,9 +661,11 @@ class BaseModel(type):
         _meta = Meta(cls)
         setattr(cls, '_meta', _meta)
         
-        _meta.db_table = re.sub('[^a-z]+', '_', cls.__name__.lower())
-        ##在后面加了Model，去掉
-        #_meta.db_table = _meta.db_table.replace('Model', '')
+        #原来的代码把_前面的都去掉了
+        #_meta.db_table = re.sub('[^a-z]+', '_', cls.__name__.lower())
+        _meta.db_table = cls.__name__.lower()
+        ##在后面加了_Model，去掉
+        _meta.db_table = _meta.db_table.replace('_model', '')
         
         has_primary_key = False
 

@@ -116,7 +116,7 @@ class LBaseModel(Model):
 """
 output_file.write(template)
 output_file.write('\n')
-cls = "class %s(%sBaseModel):"
+cls = "class %s_Model(%sBaseModel):"
 
 output_file.write('#Factor Database Models')
 output_file.write('\n')
@@ -133,8 +133,8 @@ for tb in Factory_TablesNames:
         #这个域虽然定义了，但不能写，不知道为什么
         if name == 'field1':
             continue
-        if name == 'save':       #save是model的函数，不得已改成大写的Save
-            name = 'Save'
+        if name in ['id', 'ID', 'iD', 'Id']:
+            name = name.lower()
         if type in field_types.keys():
             str = "    " + name + " = " + field_types[type] + "\n"
             output_file.write(str)
@@ -152,8 +152,8 @@ for tb in DisplayFactory_TableNames:
     for descrip in cur.description:
         name = descrip[0]
         type = descrip[1]
-        if name == 'save':
-            name = 'Save'
+        if name in ['id', 'ID', 'iD', 'Id']:
+            name = name.lower()
         if type in field_types.keys():
             str = "    " + name + " = " + field_types[type] + "\n"
             output_file.write(str)
@@ -171,6 +171,8 @@ for tb in Language_TableNames:
     for descrip in cur.description:
         name = descrip[0]
         type = descrip[1]
+        if name in ['id', 'ID', 'iD', 'Id']:
+            name = name.lower()
         if type in field_types.keys():
             str = "    " + name + " = " + field_types[type] + "\n"
             output_file.write(str)

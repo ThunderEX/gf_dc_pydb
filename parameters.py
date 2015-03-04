@@ -9,7 +9,7 @@ no = False
 
 """
 格式：
-   （表名+ _Table，
+   （表名，
     {
             filed名1：参数，
             filed名2：参数，
@@ -20,322 +20,322 @@ no = False
 #############################################################Display部分##########################################################
 h2s_level_quantity_parameters = [
     #1. 加新的单位类型
-    (QuantityType_Table, 
+    (QuantityType, 
      {
-         'name':'Q_PARTS_PER_MILLION',
+         'Name':'Q_PARTS_PER_MILLION',
      }
      ),
     #2. 加ppm的字符串定义
-    (StringDefines_Table, 
+    (StringDefines, 
      {
-         "definename" : "SID_PPM",
-         "typeid"     : "Quantity Unit",
+         "DefineName" : "SID_PPM",
+         "TypeId"     : "Quantity Unit",
      }
      ),
     #3. 加ppm相应的字符串
-    (Strings_Table, 
+    (Strings, 
      {
-         'string'     : 'ppm',
-         'languageid' : 'DEV_LANGUAGE',
-         'status'     : 'UnEdit',
+         'String'     : 'ppm',
+         'LanguageId' : 'DEV_LANGUAGE',
+         'Status'     : 'UnEdit',
      }
      ),
-    (Strings_Table, 
+    (Strings, 
      {
-         'string'     : 'ppm',
-         'languageid' : 'UK_LANGUAGE',
-         'status'     : 'UnEdit',
+         'String'     : 'ppm',
+         'LanguageId' : 'UK_LANGUAGE',
+         'Status'     : 'UnEdit',
      }
      ),
     #4. SubjectRelation里的MpcUnits要加上Q_PARTS_PER_MILLION
-    (SubjectRelation_Table, 
+    (SubjectRelation, 
      {
-         'name'           : 'Q_PARTS_PER_MILLION',
-         'observertypeid' : 'MpcUnits',
+         'Name'           : 'Q_PARTS_PER_MILLION',
+         'ObserverTypeId' : 'MpcUnits',
      }
      ),
 ]
 
 h2s_level_label_parameters = [
     #1. 添加h2s label
-    (DisplayComponent_Table,
+    (DisplayComponent,
      {
-         'name'            : '1.1 SystemStatus l1 h2s level',
-         'componenttype'   : 'Label',
-         'parentcomponent' : 0,
-         'visible'         : True,
-         'readonly'        : True,
+         'Name'            : '1.1 SystemStatus l1 h2s level',
+         'ComponentType'   : 'Label',
+         'ParentComponent' : 0,
+         'Visible'         : True,
+         'ReadOnly'        : True,
          'x1'              : 0,
          'x2'              : 0,
          'y1'              : 0,
          'y2'              : 0,
-         'displayid'       : 0,
-         'helpstring'      : 0,
-         'transparent'     : False,
+         'DisplayId'       : 0,
+         'HelpString'      : 0,
+         'Transparent'     : False,
      }
      ),
     #2. 添加数值label
-    (DisplayComponent_Table,
+    (DisplayComponent,
      {
-         'name'            : '1.1 SystemStatus l1 h2s level nq',
-         'componenttype'   : 'NumberQuantity',
-         'parentcomponent' : 0,
-         'visible'         : True,
-         'readonly'        : True,
+         'Name'            : '1.1 SystemStatus l1 h2s level nq',
+         'ComponentType'   : 'NumberQuantity',
+         'ParentComponent' : 0,
+         'Visible'         : True,
+         'ReadOnly'        : True,
          'x1'              : 0,
          'x2'              : 0,
          'y1'              : 0,
          'y2'              : 0,
-         'displayid'       : 0,
-         'helpstring'      : 0,
-         'transparent'     : False,
+         'DisplayId'       : 0,
+         'HelpString'      : 0,
+         'Transparent'     : False,
      }
      ),
     #3. 加字符串定义
-    (StringDefines_Table,
+    (StringDefines,
      {
-         'definename' : 'SID_H2S_LEVEL',
-         'typeid'     : 'Value type',
+         'DefineName' : 'SID_H2S_LEVEL',
+         'TypeId'     : 'Value type',
      }
      ),
     #4. label加相应的字符串
-    (Strings_Table,
+    (Strings,
      {
-         'string'     : 'H2S level',
-         'languageid' : 'DEV_LANGUAGE',
-         'status'     : 'UnEdit',
+         'String'     : 'H2S level',
+         'LanguageId' : 'DEV_LANGUAGE',
+         'Status'     : 'UnEdit',
      }
      ),
-    (Strings_Table,
+    (Strings,
      {
-         'string'     : 'H2S level',
-         'languageid' : 'UK_LANGUAGE',
-         'status'     : 'UnEdit',
+         'String'     : 'H2S level',
+         'LanguageId' : 'UK_LANGUAGE',
+         'Status'     : 'UnEdit',
      }
      ),
     #5. 将字符串和label对应起来
-    (DisplayLabel_Table,
+    (DisplayLabel,
      {
          'id'       : '1.1 SystemStatus l1 h2s level',
-         'stringid' : 'SID_H2S_LEVEL',
+         'StringId' : 'SID_H2S_LEVEL',
      }
      ),
     #6. 定义label的text排列方式
-    (DisplayText_Table,
+    (DisplayText,
      {
          'id'          : '1.1 SystemStatus l1 h2s level',
-         'align'       : 'VCENTER_LEFT',
-         'fontid'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'leftmargin'  : 2,
-         'rightmargin' : 0,
-         'wordwrap'    : False,
+         'Align'       : 'VCENTER_LEFT',
+         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin'  : 2,
+         'RightMargin' : 0,
+         'WordWrap'    : False,
      }
      ),
     #7. 定义数值的text排列方式
-    (DisplayText_Table,
+    (DisplayText,
      {
          'id'          : '1.1 SystemStatus l1 h2s level nq',
-         'align'       : 'VCENTER_LEFT',
-         'fontid'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'leftmargin'  : 0,
-         'rightmargin' : 0,
-         'wordwrap'    : False,
+         'Align'       : 'VCENTER_LEFT',
+         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin'  : 0,
+         'RightMargin' : 0,
+         'WordWrap'    : False,
      }
      ),
     #8. 数值与新加单位'ppm'对应
-    (DisplayNumberQuantity_Table,
+    (DisplayNumberQuantity,
      {
          'id'             : '1.1 SystemStatus l1 h2s level nq',
-         'quantitytype'   : 'Q_PARTS_PER_MILLION',
-         'numberofdigits' : 3,
-         'numberfontid'   : 'DEFAULT_FONT_13_LANGUAGE_INDEP',
-         'quantityfontid' : 'DEFAULT_FONT_13_LANGUAGE_INDEP',
+         'QuantityType'   : 'Q_PARTS_PER_MILLION',
+         'NumberOfDigits' : 3,
+         'NumberFontId'   : 'DEFAULT_FONT_13_LANGUAGE_INDEP',
+         'QuantityFontId' : 'DEFAULT_FONT_13_LANGUAGE_INDEP',
      }
      ),
     #9. 数值与subject对应
     #TODO 先用已有的subject数据total_energy_j_for_display
-    (DisplayObserverSingleSubject_Table,
+    (DisplayObserverSingleSubject,
      {
          'id'            : '1.1 SystemStatus l1 h2s level nq',
-         'subjectid'     : 'total_energy_j_for_display',
-         'subjectaccess' : 'Read',
+         'SubjectId'     : 'total_energy_j_for_display',
+         'SubjectAccess' : 'Read',
      }
      ),
     #10. 在对应的listview下面新加一个item
-    (DisplayListViewItem_Table,
+    (DisplayListViewItem,
      {
-         'listviewid' : '1.1 SystemStatus List 1',
+         'ListViewId' : '1.1 SystemStatus List 1',
      }
      ),
     #11. 在新加的item下面添加label
-    (DisplayListViewItemComponents_Table,
+    (DisplayListViewItemComponents,
      {
-         'componentid' : '1.1 SystemStatus l1 h2s level',
-         'columnindex' : 0,
+         'ComponentId' : '1.1 SystemStatus l1 h2s level',
+         'ColumnIndex' : 0,
      }
      ),
     #12. 在新加的item下面添加数值
-    (DisplayListViewItemComponents_Table,
+    (DisplayListViewItemComponents,
      {
-         'componentid' : '1.1 SystemStatus l1 h2s level nq',
-         'columnindex' : 2,
+         'ComponentId' : '1.1 SystemStatus l1 h2s level nq',
+         'ColumnIndex' : 2,
      }
      ),
 ]
 
 h2s_control_label_parameters = [
     #1. 添加h2s control label
-    (DisplayComponent_Table,
+    (DisplayComponent,
      {
-         'name'            : '4.2 AdvancedFunc h2scontol',
-         'componenttype'   : 'Label',
-         'parentcomponent' : 0,
-         'visible'         : True,
-         'readonly'        : True,
+         'Name'            : '4.2 AdvancedFunc h2scontol',
+         'ComponentType'   : 'Label',
+         'ParentComponent' : 0,
+         'Visible'         : True,
+         'ReadOnly'        : True,
          'x1'              : 0,
          'x2'              : 0,
          'y1'              : 0,
          'y2'              : 0,
-         #'displayid'       : 0,         #DisplayComponent_Table里displayid为0，需要指向要显示的group
-         'helpstring'      : 0,
-         'transparent'     : False,
+         #'DisplayId'       : 0,         #DisplayComponent里DisplayId为0，需要指向要显示的group
+         'HelpString'      : 0,
+         'Transparent'     : False,
      }
      ),
     #2. 加字符串定义
-    (StringDefines_Table,
+    (StringDefines,
      {
-         'definename' : 'SID_H2S_CONTROL',
-         'typeid'     : 'Display name',
+         'DefineName' : 'SID_H2S_CONTROL',
+         'TypeId'     : 'Display name',
      }
      ),
     #3. label加相应的字符串
-    (Strings_Table,
+    (Strings,
      {
-         'string'     : 'H2S Control',
-         'languageid' : 'DEV_LANGUAGE',
-         'status'     : 'UnEdit',
+         'String'     : 'H2S Control',
+         'LanguageId' : 'DEV_LANGUAGE',
+         'Status'     : 'UnEdit',
      }
      ),
-    (Strings_Table,
+    (Strings,
      {
-         'string'     : 'H2S Control',
-         'languageid' : 'UK_LANGUAGE',
-         'status'     : 'UnEdit',
+         'String'     : 'H2S Control',
+         'LanguageId' : 'UK_LANGUAGE',
+         'Status'     : 'UnEdit',
      }
      ),
     #4. 将字符串和label对应起来
-    (DisplayLabel_Table,
+    (DisplayLabel,
      {
          'id'       : '4.2 AdvancedFunc h2scontol',
-         'stringid' : 'SID_H2S_CONTROL',
+         'StringId' : 'SID_H2S_CONTROL',
      }
      ),
     #5. 定义label的text排列方式
-    (DisplayText_Table,
+    (DisplayText,
      {
          'id'          : '4.2 AdvancedFunc h2scontol',
-         'align'       : 'VCENTER_LEFT',
-         'fontid'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'leftmargin'  : 8,
-         'rightmargin' : 0,
-         'wordwrap'    : False,
+         'Align'       : 'VCENTER_LEFT',
+         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin'  : 8,
+         'RightMargin' : 0,
+         'WordWrap'    : False,
      }
      ),
     #6. 在对应的listview下面新加一个item
-    (DisplayListViewItem_Table,
+    (DisplayListViewItem,
      {
-         'listviewid' : '4.2 AdvancedFunc List 1',
+         'ListViewId' : '4.2 AdvancedFunc List 1',
      }
      ),
     #7. 在新加的item下面添加label
-    (DisplayListViewItemComponents_Table,
+    (DisplayListViewItemComponents,
      {
-         'componentid' : '4.2 AdvancedFunc h2scontol',
-         'columnindex' : 0,
+         'ComponentId' : '4.2 AdvancedFunc h2scontol',
+         'ColumnIndex' : 0,
      }
      ),
 ]
 
 h2s_control_group_parameters = [
     #1. 添加group，也就是另起一页
-    (DisplayComponent_Table,
+    (DisplayComponent,
      {
-         'name'            : '4.2.14 H2SContol Group',
-         'componenttype'   : 'Group',
-         'parentcomponent' : 0,
-         'visible'         : True,
-         'readonly'        : False,
+         'Name'            : '4.2.14 H2SContol Group',
+         'ComponentType'   : 'Group',
+         'ParentComponent' : 0,
+         'Visible'         : True,
+         'ReadOnly'        : False,
          'x1'              : 33,
          'x2'              : 239,
          'y1'              : 0,
          'y2'              : 305,
-         'displayid'       : 0,
-         'helpstring'      : 0,
-         'transparent'     : False,
+         'DisplayId'       : 0,
+         'HelpString'      : 0,
+         'Transparent'     : False,
      }
      ),
 ]
 
 h2s_control_display_parameters = [
     #Display
-    (Display_Table,
+    (Display,
      {
-         'rootgroupid': '4.2.14 H2SContol Group',
-         'displaynumber': '4.2.14',
-         'name': 'H2S Control',
-         #'focuscomponentid':0,   #set from listview later
-         'abletoshow': True,
-         'show':False,
-         'firstwizarddisplay':False,
+         'RootGroupId': '4.2.14 H2SContol Group',
+         'DisplayNumber': '4.2.14',
+         'Name': 'H2S Control',
+         #'FocusComponentId':0,   #set from listview later
+         'AbleToShow': True,
+         'Show':False,
+         'FirstWizardDisplay':False,
      }
      ),
 ]
 
 h2s_control_listview_parameters = [
-    (DisplayComponent_Table,
+    (DisplayComponent,
      {
-         'name'            : '4.2.14 H2SContol List',
-         'componenttype'   : 'ListView',
-         #'parentcomponent' : 0,                          #set later
-         'visible'         : True,
-         'readonly'        : False,
+         'Name'            : '4.2.14 H2SContol List',
+         'ComponentType'   : 'ListView',
+         #'ParentComponent' : 0,                          #set later
+         'Visible'         : True,
+         'ReadOnly'        : False,
          'x1'              : 15,
          'x2'              : 239,
          'y1'              : 0,
          'y2'              : 271,
-         'displayid'       : 0,
-         'helpstring'      : 0,
-         'transparent'     : False,
+         'DisplayId'       : 0,
+         'HelpString'      : 0,
+         'Transparent'     : False,
      }
      ),
-    (DisplayListView_Table,
+    (DisplayListView,
      {
          'id'          : '4.2.14 H2SContol List',
-         'rowheight'   : 15,
-         'selectedrow' : 0,
-         'nextlistid'  : 0,  # - None -
-         'prevlistid'  : 0,  # - None -
+         'RowHeight'   : 15,
+         'SelectedRow' : 0,
+         'NextListId'  : 0,  # - None -
+         'PrevListId'  : 0,  # - None -
      }
      ),
-    (DisplayListViewColumns_Table,
+    (DisplayListViewColumns,
      {
-         'listviewid'  : '4.2.14 H2SContol List',
-         'columnindex' : 0,
-         'columnwidth' : 160,
+         'ListViewId'  : '4.2.14 H2SContol List',
+         'ColumnIndex' : 0,
+         'Columnwidth' : 160,
      }
      ),
-    (DisplayListViewColumns_Table,
+    (DisplayListViewColumns,
      {
-         'listviewid'  : '4.2.14 H2SContol List',
-         'columnindex' : 1,
-         'columnwidth' : 64,
+         'ListViewId'  : '4.2.14 H2SContol List',
+         'ColumnIndex' : 1,
+         'Columnwidth' : 64,
      }
      ),
-    (DisplayListViewColumns_Table,
+    (DisplayListViewColumns,
      {
-         'listviewid'  : '4.2.14 H2SContol List',
-         'columnindex' : 2,
-         'columnwidth' : 0,
+         'ListViewId'  : '4.2.14 H2SContol List',
+         'ColumnIndex' : 2,
+         'Columnwidth' : 0,
      }
      ),
 ]
@@ -344,79 +344,81 @@ h2s_control_listview_parameters = [
 #############################################################Factor部分##########################################################
 h2s_observer_parameters = [
     #1. 加ObserverType
-    (ObserverType_Table,
+    (ObserverType,
      {
-         'name'        : 'DDACtrl',
-         'shortname'   : 'DDA',
-         'issingleton' : False,
-         'issubject'   : False,
+         'Name'        : 'DDACtrl',
+         'ShortName'   : 'DDA',
+         'IsSingleton' : False,
+         'IsSubject'   : False,
      }
      ),
     #2. 加Observer
-    (Observer_Table,
+    (Observer,
      {
-         'name'            : 'dosing_pump_ctrl',
-         #'typeid'          : 96,      #set from ObserverType
-         'taskid'          : 'LowPrioPeriodicTask',
-         #'taskorder'       : None,
-         #'subjectid'       : None,
-         #'constructorargs' : None,
+         'Name'            : 'dosing_pump_ctrl',
+         #'TypeId'          : 96,      #set from ObserverType
+         'TaskId'          : 'LowPrioPeriodicTask',
+         #'TaskOrder'       : None,
+         #'SubjectId'       : None,
+         #'ConstructorArgs' : None,
      }
      ),
 ]
 
 h2s_subject_parameters = [
     #1. 加Subject
-    (Subject_Table,
+    (Subject,
      {
-         'name'       : 'dda control enabled',
-         'typeid'     : 'BoolDataPoint',
-         'geniappif'  : False,
+         'Name'       : 'dda_control_enabled',
+         'TypeId'     : 'BoolDataPoint',
+         'GeniAppIf'  : False,
          'Save'       : 'Value',              #save是model的函数，要用大写的Save
-         'flashblock' : 'Config',
-         'verified'   : False,
+         'FlashBlock' : 'Config',
+         'Verified'   : False,
      }
      ),
      #2. 对应的DataPoint也要添加
-    (BoolDataPoint_Table,
+    (BoolDataPoint,
      {
-         'id'           : 'dda control enabled',
-         'value'        : 0,
+         'id'           : 'dda_control_enabled',
+         'Value'        : 0,
      }
      ),
 ]
 
 h2s_observer_subject_parameters = [
     #1. 先添加SubjectRelation
-    (SubjectRelation_Table, 
+    (SubjectRelation, 
      {
-         'name'           : 'dda control enabled'.upper(),    #必须用大写字母
-         'observertypeid' : 'DDACtrl',
+         'Name'           : 'dda_control_enabled'.upper(),    #必须用大写字母
+         'ObserverTypeId' : 'DDACtrl',
      }
      ),
-    #2. 再添加ObserverSubjects，会用到SubjectRelation添加的name
-    (ObserverSubjects_Table, 
+    #2. 再添加ObserverSubjects，会用到SubjectRelation添加的Name
+    (ObserverSubjects, 
      {
-         'subjectid'         : 'dda control enabled',
-         'observerid'        : 'dosing_pump_ctrl',
-         'observertypeid'    : 'DDACtrl',
-         'subjectrelationid' : 'dda control enabled'.upper(),
-         'subjectaccess'     : 'Read',
+         'SubjectId'         : 'dda_control_enabled',
+         'ObserverId'        : 'dosing_pump_ctrl',
+         'ObserverTypeId'    : 'DDACtrl',
+         'SubjectRelationId' : 'dda_control_enabled'.upper(),
+         'SubjectAccess'     : 'Read',
      }
      ),
 ]
+#用到的SubjectPtr名字SP_DDA_DDA_CONTROL_ENABLED
+SP = 'SP_' + h2s_observer_parameters[0][1]['ShortName'] + '_' + h2s_subject_parameters[0][1]['Name'].upper()
 
 #TODO test
 test_parameters = [
-    (IntDataPoint_Table,
+    (IntDataPoint,
      {
          'id'           : 'test',
-         'type'         : 'U16',
-         'min'          : '0',
-         'max'          : '0xFFFF',
-         'value'        : '0',
-         'quantitytype' : 'Q_NO_UNIT',
-         'verified'     : False,
+         'Type'         : 'U16',
+         'Min'          : '0',
+         'Max'          : '0xFFFF',
+         'Value'        : '0',
+         'QuantityType' : 'Q_NO_UNIT',
+         'Verified'     : False,
      }
      ),
 ]

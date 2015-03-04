@@ -6,26 +6,26 @@ from tables import *
 from parameters import *
 
 
-def handle_DisplayListViewItemAndComponents(display_listview_item_table, display_listview_item_components_table_list):
+def handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list):
     """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
     #index 从0开始遍历一遍
-    for i in range(0, display_listview_item_table.model.index):
+    for i in range(0, display_listview_item.model.Index):
         try:
-            r = DisplayListViewItem.get(listviewid=display_listview_item_table.model.listviewid, index=i)
+            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
             if r:
                 #通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
-                s = DisplayListViewItemComponents().get(listviewitemid=r.id)
+                s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
                 if s:
-                    for display_listview_item_components in display_listview_item_components_table_list:
-                        if display_listview_item_components.model.componentid == s.componentid:
+                    for display_listview_item_components in display_listview_item_components_list:
+                        if display_listview_item_components.model.ComponentId == s.ComponentId:
                             log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
                             return
         except :
             log(("未找到记录").decode('utf-8'))
-    display_listview_item_table.add()
-    for x in display_listview_item_components_table_list:
-        r = DisplayListViewItem.get(listviewid=display_listview_item_table.model.listviewid, index=display_listview_item_table.model.index)
-        x.model.listviewitemid = r.id
+    display_listview_item.add()
+    for x in display_listview_item_components_list:
+        r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
+        x.model.ListViewItemId = r.id
         x.add()
 
 
@@ -36,10 +36,10 @@ def add_label(label_parameters):
         table = para[0]
         kwargs = para[1]
         x = table(**kwargs)
-        if table == DisplayListViewItem_Table:
+        if table == DisplayListViewItem:
             display_listview_item = x
             continue
-        if table == DisplayListViewItemComponents_Table:
+        if table == DisplayListViewItemComponents:
             display_listview_item_components_list.append(x)
             continue
         x.add()
@@ -50,19 +50,18 @@ def add_label(label_parameters):
 
 def add_observer(parameters):
     rtn = []
-    display_listview_item_components_list = []
     for para in parameters:
         table = para[0]
         kwargs = para[1]
         x = table(**kwargs)
-        if table == ObserverType_Table:
+        if table == ObserverType:
             x.add()
             rtn.append(x)
-            typeid = x.model.id
+            TypeId = x.model.id
             continue
-        if table == Observer_Table:
+        if table == Observer:
             try:
-                x.model.typeid = typeid
+                x.model.TypeId = TypeId
                 x.add()
                 rtn.append(x)
             except:
