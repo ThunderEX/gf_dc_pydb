@@ -299,9 +299,12 @@ class DisplayListViewItem(BaseTable):
         idx_list = []
         for i in r:
             idx_list.append(i.Index)
-        max_idx = max(idx_list)
-        log("max index in DisplayListViewItem table and id=%d is %d" %(self.model.ListViewId, max_idx))
-        self.model.Index = max_idx + 1
+        if len(idx_list):
+            max_idx = max(idx_list)
+            log("max index in DisplayListViewItem table and id=%d is %d" %(self.model.ListViewId, max_idx))
+            self.model.Index = max_idx + 1
+        else:
+            self.model.Index = 0
 
     def get_listviewid_index(self):
         return self.model.ListViewId, self.model.Index
@@ -334,6 +337,14 @@ class DisplayObserverSingleSubject(BaseTable):
         self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
         self.convert_foreignkey('SubjectId', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('SubjectAccess', SubjectAccessType_Model, 'Name', 'id')
+
+
+class DisplayOnOffCheckBox(BaseTable):
+    """操作表DisplayOnOffCheckBox"""
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayOnOffCheckBox_Model()
+        super(DisplayOnOffCheckBox, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
 
 
 class QuantityType(BaseTable):
