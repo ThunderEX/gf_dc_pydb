@@ -78,7 +78,7 @@ class BaseTable(object):
         r = self.model.select()
         for i in r:
             id_list.append(i.id)
-        log("max id in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
+        debug("Max id in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
         self.model.id = max(id_list) + 1
 
     def convert_foreignkey(self, attr_name, foreign_model, foreign_search_attr_name, foreign_attr_name='id'):
@@ -121,12 +121,15 @@ class BaseTable(object):
         _id = id
         if _id:
             self.model.update(**kwargs).where(id=_id).execute()
-            log(("更新记录%d" %(_id)).decode("utf-8"))
+            debug(("表%s成功更新记录，id=%d!" %((self.model._meta.db_table), _id)).decode('utf-8'))
+            debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
+            #debug(("更新记录%d" %(_id)).decode("utf-8"))
 
     #@classmethod
     def add(self):
         if self.model.check_exist():
             log(("记录已存在，跳过......").decode("utf-8"))
+            debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
             return
         self.model.save()
         return self.model.id
@@ -301,7 +304,7 @@ class DisplayListViewItem(BaseTable):
             idx_list.append(i.Index)
         if len(idx_list):
             max_idx = max(idx_list)
-            log("max index in DisplayListViewItem table and id=%d is %d" %(self.model.ListViewId, max_idx))
+            debug("max index in DisplayListViewItem table and id=%d is %d" %(self.model.ListViewId, max_idx))
             self.model.Index = max_idx + 1
         else:
             self.model.Index = 0
@@ -362,13 +365,14 @@ class QuantityType(BaseTable):
         id_list.sort()
         #最后一个是Q_LAST_UNIT，100，要从倒数第二个+1
         self.model.id = id_list[-2] + 1
-        log("new QuantityType id is: %d" % (self.model.id))
+        debug("new QuantityType id is: %d" % (self.model.id))
 
     def add(self):
         stored_id = self.model.id
         self.model.id = None
         if self.model.check_exist():
             log(("记录已存在，跳过......").decode("utf-8"))
+            debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
             return
         self.model.id = stored_id
         self.model.save()
@@ -401,7 +405,8 @@ class DisplayText(BaseTable):
         r = self.model.select().where(id=self.model.id)
         if r:
             for i in r:
-                log(("记录已存在id=%d，跳过......" %(i.id)).decode("utf-8"))
+                log(("id=%d的记录已存在，跳过......" %(i.id)).decode("utf-8"))
+                debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
                 return
         self.model.save()
         return self.model.id
@@ -422,6 +427,7 @@ class StringDefines(BaseTable):
         self.model.id = None
         if self.model.check_exist():
             log(("记录已存在，跳过......").decode("utf-8"))
+            debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
             return
         self.model.id = stored_id
         self.model.save()
@@ -442,7 +448,7 @@ class Strings(BaseTable):
             for i in r:
                 if i.id:
                     self.model.id = i.id
-                    log("string %s exist, id is %d" % (str, i.id))
+                    debug("string %s exist, id is %d" % (str, i.id))
                     return
         self.get_max_id()
 

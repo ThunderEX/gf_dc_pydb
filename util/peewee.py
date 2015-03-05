@@ -751,7 +751,11 @@ class Model(object):
         if rs:
             for r in rs:
                 count = count + 1  #SelectQuery支持迭代，但没有len方法，count()又出错，只能用蠢办法算结果数量
-        log(("找到%d条记录" %(count)).decode('utf-8'))
+        if count:
+            log(("找到%d条记录" %(count)).decode('utf-8'))
+        else:
+            debug(("没有找到记录").decode('utf-8'))
+
         return count
 
     def validate(self):
@@ -765,8 +769,9 @@ class Model(object):
         insert = self.insert(**field_dict)
         try:
             self.id = insert.execute()
-            log(("表%s成功添加记录，id=%d!" %((self.__class__.__name__), self.id)).decode('utf-8'))
+            log(("表%s成功添加记录，id=%d!" %((self._meta.db_table), self.id)).decode('utf-8'))
+            debug(("内容=%s" %(str(field_dict))).decode('utf-8'))
         except Exception as e:
-            log(("！！！错误！！！表%s无法添加记录" %(self.__class__.__name__)).decode('utf-8'))
+            log(("！！！错误！！！表%s无法添加记录" %(self._meta.db_table)).decode('utf-8'))
             raise e
         return
