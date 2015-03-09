@@ -373,6 +373,16 @@ class DisplayNumberQuantity(BaseTable):
         self.convert_foreignkey('QuantityFontId', DisplayFont_Model, 'FontName', 'id')
 
 
+class DisplayModeCheckBox(BaseTable):
+
+    """操作表DisplayModeCheckBox"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayModeCheckBox_Model()
+        super(DisplayModeCheckBox, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+
+
 class DisplayObserverSingleSubject(BaseTable):
 
     """操作表DisplayObserverSingleSubject"""

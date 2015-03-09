@@ -77,8 +77,8 @@ h2s_level_label_parameters = [
          'Visible': True,
          'ReadOnly': True,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,
@@ -94,8 +94,8 @@ h2s_level_label_parameters = [
          'Visible': True,
          'ReadOnly': True,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,
@@ -210,8 +210,8 @@ h2s_control_label_parameters = [
          'Visible': True,
          'ReadOnly': True,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          #'DisplayId'       : 0,         #DisplayComponent里DisplayId为0，需要指向要显示的group
          'HelpString': 0,
@@ -285,8 +285,8 @@ h2s_control_group_parameters = [
          'Visible': True,
          'ReadOnly': False,
          'x1': 0,
-         'x2': 239,
          'y1': 33,
+         'x2': 239,
          'y2': 305,
          'DisplayId': 0,
          'HelpString': 0,
@@ -344,8 +344,8 @@ h2s_control_listview_parameters = [
          'Visible': True,
          'ReadOnly': False,
          'x1': 0,
-         'x2': 239,
          'y1': 15,
+         'x2': 239,
          'y2': 271,
          'DisplayId': 0,
          'HelpString': 0,
@@ -395,7 +395,7 @@ h2s_control_listview_parameters = [
      ),
 ]
 
-#--------------------------- 4.2.14 - H2S Control 页面里新加一行label:Dosing pump，点击可以跳进另一个页面 -------------------------------------------#
+#--------------------------- 4.2.14 - H2S Control 页面里新加一行label:Dosing pump，点击跳进4.2.14.1 Dosing pump group -------------------------------------------#
 component_name = '4.2.14 Dosing pump go to setting'
 label_string_define = 'SID_H2S_DOSING_PUMP_SETTING'
 label_string = 'Dosing pump',
@@ -411,8 +411,8 @@ h2s_dosing_pump_label_parameters = [
          'Visible': True,
          'ReadOnly': True,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,
@@ -474,6 +474,63 @@ h2s_dosing_pump_label_parameters = [
      ),
 ]
 
+#--------------------------- 4.2.14 - H2S Control 页面里新加一行label: go to modules installed，点击进入4.1.7 Modules installed -------------------------------------------#
+component_name = '4.2.14 H2S go to modules installed'
+label_string_define = 'SID_GO_TO_MODULES_INSTALLED'
+listviewid_name = '4.2.14 H2S Contol List'
+
+h2s_go_to_modules_installed_label_parameters = [
+    # 1. 添加label
+    (DisplayComponent,
+     {
+         'Name': component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'y1': 0,
+         'x2': 0,
+         'y2': 0,
+         'DisplayId': 137,       # 137 | Modules installed
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 5. 将字符串和label对应起来
+    (DisplayLabel,
+     {
+         'id': component_name,
+         'StringId': label_string_define,
+     }
+     ),
+    # 6. 定义label的text排列方式
+    (DisplayText,
+     {
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 2,
+         'RightMargin': 1,
+         'WordWrap': False,
+     }
+     ),
+        # 10. 在对应的listview下面新加一个item
+    (DisplayListViewItem,
+     {
+         'ListViewId': listviewid_name,
+     }
+     ),
+    # 11. 在新加的item下面添加label
+    (DisplayListViewItemComponents,
+     {
+         'ComponentId': component_name,
+         'ColumnIndex': 0,
+     }
+     ),
+]
+
+#--------------------------- 新加页面4.2.14.1 - Dosing pump -------------------------------------------#
 component_name = '4.2.14.1 H2S Dosing pump group'
 string_define = 'SID_H2S_DOSING_PUMP_SETTING'
 h2s_dosing_pump_group_parameters = [
@@ -486,8 +543,8 @@ h2s_dosing_pump_group_parameters = [
          'Visible': True,
          'ReadOnly': False,
          'x1': 0,
-         'x2': 239,
          'y1': 33,
+         'x2': 239,
          'y2': 305,
          'DisplayId': 0,
          'HelpString': 0,
@@ -545,23 +602,12 @@ h2s_dosing_pump_listview_parameters = [
          'Visible': True,
          'ReadOnly': False,
          'x1': 0,
-         'x2': 239,
          'y1': 15,
+         'x2': 239,
          'y2': 271,
          'DisplayId': 0,
          'HelpString': 0,
          'Transparent': False,
-     }
-     ),
-    # 2. 定义label的text排列方式
-    (DisplayText,
-     {
-         'id': listview_name,
-         'Align': 'VCENTER_LEFT',
-         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin': 8,
-         'RightMargin': 0,
-         'WordWrap': False,
      }
      ),
     (DisplayListView,
@@ -577,86 +623,31 @@ h2s_dosing_pump_listview_parameters = [
      {
          'ListViewId': listviewid_name,
          'ColumnIndex': 0,
-         'ColumnWidth': 160,
+         'ColumnWidth': 0,
      }
      ),
     (DisplayListViewColumns,
      {
          'ListViewId': listviewid_name,
          'ColumnIndex': 1,
-         'ColumnWidth': 64,
+         'ColumnWidth': 164,
      }
      ),
     (DisplayListViewColumns,
      {
          'ListViewId': listviewid_name,
          'ColumnIndex': 2,
-         'ColumnWidth': 0,
+         'ColumnWidth': 74,
      }
      ),
 ]
 
-#--------------------------- 4.2.14 - H2S Control 页面里新加一行label: go to modules installed，点击进入4.1.7 Modules installed -------------------------------------------#
-component_name = '4.2.14 H2S go to modules installed'
-label_string_define = 'SID_GO_TO_MODULES_INSTALLED'
-label_string = 'Dosing pump',
-listviewid_name = '4.2.14 H2S Contol List'
-
-h2s_go_to_modules_installed_label_parameters = [
-    # 1. 添加label
-    (DisplayComponent,
-     {
-         'Name': component_name,
-         'ComponentType': 'Label',
-         'ParentComponent': 0,
-         'Visible': True,
-         'ReadOnly': True,
-         'x1': 0,
-         'x2': 0,
-         'y1': 0,
-         'y2': 0,
-         'DisplayId': 137,       # 137 | Modules installed
-         'HelpString': 0,
-         'Transparent': False,
-     }
-     ),
-    # 5. 将字符串和label对应起来
-    (DisplayLabel,
-     {
-         'id': component_name,
-         'StringId': label_string_define,
-     }
-     ),
-    # 6. 定义label的text排列方式
-    (DisplayText,
-     {
-         'id': component_name,
-         'Align': 'VCENTER_LEFT',
-         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin': 2,
-         'RightMargin': 1,
-         'WordWrap': False,
-     }
-     ),
-    # 10. 在对应的listview下面新加一个item
-    (DisplayListViewItem,
-     {
-         'ListViewId': listviewid_name,
-     }
-     ),
-    # 11. 在新加的item下面添加label
-    (DisplayListViewItemComponents,
-     {
-         'ComponentId': component_name,
-         'ColumnIndex': 0,
-     }
-     ),
-]
 
 #--------------------------- 4.2.14.1 - Dosing pump 页面里新加一行label:Dosing pump interface -------------------------------------------#
 component_name = '4.2.14.1 H2S dosing pump interface headline'
 label_string_define = 'SID_DOSING_PUMP_INTERFACE'
 label_string = 'Dosing pump interface',
+listviewid_name = '4.2.14.1 H2S Dosing pump List'
 
 h2s_dosing_pump_interface_label_parameters = [
     # 1. 添加label
@@ -668,8 +659,8 @@ h2s_dosing_pump_interface_label_parameters = [
          'Visible': True,
          'ReadOnly': True,
          'x1': 1,
-         'x2': 239,
          'y1': 0,
+         'x2': 239,
          'y2': 29,
          'DisplayId': 0,
          'HelpString': 0,
@@ -716,79 +707,28 @@ h2s_dosing_pump_interface_label_parameters = [
          'WordWrap': False,
      }
      ),
-]
-
-#--------------------------- 4.2.14.1 - Dosing pump 页面里新加一个listview:Dosing pump interface List -------------------------------------------#
-listview_name = '4.2.14.1 H2S dosing pump interface List'
-listviewid_name = '4.2.14.1 H2S dosing pump interface List'
-
-h2s_dosing_pump_interface_listview_parameters = [
-    # 添加Listview
-    (DisplayComponent,
-     {
-         'Name': listview_name,
-         'ComponentType': 'ListView',
-         #'ParentComponent' : 0,                          #set later
-         'Visible': True,
-         'ReadOnly': False,
-         'x1': 0,
-         'x2': 239,
-         'y1': 31,
-         'y2': 271,
-         'DisplayId': 0,
-         'HelpString': 0,
-         'Transparent': False,
-     }
-     ),
-    # 2. 定义label的text排列方式
-    (DisplayText,
-     {
-         'id': listview_name,
-         'Align': 'VCENTER_LEFT',
-         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin': 8,
-         'RightMargin': 0,
-         'WordWrap': False,
-     }
-     ),
-    (DisplayListView,
-     {
-         'id': listviewid_name,
-         'RowHeight': 15,
-         'SelectedRow': 0,
-         'NextListId': 0,  # - None -
-         'PrevListId': 0,  # - None -
-     }
-     ),
-    (DisplayListViewColumns,
+    # 10. 在对应的listview下面新加一个item
+    (DisplayListViewItem,
      {
          'ListViewId': listviewid_name,
+     }
+     ),
+    # 11. 在新加的item下面添加label
+    (DisplayListViewItemComponents,
+     {
+         'ComponentId': component_name,
          'ColumnIndex': 0,
-         'ColumnWidth': 160,
-     }
-     ),
-    (DisplayListViewColumns,
-     {
-         'ListViewId': listviewid_name,
-         'ColumnIndex': 1,
-         'ColumnWidth': 64,
-     }
-     ),
-    (DisplayListViewColumns,
-     {
-         'ListViewId': listviewid_name,
-         'ColumnIndex': 2,
-         'ColumnWidth': 0,
      }
      ),
 ]
 
-#--------------------------- 4.1.14.1 - Dosing pump 页面里新加一行label和checkbox: 4.1.14.1 Smart Digital DDA -------------------------------------------#
+
+#--------------------------- 4.2.14.1 - Dosing pump 页面里新加一行label和checkbox: 4.2.14.1 Smart Digital DDA -------------------------------------------#
 label_component_name = '4.2.14.1 Smart Digital DDA'
 cb_component_name = '4.2.14.1 Smart Digital DDA cb'
 label_string_define = 'SID_H2S_DOSING_PUMP_SMART_DIGITAL_DDA'
 label_string = 'Smart Digital DDA',
-listviewid_name = '4.2.14.1 H2S dosing pump interface List'
+listviewid_name = '4.2.14.1 H2S Dosing pump List'
 
 h2s_dosing_pump_interface_smart_digital_dda_label_parameters = [
     # 1. 添加label
@@ -800,8 +740,8 @@ h2s_dosing_pump_interface_smart_digital_dda_label_parameters = [
          'Visible': True,
          'ReadOnly': True,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,
@@ -812,13 +752,13 @@ h2s_dosing_pump_interface_smart_digital_dda_label_parameters = [
     (DisplayComponent,
      {
          'Name': cb_component_name,
-         'ComponentType': 'OnOffCheckBox',
+         'ComponentType': 'ModeCheckBox',
          'ParentComponent': 0,
          'Visible': True,
          'ReadOnly': False,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,
@@ -860,7 +800,7 @@ h2s_dosing_pump_interface_smart_digital_dda_label_parameters = [
          'id': label_component_name,
          'Align': 'VCENTER_LEFT',
          'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin': 2,
+         'LeftMargin': 4,
          'RightMargin': 0,
          'WordWrap': False,
      }
@@ -875,43 +815,42 @@ h2s_dosing_pump_interface_smart_digital_dda_label_parameters = [
     (DisplayListViewItemComponents,
      {
          'ComponentId': label_component_name,
-         'ColumnIndex': 0,
+         'ColumnIndex': 1,
      }
      ),
-    # 12. 在新加的item下面添加数值
+    # 12. 在新加的item下面添加checkbox
     (DisplayListViewItemComponents,
      {
          'ComponentId': cb_component_name,
-         'ColumnIndex': 1,
+         'ColumnIndex': 2,
      }
      ),
 ]
 
 h2s_dosing_pump_interface_smart_digital_dda_checkbox_parameters = [
-    (DisplayOnOffCheckBox,
+    (DisplayModeCheckBox,
      {
          'id': cb_component_name,
-         'OnValue': 1,
-         'OffValue': 0,
+         'CheckState': 0,
      }
      ),
     # checkbox与subject对应
-    # TODO 先用已有的subject数据io111_pump_1_installed
+    # TODO 先用已有的subject数据pit_level_ctrl_type，是个枚举类型
     (DisplayObserverSingleSubject,
      {
          'id': cb_component_name,
-         'SubjectId': 'io111_pump_1_installed',
+         'SubjectId': 'pit_level_ctrl_type',
          'SubjectAccess': 'Read/Write',
      }
      ),
 ]
 
-#--------------------------- 4.1.14.1 - Dosing pump 页面里新加一行label和checkbox: 4.1.14.1 Analog dosing pump -------------------------------------------#
+#--------------------------- 4.2.14.1 - Dosing pump 页面里新加一行label和checkbox: 4.2.14.1 Analog dosing pump -------------------------------------------#
 label_component_name = '4.2.14.1 Analog dosing pump'
 cb_component_name = '4.2.14.1 Analog dosing pump cb'
 label_string_define = 'SID_H2S_DOSING_PUMP_ANALOG'
 label_string = 'Analog dosing pump',
-listviewid_name = '4.2.14.1 H2S dosing pump interface List'
+listviewid_name = '4.2.14.1 H2S Dosing pump List'
 
 h2s_dosing_pump_interface_analog_dosing_pump_label_parameters = [
     # 1. 添加label
@@ -923,8 +862,8 @@ h2s_dosing_pump_interface_analog_dosing_pump_label_parameters = [
          'Visible': True,
          'ReadOnly': True,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,
@@ -935,13 +874,13 @@ h2s_dosing_pump_interface_analog_dosing_pump_label_parameters = [
     (DisplayComponent,
      {
          'Name': cb_component_name,
-         'ComponentType': 'OnOffCheckBox',
+         'ComponentType': 'ModeCheckBox',
          'ParentComponent': 0,
          'Visible': True,
          'ReadOnly': False,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,
@@ -983,7 +922,7 @@ h2s_dosing_pump_interface_analog_dosing_pump_label_parameters = [
          'id': label_component_name,
          'Align': 'VCENTER_LEFT',
          'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin': 2,
+         'LeftMargin': 4,
          'RightMargin': 0,
          'WordWrap': False,
      }
@@ -998,33 +937,162 @@ h2s_dosing_pump_interface_analog_dosing_pump_label_parameters = [
     (DisplayListViewItemComponents,
      {
          'ComponentId': label_component_name,
-         'ColumnIndex': 0,
+         'ColumnIndex': 1,
      }
      ),
     # 12. 在新加的item下面添加数值
     (DisplayListViewItemComponents,
      {
          'ComponentId': cb_component_name,
-         'ColumnIndex': 1,
+         'ColumnIndex': 2,
      }
      ),
 ]
 
 h2s_dosing_pump_interface_analog_dosing_pump_checkbox_parameters = [
-    (DisplayOnOffCheckBox,
+    (DisplayModeCheckBox,
      {
          'id': cb_component_name,
-         'OnValue': 1,
-         'OffValue': 0,
+         'CheckState': 1,
      }
      ),
     # checkbox与subject对应
-    # TODO 先用已有的subject数据io111_pump_1_installed
+    # TODO 先用已有的subject数据pit_level_ctrl_type，是个枚举类型
     (DisplayObserverSingleSubject,
      {
          'id': cb_component_name,
-         'SubjectId': 'io111_pump_1_installed',
+         'SubjectId': 'pit_level_ctrl_type',
          'SubjectAccess': 'Read/Write',
+     }
+     ),
+]
+
+#--------------------------- 4.2.14.1 - Dosing pump 页面里新加一行label: Go to settting of Analog outputs，点击进入4.4.3 Analog outputs -------------------------------------------#
+component_name = '4.2.14.1 Dosing pump go to AO'
+label_string_define = 'SID_GO_TO_SETTING_OF_ANALOGUE_OUTPUTS'
+listviewid_name = '4.2.14.1 H2S Dosing pump List'
+
+h2s_dosing_pump_go_to_ao_space_parameters = [
+    # 为了美观，需要在listview下加一行空格
+    (DisplayListViewItem,
+     {
+         'ListViewId': listviewid_name,
+     }
+     ),
+]
+
+h2s_dosing_pump_go_to_ao_label_parameters = [
+    # 1. 添加label
+    (DisplayComponent,
+     {
+         'Name': component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'y1': 0,
+         'x2': 0,
+         'y2': 0,
+         'DisplayId': 143,       # 143 | Analog outputs
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 2. 将字符串和label对应起来
+    (DisplayLabel,
+     {
+         'id': component_name,
+         'StringId': label_string_define,
+     }
+     ),
+    # 3. 定义label的text排列方式
+    (DisplayText,
+     {
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 1,
+         'RightMargin': 0,
+         'WordWrap': False,
+     }
+     ),
+    # 4. 在对应的listview下面新加一个item
+    (DisplayListViewItem,
+     {
+         'ListViewId': listviewid_name,
+     }
+     ),
+    # 5. 在新加的item下面添加label
+    (DisplayListViewItemComponents,
+     {
+         'ComponentId': component_name,
+         'ColumnIndex': 0,
+     }
+     ),
+]
+
+#--------------------------- 4.2.14.1 - Dosing pump 页面里新加一行label: Go to settting of Digital outputs，点击进入4.4.4 Digital outputs -------------------------------------------#
+component_name = '4.2.14.1 Dosing pump go to DO'
+label_string_define = 'SID_GO_TO_SETTING_OF_DIGITAL_OUTPUTS'
+listviewid_name = '4.2.14.1 H2S Dosing pump List'
+
+h2s_dosing_pump_go_to_do_space_parameters = [
+    # 为了美观，需要在listview下加一行空格
+    (DisplayListViewItem,
+     {
+         'ListViewId': listviewid_name,
+     }
+     ),
+]
+
+h2s_dosing_pump_go_to_do_label_parameters = [
+    # 1. 添加label
+    (DisplayComponent,
+     {
+         'Name': component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'y1': 0,
+         'x2': 0,
+         'y2': 0,
+         'DisplayId': 35,       # 35 | Digital outputs
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 5. 将字符串和label对应起来
+    (DisplayLabel,
+     {
+         'id': component_name,
+         'StringId': label_string_define,
+     }
+     ),
+    # 6. 定义label的text排列方式
+    (DisplayText,
+     {
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 1,
+         'RightMargin': 0,
+         'WordWrap': False,
+     }
+     ),
+        # 10. 在对应的listview下面新加一个item
+    (DisplayListViewItem,
+     {
+         'ListViewId': listviewid_name,
+     }
+     ),
+    # 11. 在新加的item下面添加label
+    (DisplayListViewItemComponents,
+     {
+         'ComponentId': component_name,
+         'ColumnIndex': 0,
      }
      ),
 ]
@@ -1055,8 +1123,8 @@ h2s_dosing_pump_installed_label_parameters = [
          'Visible': True,
          'ReadOnly': True,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,
@@ -1072,8 +1140,8 @@ h2s_dosing_pump_installed_label_parameters = [
          'Visible': True,
          'ReadOnly': False,
          'x1': 0,
-         'x2': 0,
          'y1': 0,
+         'x2': 0,
          'y2': 0,
          'DisplayId': 0,
          'HelpString': 0,

@@ -37,33 +37,40 @@ if __name__ == '__main__':
     comment('********** 添加label: Dosing pump于4.2.14 **********')
     # 添加Dosing pump
     h2s_dosing_pump_label_tables = add_data(h2s_dosing_pump_label_parameters, 'label')
-    h2s_dosing_pump_group_tables = add_data(h2s_dosing_pump_group_parameters)
-    h2s_dosing_pump_display_tables = add_data(h2s_dosing_pump_display_parameters)
-    #h2s_dosing_pump_listview_tables = add_data(h2s_dosing_pump_listview_parameters)
-    update_displayid(h2s_dosing_pump_label_tables, h2s_dosing_pump_display_tables)
-    #update_focus_component_id(h2s_dosing_pump_listview_tables, h2s_dosing_pump_display_tables)
-    #update_parent_component(h2s_dosing_pump_group_tables, h2s_dosing_pump_listview_tables)
-
-    comment('********** 添加label:4.2.14.1 H2S dosing pump interface于4.2.14.1 Dosing pump **********')
-    dosing_pump_interface_label_tables = add_data(h2s_dosing_pump_interface_label_parameters)
-    update_focus_component_id(dosing_pump_interface_label_tables, h2s_dosing_pump_display_tables)
-    update_parent_component(h2s_dosing_pump_group_tables, dosing_pump_interface_label_tables)
-
-    comment('********** 添加listview:4.2.14.1 H2S dosing pump interface List于4.2.14.1 Dosing pump **********')
-    dosing_pump_interface_listview_tables = add_data(h2s_dosing_pump_interface_listview_parameters)
-    update_parent_component(h2s_dosing_pump_group_tables, dosing_pump_interface_listview_tables)
-
-    comment('********** 添加label和checkbox: Smart Digital DDA于4.1.14.1 H2S dosing pump interface List**********')
-    add_data(h2s_dosing_pump_interface_smart_digital_dda_label_parameters, 'label')
-    add_data(h2s_dosing_pump_interface_smart_digital_dda_checkbox_parameters)
-
-    #comment('********** 添加label和checkbox: Analog dosing pump于4.1.14.1 H2S dosing pump interface List**********')
-    #add_data(h2s_dosing_pump_interface_analog_dosing_pump_label_parameters, 'label')
-    # add_data(h2s_dosing_pump_interface_analog_dosing_pump_checkbox_parameters)
 
     comment('********** 添加label: Go to modules installed于4.2.14 **********')
     # 添加Go to modules installed
     add_data(h2s_go_to_modules_installed_label_parameters, 'label')
+
+    comment('********** 添加新页group: 4.2.14.1 Dosing pump **********')
+    h2s_dosing_pump_group_tables = add_data(h2s_dosing_pump_group_parameters)
+    h2s_dosing_pump_display_tables = add_data(h2s_dosing_pump_display_parameters)
+    #label跳转到新页
+    update_displayid(h2s_dosing_pump_label_tables, h2s_dosing_pump_display_tables)
+
+    comment('********** 添加新的listview于页4.2.14.1 Dosing pump下 **********')
+    h2s_dosing_pump_listview_tables = add_data(h2s_dosing_pump_listview_parameters)
+    update_focus_component_id(h2s_dosing_pump_listview_tables, h2s_dosing_pump_display_tables)
+    update_parent_component(h2s_dosing_pump_group_tables, h2s_dosing_pump_listview_tables)
+
+    comment('********** 添加label:4.2.14.1 H2S dosing pump interface于4.2.14.1 Dosing pump **********')
+    dosing_pump_interface_label_tables = add_data(h2s_dosing_pump_interface_label_parameters, 'label')
+
+    comment('********** 添加label和checkbox: Smart Digital DDA于4.2.14.1 H2S Dosing pump List **********')
+    add_data(h2s_dosing_pump_interface_smart_digital_dda_label_parameters, 'label')
+    add_data(h2s_dosing_pump_interface_smart_digital_dda_checkbox_parameters)
+
+    comment('********** 添加label和checkbox: Analog dosing pump于4.2.14.1 H2S Dosing pump List **********')
+    add_data(h2s_dosing_pump_interface_analog_dosing_pump_label_parameters, 'label')
+    add_data(h2s_dosing_pump_interface_analog_dosing_pump_checkbox_parameters)
+
+    comment('********** 添加label: Go to settting of Analog outputs于4.2.14.1 **********')
+    add_data(h2s_dosing_pump_go_to_ao_space_parameters)  # 空行
+    add_data(h2s_dosing_pump_go_to_ao_label_parameters, 'label')
+
+    comment('********** 添加label: Go to settting of Digital outputs于4.2.14.1 **********')
+    add_data(h2s_dosing_pump_go_to_do_space_parameters)  # 空行
+    add_data(h2s_dosing_pump_go_to_do_label_parameters, 'label')
 
     comment('********** 添加label和checkbox: Dosing pump installed于4.1.7 **********')
     add_data(h2s_dosing_pump_installed_space_parameters)  # 空行

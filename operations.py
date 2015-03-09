@@ -108,10 +108,11 @@ def update_parent_component(group_tables, display_component_tables):
     display_component.update(display_component.model.id, ParentComponent=_parentcomponent)
 
 
-def add_label(label_parameters):
+def add_label(parameters):
     rtn = []
     display_listview_item_components_list = []
-    for para in label_parameters:
+    for index, para in enumerate(parameters):
+        log(("处理第%d项" % (index + 1)).decode('utf-8'))
         table = para[0]
         kwargs = para[1]
         x = table(**kwargs)
@@ -129,7 +130,9 @@ def add_label(label_parameters):
 
 def add_observer(parameters):
     rtn = []
-    for para in parameters:
+    #for para in parameters:
+    for index, para in enumerate(parameters):
+        log(("处理第%d项" % (index + 1)).decode('utf-8'))
         table = para[0]
         kwargs = para[1]
         x = table(**kwargs)
