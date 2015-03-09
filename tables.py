@@ -5,7 +5,9 @@ from models import *
 
 
 class BaseTable(object):
+
     ''' 所有表的基类 '''
+
     def __init__(self, model, *args, **kwargs):
         '''
             初始化
@@ -55,10 +57,10 @@ class BaseTable(object):
         :param attr_list: 要删除的属性列表
         :return:
         '''
-        #TODO Bug:如果连续使用一张table，第二次就没有Comment这个field了
+        # TODO Bug:如果连续使用一张table，第二次就没有Comment这个field了
         for attr in attr_list:
             if hasattr(self.model, attr) and getattr(self.model, attr) == None:
-                #print self.model._meta.fields[attr]
+                # print self.model._meta.fields[attr]
                 if attr in self.model._meta.fields.keys():
                     self.model._meta.fields.pop(attr)
 
@@ -68,8 +70,8 @@ class BaseTable(object):
         foreignkey_items = {}
         for k, v in kwargs.items():
             if hasattr(self.model, k):
-                #如果类型不同，则提取外键（一般是用描述性字符串代替外键的id）
-                if type(v) != field_types[k]:
+                # 如果类型不同，则提取外键（一般是用描述性字符串代替外键的id）
+                if not isinstance(v, field_types[k]):
                     foreignkey_items[k] = v
         return foreignkey_items
 
@@ -91,12 +93,12 @@ class BaseTable(object):
         :param foreign_attr_name: 得到的关联表field
         '''
         if not hasattr(self.model, attr_name):
-            log(("没有Field: %s" %(attr_name)).decode("utf-8"))
+            log(("没有Field: %s" % (attr_name)).decode("utf-8"))
             raise NameError
         if attr_name in self.foreignkey_items.keys():
-            r = foreign_model.get(**{foreign_search_attr_name : getattr(self.model, attr_name)})
+            r = foreign_model.get(**{foreign_search_attr_name: getattr(self.model, attr_name)})
             value = getattr(r, foreign_attr_name)
-            debug(("转换外键%s = %s" %(attr_name, str(value))).decode("utf-8"))
+            debug(("转换外键%s = %s" % (attr_name, str(value))).decode("utf-8"))
             setattr(self.model, attr_name, value)
 
     def query(self, id=None):
@@ -115,29 +117,31 @@ class BaseTable(object):
                     olist.append(str(getattr(result, field)))
                 output = '\t'.join(olist)
                 print output
-                #log(("记录已存在，跳过......").decode("utf-8"))
+                # log(("记录已存在，跳过......").decode("utf-8"))
 
     def update(self, id=0, **kwargs):
         _id = id
         if _id:
             self.model.update(**kwargs).where(id=_id).execute()
-            debug(("表%s成功更新记录，id=%d!" %((self.model._meta.db_table), _id)).decode('utf-8'))
-            debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
+            debug(("表%s成功更新记录，id=%d!" % ((self.model._meta.db_table), _id)).decode('utf-8'))
+            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             #debug(("更新记录%d" %(_id)).decode("utf-8"))
 
     #@classmethod
     def add(self):
         if self.model.check_exist():
             log(("记录已存在，跳过......").decode("utf-8"))
-            debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
+            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             return
         self.model.save()
         return self.model.id
 
 
-#Factory Database Models
+# Factory Database
 class BoolDataPoint(BaseTable):
+
     """操作表BoolDataPoint"""
+
     def __init__(self, *args, **kwargs):
         self.model = BoolDataPoint_Model()
         super(BoolDataPoint, self).__init__(self.model, *args, **kwargs)
@@ -145,7 +149,9 @@ class BoolDataPoint(BaseTable):
 
 
 class EnumDataPoint(BaseTable):
+
     """操作表EnumDataPoint"""
+
     def __init__(self, *args, **kwargs):
         self.model = EnumDataPoint_Model()
         super(EnumDataPoint, self).__init__(self.model, *args, **kwargs)
@@ -153,7 +159,9 @@ class EnumDataPoint(BaseTable):
 
 
 class FloatDataPoint(BaseTable):
+
     """操作表FloatDataPoint"""
+
     def __init__(self, *args, **kwargs):
         self.model = FloatDataPoint_Model()
         super(FloatDataPoint, self).__init__(self.model, *args, **kwargs)
@@ -162,7 +170,9 @@ class FloatDataPoint(BaseTable):
 
 
 class IntDataPoint(BaseTable):
+
     """操作表IntDataPoint"""
+
     def __init__(self, *args, **kwargs):
         self.model = IntDataPoint_Model()
         super(IntDataPoint, self).__init__(self.model, *args, **kwargs)
@@ -174,7 +184,9 @@ class IntDataPoint(BaseTable):
 
 
 class StringDataPoint(BaseTable):
+
     """操作表StringDataPoint"""
+
     def __init__(self, *args, **kwargs):
         self.model = StringDataPoint_Model()
         super(StringDataPoint, self).__init__(self.model, *args, **kwargs)
@@ -182,7 +194,9 @@ class StringDataPoint(BaseTable):
 
 
 class Observer(BaseTable):
+
     """操作表Observer"""
+
     def __init__(self, *args, **kwargs):
         self.model = Observer_Model()
         super(Observer, self).__init__(self.model, *args, **kwargs)
@@ -191,7 +205,9 @@ class Observer(BaseTable):
 
 
 class ObserverSubjects(BaseTable):
+
     """操作表ObserverSubjects"""
+
     def __init__(self, *args, **kwargs):
         self.model = ObserverSubjects_Model()
         super(ObserverSubjects, self).__init__(self.model, *args, **kwargs)
@@ -202,7 +218,9 @@ class ObserverSubjects(BaseTable):
 
 
 class ObserverType(BaseTable):
+
     """操作表ObserverType"""
+
     def __init__(self, *args, **kwargs):
         self.model = ObserverType_Model()
         super(ObserverType, self).__init__(self.model, *args, **kwargs)
@@ -210,9 +228,11 @@ class ObserverType(BaseTable):
 
 
 class Subject(BaseTable):
+
     """操作表Subject
     save : '-', 'All', 'Value'
     """
+
     def __init__(self, *args, **kwargs):
         self.model = Subject_Model()
         super(Subject, self).__init__(self.model, *args, **kwargs)
@@ -222,7 +242,9 @@ class Subject(BaseTable):
 
 
 class SubjectRelation(BaseTable):
+
     """操作表SubjectRelation"""
+
     def __init__(self, *args, **kwargs):
         """
         SubjectRelation.name - 用于组成SubjectPointer，前面加SP_和ObserverType里的ShortName，如SP_UNITS_XXX
@@ -233,7 +255,9 @@ class SubjectRelation(BaseTable):
 
 
 class VectorDataPoint(BaseTable):
+
     """操作表VectorDataPoint"""
+
     def __init__(self, *args, **kwargs):
         self.model = VectorDataPoint_Model()
         super(VectorDataPoint, self).__init__(self.model, *args, **kwargs)
@@ -243,17 +267,22 @@ class VectorDataPoint(BaseTable):
             raise TypeError
 
 
-#Display Database Models
+# Display Database
 class Display(BaseTable):
+
     """操作表Display"""
+
     def __init__(self, *args, **kwargs):
         self.model = Display_Model()
         super(Display, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('RootGroupId', DisplayComponent_Model, 'Name', 'id')
         self.convert_foreignkey('Name', Strings_Model, 'String', 'id')
 
+
 class DisplayComponent(BaseTable):
+
     """操作表DisplayComponent"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayComponent_Model()
         super(DisplayComponent, self).__init__(self.model, *args, **kwargs)
@@ -262,7 +291,9 @@ class DisplayComponent(BaseTable):
 
 
 class DisplayLabel(BaseTable):
+
     """操作表DisplayLabel"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayLabel_Model()
         super(DisplayLabel, self).__init__(self.model, *args, **kwargs)
@@ -271,7 +302,9 @@ class DisplayLabel(BaseTable):
 
 
 class DisplayListView(BaseTable):
+
     """操作表DisplayListView"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayListView_Model()
         super(DisplayListView, self).__init__(self.model, *args, **kwargs)
@@ -281,7 +314,9 @@ class DisplayListView(BaseTable):
 
 
 class DisplayListViewColumns(BaseTable):
+
     """操作表DisplayListViewColumns"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayListViewColumns_Model()
         super(DisplayListViewColumns, self).__init__(self.model, *args, **kwargs)
@@ -289,7 +324,9 @@ class DisplayListViewColumns(BaseTable):
 
 
 class DisplayListViewItem(BaseTable):
+
     """操作表DisplayListViewItem"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayListViewItem_Model()
         super(DisplayListViewItem, self).__init__(self.model, *args, **kwargs)
@@ -297,14 +334,14 @@ class DisplayListViewItem(BaseTable):
         self.get_max_id()
 
     def get_max_id(self):
-        #找出同一个listview下的item有多少个，选出最大的index
+        # 找出同一个listview下的item有多少个，选出最大的index
         r = DisplayListViewItem_Model.select().where(ListViewId=self.model.ListViewId)
         idx_list = []
         for i in r:
             idx_list.append(i.Index)
         if len(idx_list):
             max_idx = max(idx_list)
-            debug("max index in DisplayListViewItem table and id=%d is %d" %(self.model.ListViewId, max_idx))
+            debug("max index in DisplayListViewItem table and id=%d is %d" % (self.model.ListViewId, max_idx))
             self.model.Index = max_idx + 1
         else:
             self.model.Index = 0
@@ -314,7 +351,9 @@ class DisplayListViewItem(BaseTable):
 
 
 class DisplayListViewItemComponents(BaseTable):
+
     """操作表DisplayListViewItemComponents"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayListViewItemComponents_Model()
         super(DisplayListViewItemComponents, self).__init__(self.model, *args, **kwargs)
@@ -322,7 +361,9 @@ class DisplayListViewItemComponents(BaseTable):
 
 
 class DisplayNumberQuantity(BaseTable):
+
     """操作表DisplayNumberQuantity"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayNumberQuantity_Model()
         super(DisplayNumberQuantity, self).__init__(self.model, *args, **kwargs)
@@ -333,7 +374,9 @@ class DisplayNumberQuantity(BaseTable):
 
 
 class DisplayObserverSingleSubject(BaseTable):
+
     """操作表DisplayObserverSingleSubject"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayObserverSingleSubject_Model()
         super(DisplayObserverSingleSubject, self).__init__(self.model, *args, **kwargs)
@@ -343,7 +386,9 @@ class DisplayObserverSingleSubject(BaseTable):
 
 
 class DisplayOnOffCheckBox(BaseTable):
+
     """操作表DisplayOnOffCheckBox"""
+
     def __init__(self, *args, **kwargs):
         self.model = DisplayOnOffCheckBox_Model()
         super(DisplayOnOffCheckBox, self).__init__(self.model, *args, **kwargs)
@@ -351,7 +396,9 @@ class DisplayOnOffCheckBox(BaseTable):
 
 
 class QuantityType(BaseTable):
+
     """操作表QuantityType"""
+
     def __init__(self, *args, **kwargs):
         self.model = QuantityType_Model()
         super(QuantityType, self).__init__(self.model, *args, **kwargs)
@@ -363,7 +410,7 @@ class QuantityType(BaseTable):
         for i in r:
             id_list.append(i.id)
         id_list.sort()
-        #最后一个是Q_LAST_UNIT，100，要从倒数第二个+1
+        # 最后一个是Q_LAST_UNIT，100，要从倒数第二个+1
         self.model.id = id_list[-2] + 1
         debug("new QuantityType id is: %d" % (self.model.id))
 
@@ -372,7 +419,7 @@ class QuantityType(BaseTable):
         self.model.id = None
         if self.model.check_exist():
             log(("记录已存在，跳过......").decode("utf-8"))
-            debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
+            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             return
         self.model.id = stored_id
         self.model.save()
@@ -380,7 +427,9 @@ class QuantityType(BaseTable):
 
 
 class DisplayText(BaseTable):
+
     """操作表DisplayText"""
+
     def __init__(self, *args, **kwargs):
         aligns = {
             "TOP_LEFT"        : 0,
@@ -405,16 +454,18 @@ class DisplayText(BaseTable):
         r = self.model.select().where(id=self.model.id)
         if r:
             for i in r:
-                log(("id=%d的记录已存在，跳过......" %(i.id)).decode("utf-8"))
-                debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
+                log(("id=%d的记录已存在，跳过......" % (i.id)).decode("utf-8"))
+                debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
                 return
         self.model.save()
         return self.model.id
 
 
-#Language Database
+# Language Database
 class StringDefines(BaseTable):
+
     """操作表StringDefines"""
+
     def __init__(self, *args, **kwargs):
         self.model = StringDefines_Model()
         super(StringDefines, self).__init__(self.model, *args, **kwargs)
@@ -427,7 +478,7 @@ class StringDefines(BaseTable):
         self.model.id = None
         if self.model.check_exist():
             log(("记录已存在，跳过......").decode("utf-8"))
-            debug(("内容=%s" %(str(self.model.get_field_dict()))).decode('utf-8'))
+            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             return
         self.model.id = stored_id
         self.model.save()
@@ -435,7 +486,9 @@ class StringDefines(BaseTable):
 
 
 class Strings(BaseTable):
+
     """操作表Strings"""
+
     def __init__(self, *args, **kwargs):
         self.model = Strings_Model()
         super(Strings, self).__init__(self.model, *args, **kwargs)
@@ -454,14 +507,18 @@ class Strings(BaseTable):
 
 
 class StringTypes(BaseTable):
+
     """操作表StringTypes"""
+
     def __init__(self, *args, **kwargs):
         self.model = StringTypes_Model()
         super(StringTypes, self).__init__(self.model, *args, **kwargs)
 
 
 class Languages(BaseTable):
+
     """操作表Languages"""
+
     def __init__(self, *args, **kwargs):
         self.model = Languages_Model()
         super(Languages, self).__init__(self.model, *args, **kwargs)

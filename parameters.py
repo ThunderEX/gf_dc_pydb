@@ -24,172 +24,172 @@ quantity_name = 'Q_PARTS_PER_MILLION'
 string_define = 'SID_PPM'
 string = 'ppm'
 h2s_level_quantity_parameters = [
-    #1. 加新的单位类型
-    (QuantityType, 
+    # 1. 加新的单位类型
+    (QuantityType,
      {
          'Name': quantity_name,
      }
      ),
-    #2. 加ppm的字符串定义
-    (StringDefines, 
+    # 2. 加ppm的字符串定义
+    (StringDefines,
      {
-         "DefineName" : string_define,
-         "TypeId"     : "Quantity Unit",
+         "DefineName": string_define,
+         "TypeId": "Quantity Unit",
      }
      ),
-    #3. 加ppm相应的字符串
-    (Strings, 
+    # 3. 加ppm相应的字符串
+    (Strings,
      {
-         'String'     : string,
-         'LanguageId' : 'DEV_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': string,
+         'LanguageId': 'DEV_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
-    (Strings, 
+    (Strings,
      {
-         'String'     : string,
-         'LanguageId' : 'UK_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': string,
+         'LanguageId': 'UK_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
-    #4. SubjectRelation里的MpcUnits要加上Q_PARTS_PER_MILLION
-    (SubjectRelation, 
+    # 4. SubjectRelation里的MpcUnits要加上Q_PARTS_PER_MILLION
+    (SubjectRelation,
      {
-         'Name'           : quantity_name,
-         'ObserverTypeId' : 'MpcUnits',
+         'Name': quantity_name,
+         'ObserverTypeId': 'MpcUnits',
      }
      ),
 ]
 
-label_component_name =  '1.1 SystemStatus l1 h2s level'
+label_component_name = '1.1 SystemStatus l1 h2s level'
 quantity_component_name = '1.1 SystemStatus l1 h2s level nq'
 string_define = 'SID_H2S_LEVEL'
 string = 'H2S level'
 listviewid_name = '1.1 SystemStatus List 1'
 
 h2s_level_label_parameters = [
-    #1. 添加h2s label
+    # 1. 添加h2s label
     (DisplayComponent,
      {
-         'Name'            : label_component_name,
-         'ComponentType'   : 'Label',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : True,
-         'x1'              : 0,
-         'x2'              : 0,
-         'y1'              : 0,
-         'y2'              : 0,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Name': label_component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #2. 添加数值label
+    # 2. 添加数值label
     (DisplayComponent,
      {
-         'Name'            : quantity_component_name,
-         'ComponentType'   : 'NumberQuantity',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : True,
-         'x1'              : 0,
-         'x2'              : 0,
-         'y1'              : 0,
-         'y2'              : 0,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Name': quantity_component_name,
+         'ComponentType': 'NumberQuantity',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #3. 加字符串定义
+    # 3. 加字符串定义
     (StringDefines,
      {
-         'DefineName' : string_define,
-         'TypeId'     : 'Value type',
+         'DefineName': string_define,
+         'TypeId': 'Value type',
      }
      ),
-    #4. label加相应的字符串
+    # 4. label加相应的字符串
     (Strings,
      {
-         'String'     : string,
-         'LanguageId' : 'DEV_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': string,
+         'LanguageId': 'DEV_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
     (Strings,
      {
-         'String'     : string,
-         'LanguageId' : 'UK_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': string,
+         'LanguageId': 'UK_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
-    #5. 将字符串和label对应起来
+    # 5. 将字符串和label对应起来
     (DisplayLabel,
      {
-         'id'       : label_component_name,
-         'StringId' : string_define,
+         'id': label_component_name,
+         'StringId': string_define,
      }
      ),
-    #6. 定义label的text排列方式
+    # 6. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : label_component_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 2,
-         'RightMargin' : 0,
-         'WordWrap'    : False,
+         'id': label_component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 2,
+         'RightMargin': 0,
+         'WordWrap': False,
      }
      ),
-    #7. 定义数值的text排列方式
+    # 7. 定义数值的text排列方式
     (DisplayText,
      {
-         'id'          : quantity_component_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 0,
-         'RightMargin' : 0,
-         'WordWrap'    : False,
+         'id': quantity_component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 0,
+         'RightMargin': 0,
+         'WordWrap': False,
      }
      ),
-    #8. 数值与新加单位'ppm'对应
+    # 8. 数值与新加单位'ppm'对应
     (DisplayNumberQuantity,
      {
-         'id'             : quantity_component_name,
-         'QuantityType'   : quantity_name,
-         'NumberOfDigits' : 3,
-         'NumberFontId'   : 'DEFAULT_FONT_13_LANGUAGE_INDEP',
-         'QuantityFontId' : 'DEFAULT_FONT_13_LANGUAGE_INDEP',
+         'id': quantity_component_name,
+         'QuantityType': quantity_name,
+         'NumberOfDigits': 3,
+         'NumberFontId': 'DEFAULT_FONT_13_LANGUAGE_INDEP',
+         'QuantityFontId': 'DEFAULT_FONT_13_LANGUAGE_INDEP',
      }
      ),
-    #9. 数值与subject对应
-    #TODO 先用已有的subject数据total_energy_j_for_display
+    # 9. 数值与subject对应
+    # TODO 先用已有的subject数据total_energy_j_for_display
     (DisplayObserverSingleSubject,
      {
-         'id'            : quantity_component_name,
-         'SubjectId'     : 'total_energy_j_for_display',
-         'SubjectAccess' : 'Read',
+         'id': quantity_component_name,
+         'SubjectId': 'total_energy_j_for_display',
+         'SubjectAccess': 'Read',
      }
      ),
-    #10. 在对应的listview下面新加一个item
+    # 10. 在对应的listview下面新加一个item
     (DisplayListViewItem,
      {
-         'ListViewId' : listviewid_name,
+         'ListViewId': listviewid_name,
      }
      ),
-    #11. 在新加的item下面添加label
+    # 11. 在新加的item下面添加label
     (DisplayListViewItemComponents,
      {
-         'ComponentId' : label_component_name,
-         'ColumnIndex' : 0,
+         'ComponentId': label_component_name,
+         'ColumnIndex': 0,
      }
      ),
-    #12. 在新加的item下面添加数值
+    # 12. 在新加的item下面添加数值
     (DisplayListViewItemComponents,
      {
-         'ComponentId' : quantity_component_name,
-         'ColumnIndex' : 2,
+         'ComponentId': quantity_component_name,
+         'ColumnIndex': 2,
      }
      ),
 ]
@@ -201,74 +201,74 @@ string = 'H2S Control'
 listviewid_name = '4.2 AdvancedFunc List 1'
 
 h2s_control_label_parameters = [
-    #1. 添加h2s control label
+    # 1. 添加h2s control label
     (DisplayComponent,
      {
-         'Name'            : component_name,
-         'ComponentType'   : 'Label',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : True,
-         'x1'              : 0,
-         'x2'              : 0,
-         'y1'              : 0,
-         'y2'              : 0,
+         'Name': component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
          #'DisplayId'       : 0,         #DisplayComponent里DisplayId为0，需要指向要显示的group
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #2. 加字符串定义
+    # 2. 加字符串定义
     (StringDefines,
      {
-         'DefineName' : string_define,
-         'TypeId'     : 'Display name',
+         'DefineName': string_define,
+         'TypeId': 'Display name',
      }
      ),
-    #3. label加相应的字符串
+    # 3. label加相应的字符串
     (Strings,
      {
-         'String'     : string,
-         'LanguageId' : 'DEV_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': string,
+         'LanguageId': 'DEV_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
     (Strings,
      {
-         'String'     : string,
-         'LanguageId' : 'UK_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': string,
+         'LanguageId': 'UK_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
-    #4. 将字符串和label对应起来
+    # 4. 将字符串和label对应起来
     (DisplayLabel,
      {
-         'id'       : component_name,
-         'StringId' : string_define,
+         'id': component_name,
+         'StringId': string_define,
      }
      ),
-    #5. 定义label的text排列方式
+    # 5. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : component_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 8,
-         'RightMargin' : 0,
-         'WordWrap'    : False,
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 8,
+         'RightMargin': 0,
+         'WordWrap': False,
      }
      ),
-    #6. 在对应的listview下面新加一个item
+    # 6. 在对应的listview下面新加一个item
     (DisplayListViewItem,
      {
-         'ListViewId' : listviewid_name,
+         'ListViewId': listviewid_name,
      }
      ),
-    #7. 在新加的item下面添加label
+    # 7. 在新加的item下面添加label
     (DisplayListViewItemComponents,
      {
-         'ComponentId' : component_name,
-         'ColumnIndex' : 0,
+         'ComponentId': component_name,
+         'ColumnIndex': 0,
      }
      ),
 ]
@@ -276,121 +276,121 @@ h2s_control_label_parameters = [
 component_name = '4.2.14 H2S Contol Group'
 string_define = 'SID_H2S_CONTROL'
 h2s_control_group_parameters = [
-    #1. 添加group，也就是另起一页
+    # 1. 添加group，也就是另起一页
     (DisplayComponent,
      {
-         'Name'            : component_name,
-         'ComponentType'   : 'Group',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : False,
-         'x1'              : 0,
-         'x2'              : 239,
-         'y1'              : 33,
-         'y2'              : 305,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Name': component_name,
+         'ComponentType': 'Group',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': False,
+         'x1': 0,
+         'x2': 239,
+         'y1': 33,
+         'y2': 305,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #2. 将字符串和label对应起来
+    # 2. 将字符串和label对应起来
     (DisplayLabel,
      {
-         'id'       : component_name,
-         'StringId' : string_define,
+         'id': component_name,
+         'StringId': string_define,
      }
      ),
-    #3. 定义label的text排列方式
+    # 3. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : component_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 8,
-         'RightMargin' : 0,
-         'WordWrap'    : False,
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 8,
+         'RightMargin': 0,
+         'WordWrap': False,
      }
      ),
 ]
 
 root_group_id_name = '4.2.14 H2S Contol Group',
-string_name =  'H2S Control'
+string_name = 'H2S Control'
 display_number = '4.2.14'
 h2s_control_display_parameters = [
-    #Display
+    # Display
     (Display,
      {
-         'RootGroupId'        : root_group_id_name,
-         'DisplayNumber'      : display_number,
-         'Name'               : string_name,
+         'RootGroupId': root_group_id_name,
+         'DisplayNumber': display_number,
+         'Name': string_name,
          #'FocusComponentId'  : 0,   #set from listview later
-         'AbleToShow'         : True,
-         'Show'               : False,
-         'FirstWizardDisplay' : False,
+         'AbleToShow': True,
+         'Show': False,
+         'FirstWizardDisplay': False,
      }
      ),
 ]
 
-listview_name = '4.2.14 H2SContol List'
-listviewid_name = '4.2.14 H2SContol List'
+listview_name = '4.2.14 H2S Contol List'
+listviewid_name = '4.2.14 H2S Contol List'
 
 h2s_control_listview_parameters = [
-    #添加Listview
+    # 添加Listview
     (DisplayComponent,
      {
-         'Name'            : listview_name,
-         'ComponentType'   : 'ListView',
+         'Name': listview_name,
+         'ComponentType': 'ListView',
          #'ParentComponent' : 0,                          #set later
-         'Visible'         : True,
-         'ReadOnly'        : False,
-         'x1'              : 0,
-         'x2'              : 239,
-         'y1'              : 15,
-         'y2'              : 271,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Visible': True,
+         'ReadOnly': False,
+         'x1': 0,
+         'x2': 239,
+         'y1': 15,
+         'y2': 271,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #2. 定义label的text排列方式
+    # 2. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : listview_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 8,
-         'RightMargin' : 0,
-         'WordWrap'    : False,
+         'id': listview_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 8,
+         'RightMargin': 0,
+         'WordWrap': False,
      }
      ),
     (DisplayListView,
      {
-         'id'          : listviewid_name,
-         'RowHeight'   : 15,
-         'SelectedRow' : 0,
-         'NextListId'  : 0,  # - None -
-         'PrevListId'  : 0,  # - None -
+         'id': listviewid_name,
+         'RowHeight': 15,
+         'SelectedRow': 0,
+         'NextListId': 0,  # - None -
+         'PrevListId': 0,  # - None -
      }
      ),
     (DisplayListViewColumns,
      {
-         'ListViewId'  : listviewid_name,
-         'ColumnIndex' : 0,
-         'Columnwidth' : 160,
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 0,
+         'ColumnWidth': 160,
      }
      ),
     (DisplayListViewColumns,
      {
-         'ListViewId'  : listviewid_name,
-         'ColumnIndex' : 1,
-         'Columnwidth' : 64,
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 1,
+         'ColumnWidth': 64,
      }
      ),
     (DisplayListViewColumns,
      {
-         'ListViewId'  : listviewid_name,
-         'ColumnIndex' : 2,
-         'Columnwidth' : 0,
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 2,
+         'ColumnWidth': 0,
      }
      ),
 ]
@@ -399,77 +399,77 @@ h2s_control_listview_parameters = [
 component_name = '4.2.14 Dosing pump go to setting'
 label_string_define = 'SID_H2S_DOSING_PUMP_SETTING'
 label_string = 'Dosing pump',
-listviewid_name = '4.2.14 H2SContol List'
+listviewid_name = '4.2.14 H2S Contol List'
 
 h2s_dosing_pump_label_parameters = [
-    #1. 添加label
+    # 1. 添加label
     (DisplayComponent,
      {
-         'Name'            : component_name,
-         'ComponentType'   : 'Label',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : True,
-         'x1'              : 0,
-         'x2'              : 0,
-         'y1'              : 0,
-         'y2'              : 0,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Name': component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #3. 加字符串定义
+    # 3. 加字符串定义
     (StringDefines,
      {
-         'DefineName' : label_string_define,
-         'TypeId'     : 'Display name',
+         'DefineName': label_string_define,
+         'TypeId': 'Display name',
      }
      ),
-    #4. label加相应的字符串
+    # 4. label加相应的字符串
     (Strings,
      {
-         'String'     : label_string,
-         'LanguageId' : 'DEV_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': label_string,
+         'LanguageId': 'DEV_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
     (Strings,
      {
-         'String'     : label_string,
-         'LanguageId' : 'UK_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': label_string,
+         'LanguageId': 'UK_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
-    #5. 将字符串和label对应起来
+    # 5. 将字符串和label对应起来
     (DisplayLabel,
      {
-         'id'       : component_name,
-         'StringId' : label_string_define,
+         'id': component_name,
+         'StringId': label_string_define,
      }
      ),
-    #6. 定义label的text排列方式
+    # 6. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : component_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 2,
-         'RightMargin' : 1,
-         'WordWrap'    : False,
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 2,
+         'RightMargin': 1,
+         'WordWrap': False,
      }
      ),
-    #10. 在对应的listview下面新加一个item
+    # 10. 在对应的listview下面新加一个item
     (DisplayListViewItem,
      {
-         'ListViewId' : listviewid_name,
+         'ListViewId': listviewid_name,
      }
      ),
-    #11. 在新加的item下面添加label
+    # 11. 在新加的item下面添加label
     (DisplayListViewItemComponents,
      {
-         'ComponentId' : component_name,
-         'ColumnIndex' : 0,
+         'ComponentId': component_name,
+         'ColumnIndex': 0,
      }
      ),
 ]
@@ -477,39 +477,39 @@ h2s_dosing_pump_label_parameters = [
 component_name = '4.2.14.1 H2S Dosing pump group'
 string_define = 'SID_H2S_DOSING_PUMP_SETTING'
 h2s_dosing_pump_group_parameters = [
-    #1. 添加group，也就是另起一页
+    # 1. 添加group，也就是另起一页
     (DisplayComponent,
      {
-         'Name'            : component_name,
-         'ComponentType'   : 'Group',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : False,
-         'x1'              : 0,
-         'x2'              : 239,
-         'y1'              : 33,
-         'y2'              : 305,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Name': component_name,
+         'ComponentType': 'Group',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': False,
+         'x1': 0,
+         'x2': 239,
+         'y1': 33,
+         'y2': 305,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #2. 将字符串和label对应起来
+    # 2. 将字符串和label对应起来
     (DisplayLabel,
      {
-         'id'       : component_name,
-         'StringId' : string_define,
+         'id': component_name,
+         'StringId': string_define,
      }
      ),
-    #3. 定义label的text排列方式
+    # 3. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : component_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 8,
-         'RightMargin' : 0,
-         'WordWrap'    : False,
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 8,
+         'RightMargin': 0,
+         'WordWrap': False,
      }
      ),
 ]
@@ -518,16 +518,16 @@ root_group_id_name = '4.2.14.1 H2S Dosing pump group',
 string_name = 'Dosing pump',
 display_number = '4.2.14.1'
 h2s_dosing_pump_display_parameters = [
-    #Display
+    # Display
     (Display,
      {
-         'RootGroupId'        : root_group_id_name,
-         'DisplayNumber'      : display_number,
-         'Name'               : string_name,
+         'RootGroupId': root_group_id_name,
+         'DisplayNumber': display_number,
+         'Name': string_name,
          #'FocusComponentId'  : 0,   #set from listview later
-         'AbleToShow'         : True,
-         'Show'               : False,
-         'FirstWizardDisplay' : False,
+         'AbleToShow': True,
+         'Show': False,
+         'FirstWizardDisplay': False,
      }
      ),
 ]
@@ -536,62 +536,62 @@ listview_name = '4.2.14.1 H2S Dosing pump List'
 listviewid_name = '4.2.14.1 H2S Dosing pump List'
 
 h2s_dosing_pump_listview_parameters = [
-    #添加Listview
+    # 添加Listview
     (DisplayComponent,
      {
-         'Name'            : listview_name,
-         'ComponentType'   : 'ListView',
+         'Name': listview_name,
+         'ComponentType': 'ListView',
          #'ParentComponent' : 0,                          #set later
-         'Visible'         : True,
-         'ReadOnly'        : False,
-         'x1'              : 0,
-         'x2'              : 239,
-         'y1'              : 15,
-         'y2'              : 271,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Visible': True,
+         'ReadOnly': False,
+         'x1': 0,
+         'x2': 239,
+         'y1': 15,
+         'y2': 271,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #2. 定义label的text排列方式
+    # 2. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : listview_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 8,
-         'RightMargin' : 0,
-         'WordWrap'    : False,
+         'id': listview_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 8,
+         'RightMargin': 0,
+         'WordWrap': False,
      }
      ),
     (DisplayListView,
      {
-         'id'          : listviewid_name,
-         'RowHeight'   : 15,
-         'SelectedRow' : 0,
-         'NextListId'  : 0,  # - None -
-         'PrevListId'  : 0,  # - None -
+         'id': listviewid_name,
+         'RowHeight': 15,
+         'SelectedRow': 0,
+         'NextListId': 0,  # - None -
+         'PrevListId': 0,  # - None -
      }
      ),
     (DisplayListViewColumns,
      {
-         'ListViewId'  : listviewid_name,
-         'ColumnIndex' : 0,
-         'Columnwidth' : 160,
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 0,
+         'ColumnWidth': 160,
      }
      ),
     (DisplayListViewColumns,
      {
-         'ListViewId'  : listviewid_name,
-         'ColumnIndex' : 1,
-         'Columnwidth' : 64,
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 1,
+         'ColumnWidth': 64,
      }
      ),
     (DisplayListViewColumns,
      {
-         'ListViewId'  : listviewid_name,
-         'ColumnIndex' : 2,
-         'Columnwidth' : 0,
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 2,
+         'ColumnWidth': 0,
      }
      ),
 ]
@@ -600,55 +600,431 @@ h2s_dosing_pump_listview_parameters = [
 component_name = '4.2.14 H2S go to modules installed'
 label_string_define = 'SID_GO_TO_MODULES_INSTALLED'
 label_string = 'Dosing pump',
-listviewid_name = '4.2.14 H2SContol List'
+listviewid_name = '4.2.14 H2S Contol List'
 
 h2s_go_to_modules_installed_label_parameters = [
-    #1. 添加label
+    # 1. 添加label
     (DisplayComponent,
      {
-         'Name'            : component_name,
-         'ComponentType'   : 'Label',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : True,
-         'x1'              : 0,
-         'x2'              : 0,
-         'y1'              : 0,
-         'y2'              : 0,
-         'DisplayId'       : 137,       # 137 | Modules installed
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Name': component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 137,       # 137 | Modules installed
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #5. 将字符串和label对应起来
+    # 5. 将字符串和label对应起来
     (DisplayLabel,
      {
-         'id'       : component_name,
-         'StringId' : label_string_define,
+         'id': component_name,
+         'StringId': label_string_define,
      }
      ),
-    #6. 定义label的text排列方式
+    # 6. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : component_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 2,
-         'RightMargin' : 1,
-         'WordWrap'    : False,
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 2,
+         'RightMargin': 1,
+         'WordWrap': False,
      }
      ),
-    #10. 在对应的listview下面新加一个item
+    # 10. 在对应的listview下面新加一个item
     (DisplayListViewItem,
      {
-         'ListViewId' : listviewid_name,
+         'ListViewId': listviewid_name,
      }
      ),
-    #11. 在新加的item下面添加label
+    # 11. 在新加的item下面添加label
     (DisplayListViewItemComponents,
      {
-         'ComponentId' : component_name,
-         'ColumnIndex' : 0,
+         'ComponentId': component_name,
+         'ColumnIndex': 0,
+     }
+     ),
+]
+
+#--------------------------- 4.2.14.1 - Dosing pump 页面里新加一行label:Dosing pump interface -------------------------------------------#
+component_name = '4.2.14.1 H2S dosing pump interface headline'
+label_string_define = 'SID_DOSING_PUMP_INTERFACE'
+label_string = 'Dosing pump interface',
+
+h2s_dosing_pump_interface_label_parameters = [
+    # 1. 添加label
+    (DisplayComponent,
+     {
+         'Name': component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 1,
+         'x2': 239,
+         'y1': 0,
+         'y2': 29,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 3. 加字符串定义
+    (StringDefines,
+     {
+         'DefineName': label_string_define,
+         'TypeId': 'Display name',
+     }
+     ),
+    # 4. label加相应的字符串
+    (Strings,
+     {
+         'String': label_string,
+         'LanguageId': 'DEV_LANGUAGE',
+         'Status': 'UnEdit',
+     }
+     ),
+    (Strings,
+     {
+         'String': label_string,
+         'LanguageId': 'UK_LANGUAGE',
+         'Status': 'UnEdit',
+     }
+     ),
+    # 5. 将字符串和label对应起来
+    (DisplayLabel,
+     {
+         'id': component_name,
+         'StringId': label_string_define,
+     }
+     ),
+    # 6. 定义label的text排列方式
+    (DisplayText,
+     {
+         'id': component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 0,
+         'RightMargin': 0,
+         'WordWrap': False,
+     }
+     ),
+]
+
+#--------------------------- 4.2.14.1 - Dosing pump 页面里新加一个listview:Dosing pump interface List -------------------------------------------#
+listview_name = '4.2.14.1 H2S dosing pump interface List'
+listviewid_name = '4.2.14.1 H2S dosing pump interface List'
+
+h2s_dosing_pump_interface_listview_parameters = [
+    # 添加Listview
+    (DisplayComponent,
+     {
+         'Name': listview_name,
+         'ComponentType': 'ListView',
+         #'ParentComponent' : 0,                          #set later
+         'Visible': True,
+         'ReadOnly': False,
+         'x1': 0,
+         'x2': 239,
+         'y1': 31,
+         'y2': 271,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 2. 定义label的text排列方式
+    (DisplayText,
+     {
+         'id': listview_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 8,
+         'RightMargin': 0,
+         'WordWrap': False,
+     }
+     ),
+    (DisplayListView,
+     {
+         'id': listviewid_name,
+         'RowHeight': 15,
+         'SelectedRow': 0,
+         'NextListId': 0,  # - None -
+         'PrevListId': 0,  # - None -
+     }
+     ),
+    (DisplayListViewColumns,
+     {
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 0,
+         'ColumnWidth': 160,
+     }
+     ),
+    (DisplayListViewColumns,
+     {
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 1,
+         'ColumnWidth': 64,
+     }
+     ),
+    (DisplayListViewColumns,
+     {
+         'ListViewId': listviewid_name,
+         'ColumnIndex': 2,
+         'ColumnWidth': 0,
+     }
+     ),
+]
+
+#--------------------------- 4.1.14.1 - Dosing pump 页面里新加一行label和checkbox: 4.1.14.1 Smart Digital DDA -------------------------------------------#
+label_component_name = '4.2.14.1 Smart Digital DDA'
+cb_component_name = '4.2.14.1 Smart Digital DDA cb'
+label_string_define = 'SID_H2S_DOSING_PUMP_SMART_DIGITAL_DDA'
+label_string = 'Smart Digital DDA',
+listviewid_name = '4.2.14.1 H2S dosing pump interface List'
+
+h2s_dosing_pump_interface_smart_digital_dda_label_parameters = [
+    # 1. 添加label
+    (DisplayComponent,
+     {
+         'Name': label_component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 2. 添加OnOffCheckBox
+    (DisplayComponent,
+     {
+         'Name': cb_component_name,
+         'ComponentType': 'OnOffCheckBox',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': False,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 3. 加字符串定义
+    (StringDefines,
+     {
+         'DefineName': label_string_define,
+         'TypeId': 'Value type',
+     }
+     ),
+    # 4. label加相应的字符串
+    (Strings,
+     {
+         'String': label_string,
+         'LanguageId': 'DEV_LANGUAGE',
+         'Status': 'UnEdit',
+     }
+     ),
+    (Strings,
+     {
+         'String': label_string,
+         'LanguageId': 'UK_LANGUAGE',
+         'Status': 'UnEdit',
+     }
+     ),
+    # 5. 将字符串和label对应起来
+    (DisplayLabel,
+     {
+         'id': label_component_name,
+         'StringId': label_string_define,
+     }
+     ),
+    # 6. 定义label的text排列方式
+    (DisplayText,
+     {
+         'id': label_component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 2,
+         'RightMargin': 0,
+         'WordWrap': False,
+     }
+     ),
+    # 10. 在对应的listview下面新加一个item
+    (DisplayListViewItem,
+     {
+         'ListViewId': listviewid_name,
+     }
+     ),
+    # 11. 在新加的item下面添加label
+    (DisplayListViewItemComponents,
+     {
+         'ComponentId': label_component_name,
+         'ColumnIndex': 0,
+     }
+     ),
+    # 12. 在新加的item下面添加数值
+    (DisplayListViewItemComponents,
+     {
+         'ComponentId': cb_component_name,
+         'ColumnIndex': 1,
+     }
+     ),
+]
+
+h2s_dosing_pump_interface_smart_digital_dda_checkbox_parameters = [
+    (DisplayOnOffCheckBox,
+     {
+         'id': cb_component_name,
+         'OnValue': 1,
+         'OffValue': 0,
+     }
+     ),
+    # checkbox与subject对应
+    # TODO 先用已有的subject数据io111_pump_1_installed
+    (DisplayObserverSingleSubject,
+     {
+         'id': cb_component_name,
+         'SubjectId': 'io111_pump_1_installed',
+         'SubjectAccess': 'Read/Write',
+     }
+     ),
+]
+
+#--------------------------- 4.1.14.1 - Dosing pump 页面里新加一行label和checkbox: 4.1.14.1 Analog dosing pump -------------------------------------------#
+label_component_name = '4.2.14.1 Analog dosing pump'
+cb_component_name = '4.2.14.1 Analog dosing pump cb'
+label_string_define = 'SID_H2S_DOSING_PUMP_ANALOG'
+label_string = 'Analog dosing pump',
+listviewid_name = '4.2.14.1 H2S dosing pump interface List'
+
+h2s_dosing_pump_interface_analog_dosing_pump_label_parameters = [
+    # 1. 添加label
+    (DisplayComponent,
+     {
+         'Name': label_component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 2. 添加OnOffCheckBox
+    (DisplayComponent,
+     {
+         'Name': cb_component_name,
+         'ComponentType': 'OnOffCheckBox',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': False,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
+     }
+     ),
+    # 3. 加字符串定义
+    (StringDefines,
+     {
+         'DefineName': label_string_define,
+         'TypeId': 'Value type',
+     }
+     ),
+    # 4. label加相应的字符串
+    (Strings,
+     {
+         'String': label_string,
+         'LanguageId': 'DEV_LANGUAGE',
+         'Status': 'UnEdit',
+     }
+     ),
+    (Strings,
+     {
+         'String': label_string,
+         'LanguageId': 'UK_LANGUAGE',
+         'Status': 'UnEdit',
+     }
+     ),
+    # 5. 将字符串和label对应起来
+    (DisplayLabel,
+     {
+         'id': label_component_name,
+         'StringId': label_string_define,
+     }
+     ),
+    # 6. 定义label的text排列方式
+    (DisplayText,
+     {
+         'id': label_component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 2,
+         'RightMargin': 0,
+         'WordWrap': False,
+     }
+     ),
+    # 10. 在对应的listview下面新加一个item
+    (DisplayListViewItem,
+     {
+         'ListViewId': listviewid_name,
+     }
+     ),
+    # 11. 在新加的item下面添加label
+    (DisplayListViewItemComponents,
+     {
+         'ComponentId': label_component_name,
+         'ColumnIndex': 0,
+     }
+     ),
+    # 12. 在新加的item下面添加数值
+    (DisplayListViewItemComponents,
+     {
+         'ComponentId': cb_component_name,
+         'ColumnIndex': 1,
+     }
+     ),
+]
+
+h2s_dosing_pump_interface_analog_dosing_pump_checkbox_parameters = [
+    (DisplayOnOffCheckBox,
+     {
+         'id': cb_component_name,
+         'OnValue': 1,
+         'OffValue': 0,
+     }
+     ),
+    # checkbox与subject对应
+    # TODO 先用已有的subject数据io111_pump_1_installed
+    (DisplayObserverSingleSubject,
+     {
+         'id': cb_component_name,
+         'SubjectId': 'io111_pump_1_installed',
+         'SubjectAccess': 'Read/Write',
      }
      ),
 ]
@@ -661,107 +1037,107 @@ label_string = 'Dosing pump installed',
 listviewid_name = '4.1.7 pumpModules List'
 
 h2s_dosing_pump_installed_space_parameters = [
-    #为了美观，需要在listview下加一行空格
+    # 为了美观，需要在listview下加一行空格
     (DisplayListViewItem,
      {
-         'ListViewId' : listviewid_name,
+         'ListViewId': listviewid_name,
      }
      ),
 ]
 
 h2s_dosing_pump_installed_label_parameters = [
-    #1. 添加label
+    # 1. 添加label
     (DisplayComponent,
      {
-         'Name'            : label_component_name,
-         'ComponentType'   : 'Label',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : True,
-         'x1'              : 0,
-         'x2'              : 0,
-         'y1'              : 0,
-         'y2'              : 0,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Name': label_component_name,
+         'ComponentType': 'Label',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': True,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #2. 添加OnOffCheckBox
+    # 2. 添加OnOffCheckBox
     (DisplayComponent,
      {
-         'Name'            : cb_component_name,
-         'ComponentType'   : 'OnOffCheckBox',
-         'ParentComponent' : 0,
-         'Visible'         : True,
-         'ReadOnly'        : False,
-         'x1'              : 0,
-         'x2'              : 0,
-         'y1'              : 0,
-         'y2'              : 0,
-         'DisplayId'       : 0,
-         'HelpString'      : 0,
-         'Transparent'     : False,
+         'Name': cb_component_name,
+         'ComponentType': 'OnOffCheckBox',
+         'ParentComponent': 0,
+         'Visible': True,
+         'ReadOnly': False,
+         'x1': 0,
+         'x2': 0,
+         'y1': 0,
+         'y2': 0,
+         'DisplayId': 0,
+         'HelpString': 0,
+         'Transparent': False,
      }
      ),
-    #3. 加字符串定义
+    # 3. 加字符串定义
     (StringDefines,
      {
-         'DefineName' : label_string_define,
-         'TypeId'     : 'Value type',
+         'DefineName': label_string_define,
+         'TypeId': 'Value type',
      }
      ),
-    #4. label加相应的字符串
+    # 4. label加相应的字符串
     (Strings,
      {
-         'String'     : label_string,
-         'LanguageId' : 'DEV_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': label_string,
+         'LanguageId': 'DEV_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
     (Strings,
      {
-         'String'     : label_string,
-         'LanguageId' : 'UK_LANGUAGE',
-         'Status'     : 'UnEdit',
+         'String': label_string,
+         'LanguageId': 'UK_LANGUAGE',
+         'Status': 'UnEdit',
      }
      ),
-    #5. 将字符串和label对应起来
+    # 5. 将字符串和label对应起来
     (DisplayLabel,
      {
-         'id'       : label_component_name,
-         'StringId' : label_string_define,
+         'id': label_component_name,
+         'StringId': label_string_define,
      }
      ),
-    #6. 定义label的text排列方式
+    # 6. 定义label的text排列方式
     (DisplayText,
      {
-         'id'          : label_component_name,
-         'Align'       : 'VCENTER_LEFT',
-         'FontId'      : 'DEFAULT_FONT_13_LANGUAGE_DEP',
-         'LeftMargin'  : 2,
-         'RightMargin' : 0,
-         'WordWrap'    : False,
+         'id': label_component_name,
+         'Align': 'VCENTER_LEFT',
+         'FontId': 'DEFAULT_FONT_13_LANGUAGE_DEP',
+         'LeftMargin': 2,
+         'RightMargin': 0,
+         'WordWrap': False,
      }
      ),
-    #10. 在对应的listview下面新加一个item
+    # 10. 在对应的listview下面新加一个item
     (DisplayListViewItem,
      {
-         'ListViewId' : listviewid_name,
+         'ListViewId': listviewid_name,
      }
      ),
-    #11. 在新加的item下面添加label
+    # 11. 在新加的item下面添加label
     (DisplayListViewItemComponents,
      {
-         'ComponentId' : label_component_name,
-         'ColumnIndex' : 0,
+         'ComponentId': label_component_name,
+         'ColumnIndex': 0,
      }
      ),
-    #12. 在新加的item下面添加数值
+    # 12. 在新加的item下面添加数值
     (DisplayListViewItemComponents,
      {
-         'ComponentId' : cb_component_name,
-         'ColumnIndex' : 1,
+         'ComponentId': cb_component_name,
+         'ColumnIndex': 1,
      }
      ),
 ]
@@ -769,39 +1145,39 @@ h2s_dosing_pump_installed_label_parameters = [
 h2s_dosing_pump_installed_checkbox_parameters = [
     (DisplayOnOffCheckBox,
      {
-         'id'       : cb_component_name,
-         'OnValue'  : 1,
-         'OffValue' : 0,
+         'id': cb_component_name,
+         'OnValue': 1,
+         'OffValue': 0,
      }
      ),
     # checkbox与subject对应
-    #TODO 先用已有的subject数据io111_pump_1_installed
+    # TODO 先用已有的subject数据io111_pump_1_installed
     (DisplayObserverSingleSubject,
      {
-         'id'            : cb_component_name,
-         'SubjectId'     : 'io111_pump_1_installed',
-         'SubjectAccess' : 'Read/Write',
+         'id': cb_component_name,
+         'SubjectId': 'io111_pump_1_installed',
+         'SubjectAccess': 'Read/Write',
      }
      ),
 ]
 
 #############################################################Factor部分##########################################################
 h2s_observer_parameters = [
-    #1. 加ObserverType
+    # 1. 加ObserverType
     (ObserverType,
      {
-         'Name'        : 'DDACtrl',
-         'ShortName'   : 'DDA',
-         'IsSingleton' : False,
-         'IsSubject'   : False,
+         'Name': 'DDACtrl',
+         'ShortName': 'DDA',
+         'IsSingleton': False,
+         'IsSubject': False,
      }
      ),
-    #2. 加Observer
+    # 2. 加Observer
     (Observer,
      {
-         'Name'            : 'dosing_pump_ctrl',
+         'Name': 'dosing_pump_ctrl',
          #'TypeId'          : 96,      #set from ObserverType
-         'TaskId'          : 'LowPrioPeriodicTask',
+         'TaskId': 'LowPrioPeriodicTask',
          #'TaskOrder'       : None,
          #'SubjectId'       : None,
          #'ConstructorArgs' : None,
@@ -810,59 +1186,59 @@ h2s_observer_parameters = [
 ]
 
 h2s_subject_parameters = [
-    #1. 加Subject
+    # 1. 加Subject
     (Subject,
      {
-         'Name'       : 'dda_control_enabled',
-         'TypeId'     : 'BoolDataPoint',
-         'GeniAppIf'  : False,
-         'Save'       : 'Value',
-         'FlashBlock' : 'Config',
-         'Verified'   : False,
+         'Name': 'dda_control_enabled',
+         'TypeId': 'BoolDataPoint',
+         'GeniAppIf': False,
+         'Save': 'Value',
+         'FlashBlock': 'Config',
+         'Verified': False,
      }
      ),
-     #2. 对应的DataPoint也要添加
+    # 2. 对应的DataPoint也要添加
     (BoolDataPoint,
      {
-         'id'           : 'dda_control_enabled',
-         'Value'        : 0,
+         'id': 'dda_control_enabled',
+         'Value': 0,
      }
      ),
 ]
 
 h2s_observer_subject_parameters = [
-    #1. 先添加SubjectRelation
-    (SubjectRelation, 
+    # 1. 先添加SubjectRelation
+    (SubjectRelation,
      {
-         'Name'           : 'dda_control_enabled'.upper(),    #必须用大写字母
-         'ObserverTypeId' : 'DDACtrl',
+         'Name': 'dda_control_enabled'.upper(),  # 必须用大写字母
+         'ObserverTypeId': 'DDACtrl',
      }
      ),
-    #2. 再添加ObserverSubjects，会用到SubjectRelation添加的Name
-    (ObserverSubjects, 
+    # 2. 再添加ObserverSubjects，会用到SubjectRelation添加的Name
+    (ObserverSubjects,
      {
-         'SubjectId'         : 'dda_control_enabled',
-         'ObserverId'        : 'dosing_pump_ctrl',
-         'ObserverTypeId'    : 'DDACtrl',
-         'SubjectRelationId' : 'dda_control_enabled'.upper(),
-         'SubjectAccess'     : 'Read',
+         'SubjectId': 'dda_control_enabled',
+         'ObserverId': 'dosing_pump_ctrl',
+         'ObserverTypeId': 'DDACtrl',
+         'SubjectRelationId': 'dda_control_enabled'.upper(),
+         'SubjectAccess': 'Read',
      }
      ),
 ]
-#用到的SubjectPtr名字SP_DDA_DDA_CONTROL_ENABLED
+# 用到的SubjectPtr名字SP_DDA_DDA_CONTROL_ENABLED
 SP = 'SP_' + h2s_observer_parameters[0][1]['ShortName'] + '_' + h2s_subject_parameters[0][1]['Name'].upper()
 
-#TODO test
+# TODO test
 test_parameters = [
     (IntDataPoint,
      {
-         'id'           : 'test',
-         'Type'         : 'U16',
-         'Min'          : '0',
-         'Max'          : '0xFFFF',
-         'Value'        : '0',
-         'QuantityType' : 'Q_NO_UNIT',
-         'Verified'     : False,
+         'id': 'test',
+         'Type': 'U16',
+         'Min': '0',
+         'Max': '0xFFFF',
+         'Value': '0',
+         'QuantityType': 'Q_NO_UNIT',
+         'Verified': False,
      }
      ),
 ]
