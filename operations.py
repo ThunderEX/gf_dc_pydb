@@ -29,31 +29,6 @@ def handle_DisplayListViewItemAndComponents(display_listview_item, display_listv
         x.add()
 
 
-def update_h2s_control(args):
-    # 找出label component
-    for x in args[0]:
-        if isinstance(x, DisplayComponent):
-            h2scontol_label = x
-    # 找出group的parentcomponent供listview用
-    for x in args[1]:
-        if isinstance(x, DisplayComponent):
-            h2scontol_group = x
-            _parentcomponent = x.model.id
-    # 找出display
-    for x in args[2]:
-        if isinstance(x, Display):
-            h2scontol_display = x
-            _displayid = x.model.id
-    # 找出listview的focuscomponentid供display用
-    for x in args[3]:
-        if isinstance(x, DisplayComponent):
-            h2scontol_listview = x
-            _focuscomponentid = x.model.id
-    h2scontol_label.update(h2scontol_label.model.id, DisplayId=_displayid)
-    h2scontol_display.update(h2scontol_display.model.id, FocusComponentId=_focuscomponentid)
-    h2scontol_listview.update(h2scontol_listview.model.id, ParentComponent=_parentcomponent)
-
-
 def update_displayid(display_component_tables, display_tables):
     '''
         更新DisplayComponent表里的DisplayId，指向一个新的页
