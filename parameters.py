@@ -414,7 +414,7 @@ h2s_dosing_pump_label_parameters = [
          'y1': 0,
          'x2': 0,
          'y2': 0,
-         'DisplayId': 0,
+         #'DisplayId': 0,
          'HelpString': 0,
          'Transparent': False,
      }
