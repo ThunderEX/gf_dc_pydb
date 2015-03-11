@@ -169,6 +169,17 @@ class FloatDataPoint(BaseTable):
         self.convert_foreignkey('QuantityType', QuantityType_Model, 'Name', 'id')
 
 
+class GeniAppIf(BaseTable):
+
+    """操作表GeniAppIf"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = GeniAppIf_Model()
+        super(GeniAppIf, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('SubjectId', Subject_Model, 'Name', 'id')
+        self.convert_foreignkey('GeniConvertId', GeniConvert_Model, 'Comment', 'id')
+
+
 class IntDataPoint(BaseTable):
 
     """操作表IntDataPoint"""

@@ -21,9 +21,17 @@ def copy_database():
 if __name__ == '__main__':
     copy_database()
 
+    '''
+    '''
     comment('********** 添加label:h2s level于1.1 System Status **********')
     add_data(h2s_level_quantity_parameters, 'quantity')
     add_data(h2s_level_label_parameters, 'label')
+
+    comment('********** 添加label:Chemical remaining于1.1 System Status **********')
+    add_data(chemical_remaining_label_parameters, 'label')
+
+    comment('********** 添加label:Chemical remaining于1.1 System Status **********')
+    add_data(chemical_dosed_label_parameters, 'label')
 
     comment('********** 添加label:H2S Contol于4.2 Advanced Functions **********')
     h2s_control_label_tables = add_data(h2s_control_label_parameters, 'label')
@@ -85,3 +93,12 @@ if __name__ == '__main__':
 
     comment('********** 连接Observer与Subject **********')
     add_data(h2s_observer_subject_parameters)
+
+    comment('********** 添加Subject **********')
+    add_data(h2s_level_act_subject_parameters)
+
+    comment('********** 连接Observer与Subject **********')
+    add_data(h2s_level_act_observer_subject_parameters)
+
+    comment('********** GeniAppIf **********')
+    add_data(h2s_level_act_geni_if_parameters)
