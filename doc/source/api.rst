@@ -1,5 +1,7 @@
-Tables API
-========
+.. _api:
+
+API
+===
 
 .. automodule:: tables
    :members:

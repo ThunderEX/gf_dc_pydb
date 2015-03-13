@@ -59,6 +59,7 @@ h2s_level_quantity_parameters = [
          'ObserverTypeId': 'MpcUnits',
      }
      ),
+    # 5. 修改mpcunits.conf.cpp和mpcunits.cpp
 ]
 
 label_component_name = '1.1 SystemStatus l1 h2s level'
@@ -66,6 +67,7 @@ quantity_component_name = '1.1 SystemStatus l1 h2s level nq'
 string_define = 'SID_H2S_LEVEL'
 string = 'H2S level'
 listviewid_name = '1.1 SystemStatus List 1'
+# TODO 先用已有的subject数据total_energy_j_for_display
 subjectid = 'total_energy_j_for_display'
 
 h2s_level_label_parameters = [
@@ -165,7 +167,6 @@ h2s_level_label_parameters = [
      }
      ),
     # 9. 数值与subject对应
-    # TODO 先用已有的subject数据total_energy_j_for_display
     (DisplayObserverSingleSubject,
      {
          'id': quantity_component_name,
@@ -201,9 +202,9 @@ quantity_component_name = '1.1 SystemStatus l1 chemical remaining nq'
 string_define = 'SID_CHEMICAL_REMAINING'
 string = 'Chemical remaining'
 listviewid_name = '1.1 SystemStatus List 1'
-quantity_name = 'Q_VOLUME'
-#subjectid = 'overflow_volume_m3_for_display'
-subjectid = 'surface_level'
+quantity_name = 'Q_FLOW'
+# TODO 试验新加subjectid
+subjectid = 'h2s_level_act'
 
 chemical_remaining_label_parameters = [
     # 1. 添加label
@@ -302,7 +303,6 @@ chemical_remaining_label_parameters = [
      }
      ),
     # 9. 数值与subject对应
-    # TODO 先用已有的subject数据overflow_volume_m3_for_display
     (DisplayObserverSingleSubject,
      {
          'id': quantity_component_name,
@@ -338,9 +338,9 @@ quantity_component_name = '1.1 SystemStatus l1 chemical dosed nq'
 string_define = 'SID_CHEMICAL_DOSED'
 string = 'Chemical dosed'
 listviewid_name = '1.1 SystemStatus List 1'
-quantity_name = 'Q_VOLUME'
-#subjectid = 'overflow_volume_m3_for_display'
-subjectid = 'surface_level'
+quantity_name = 'Q_FLOW'
+# TODO 试验新加subjectid
+subjectid = 'h2s_level_act'
 
 chemical_dosed_label_parameters = [
     # 1. 添加label
@@ -439,7 +439,6 @@ chemical_dosed_label_parameters = [
      }
      ),
     # 9. 数值与subject对应
-    # TODO 先用已有的subject数据overflow_volume_m3_for_display
     (DisplayObserverSingleSubject,
      {
          'id': quantity_component_name,
@@ -1004,6 +1003,7 @@ cb_component_name = '4.2.14.1 Smart Digital DDA cb'
 label_string_define = 'SID_H2S_DOSING_PUMP_SMART_DIGITAL_DDA'
 label_string = 'Smart Digital DDA',
 listviewid_name = '4.2.14.1 H2S Dosing pump List'
+# TODO 先用已有的subject数据pit_level_ctrl_type，是个枚举类型
 subjectid = 'pit_level_ctrl_type'
 
 h2s_dosing_pump_interface_smart_digital_dda_label_parameters = [
@@ -1111,7 +1111,6 @@ h2s_dosing_pump_interface_smart_digital_dda_checkbox_parameters = [
      }
      ),
     # checkbox与subject对应
-    # TODO 先用已有的subject数据pit_level_ctrl_type，是个枚举类型
     (DisplayObserverSingleSubject,
      {
          'id': cb_component_name,
@@ -1127,6 +1126,7 @@ cb_component_name = '4.2.14.1 Analog dosing pump cb'
 label_string_define = 'SID_H2S_DOSING_PUMP_ANALOG'
 label_string = 'Analog dosing pump',
 listviewid_name = '4.2.14.1 H2S Dosing pump List'
+# TODO 先用已有的subject数据pit_level_ctrl_type，是个枚举类型
 subjectid = 'pit_level_ctrl_type'
 
 h2s_dosing_pump_interface_analog_dosing_pump_label_parameters = [
@@ -1234,7 +1234,6 @@ h2s_dosing_pump_interface_analog_dosing_pump_checkbox_parameters = [
      }
      ),
     # checkbox与subject对应
-    # TODO 先用已有的subject数据pit_level_ctrl_type，是个枚举类型
     (DisplayObserverSingleSubject,
      {
          'id': cb_component_name,
@@ -1380,6 +1379,7 @@ cb_component_name = '4.1.7 pumpModules dosing pump cb'
 label_string_define = 'SID_H2S_DOSING_PUMP_INSTALLED'
 label_string = 'Dosing pump installed',
 listviewid_name = '4.1.7 pumpModules List'
+# TODO 先用已有的subject数据io111_pump_1_installed
 subjectid = 'io111_pump_1_installed'
 
 h2s_dosing_pump_installed_space_parameters = [
@@ -1497,7 +1497,6 @@ h2s_dosing_pump_installed_checkbox_parameters = [
      }
      ),
     # checkbox与subject对应
-    # TODO 先用已有的subject数据io111_pump_1_installed
     (DisplayObserverSingleSubject,
      {
          'id': cb_component_name,
@@ -1508,6 +1507,7 @@ h2s_dosing_pump_installed_checkbox_parameters = [
 ]
 
 #############################################################Factor部分##########################################################
+#--------------------------- 加Observer: DDACtrl -------------------------------------------#
 observer_name = 'dosing_pump_ctrl'
 observer_type = 'DDACtrl'
 short_name = 'DDA'
@@ -1534,6 +1534,7 @@ h2s_observer_parameters = [
      ),
 ]
 
+#--------------------------- 加Subject: dda_control_enabled -------------------------------------------#
 subject_name =  'dda_control_enabled'
 observer_name = 'dosing_pump_ctrl'
 observer_type = 'DDACtrl'
@@ -1580,7 +1581,9 @@ h2s_observer_subject_parameters = [
 # 用到的SubjectPtr名字SP_DDA_DDA_CONTROL_ENABLED
 SP = 'SP_' + short_name + '_' + subject_name.upper()
 
+#--------------------------- 加Subject: h2s_level_act -------------------------------------------#
 subject_name = 'h2s_level_act'
+quantity_type = 'Q_FLOW'
 observer_name = 'dosing_pump_ctrl'
 observer_type = 'DDACtrl'
 h2s_level_act_subject_parameters = [
@@ -1603,7 +1606,7 @@ h2s_level_act_subject_parameters = [
          'Type': 'U32',
          'Min': '0',
          'Max': '99999999',
-         'QuantityType': 'Q_VOLUME',
+         'QuantityType': quantity_type,
          'Verified': False,
      }
      ),

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from util.peewee import *
 from util.log import *
+from util.prettytable import PrettyTable
 from models import *
 
 
@@ -105,7 +106,13 @@ class BaseTable(object):
         _id = id
         field_dict = self.model.get_field_dict()
         field_names = field_dict.keys()
-        print '\t'.join(field_names)
+        #简单排序，让id在第一位
+        if 'id' in field_names:
+            id_index = field_names.index('id')
+            if id_index is not 0:
+                field_names[id_index] = field_names[0]
+                field_names[0] = 'id'
+        table = PrettyTable(field_names)
         if _id:
             results = self.model.select().where(id=_id)
         else:
@@ -114,10 +121,10 @@ class BaseTable(object):
             for result in results:
                 olist = []
                 for field in field_names:
-                    olist.append(str(getattr(result, field)))
-                output = '\t'.join(olist)
-                print output
-                # log(("记录已存在，跳过......").decode("utf-8"))
+                    #olist.append(str(getattr(result, field)))
+                    olist.append(getattr(result, field))
+                table.add_row(olist)
+        print table
 
     def update(self, id=0, **kwargs):
         _id = id
@@ -127,14 +134,19 @@ class BaseTable(object):
             debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             #debug(("更新记录%d" %(_id)).decode("utf-8"))
 
-    #@classmethod
-    def add(self):
+    def check_exist(self):
         if self.model.check_exist():
+            return True
+        return False
+
+    def add(self):
+        if self.check_exist():
             log(("记录已存在，跳过......").decode("utf-8"))
             debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
-            return
-        self.model.save()
-        return self.model.id
+            return 0
+        else:
+            self.model.save()
+            return self.model.id
 
 
 # Factory Database
@@ -514,7 +526,8 @@ class Strings(BaseTable):
         self.model = Strings_Model()
         super(Strings, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('LanguageId', Languages_Model, 'Language', 'id')
-        self.get_strings_max_id(kwargs['String'])
+        if kwargs.has_key('String'):
+            self.get_strings_max_id(kwargs['String'])
 
     def get_strings_max_id(self, str):
         r = Strings_Model.select().where(String=str)

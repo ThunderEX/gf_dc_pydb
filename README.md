@@ -10,7 +10,7 @@ This tool is developed by Python language. It can auto generate data and insert 
 
 ## Doc
 
-All documents, please refer to ..\doc\build\html\index.html
+All documents, please refer to \doc\build\html\index.html (not finished)
 
 ## Contact
 
