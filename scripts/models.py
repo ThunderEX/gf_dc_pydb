@@ -1,27 +1,21 @@
 # -*- coding: utf-8 -*-
-import os
-import sys
+import os, sys
 from util.peewee import *
 
 factory_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
 display_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
-language_database = '../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
-
+language_database ='../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
 
 class FBaseModel(Model):
     database = Database(factory_database)
 
-
 class DBaseModel(Model):
     database = Database(display_database)
-
 
 class LBaseModel(Model):
     database = Database(language_database)
 
-# Factor Database Models
-
-
+#Factor Database Models
 class AlarmConfig_Model(FBaseModel):
     AlarmConfigId = IntegerField()
     Sms1Enabled = BooleanField()
@@ -43,7 +37,6 @@ class AlarmConfig_Model(FBaseModel):
     Verified = BooleanField()
     Comment = CharField()
 
-
 class AlarmDataPoint_Model(FBaseModel):
     id = IntegerField()
     AlarmConfigId = IntegerField()
@@ -53,12 +46,10 @@ class AlarmDataPoint_Model(FBaseModel):
     AlarmId = IntegerField()
     Comment = CharField()
 
-
 class BoolDataPoint_Model(FBaseModel):
     id = IntegerField()
     Value = IntegerField()
     Comment = CharField()
-
 
 class EnumDataPoint_Model(FBaseModel):
     id = IntegerField()
@@ -66,30 +57,25 @@ class EnumDataPoint_Model(FBaseModel):
     Value = CharField()
     Comment = CharField()
 
-
 class EnumTypes_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
-
 
 class ErroneousUnitType_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
 
-
 class FlashBlockTypes_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
 
-
 class FloatDataPoint_Model(FBaseModel):
     id = IntegerField()
     QuantityType = IntegerField()
     Comment = CharField()
-
 
 class GeniAppIf_Model(FBaseModel):
     GeniVarName = CharField()
@@ -100,14 +86,12 @@ class GeniAppIf_Model(FBaseModel):
     AutoGenerate = BooleanField()
     Comment = CharField()
 
-
 class GeniConvert_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
     GeniNASupport = BooleanField()
     GeniInfo = CharField()
-
 
 class IntDataPoint_Model(FBaseModel):
     id = IntegerField()
@@ -119,11 +103,9 @@ class IntDataPoint_Model(FBaseModel):
     Comment = CharField()
     Verified = BooleanField()
 
-
 class IntDataPointTypes_Model(FBaseModel):
     Type = CharField()
     Comment = CharField()
-
 
 class Observer_Model(FBaseModel):
     id = IntegerField()
@@ -135,7 +117,6 @@ class Observer_Model(FBaseModel):
     SubjectId = IntegerField()
     Comment = CharField()
 
-
 class ObserverSubjects_Model(FBaseModel):
     id = IntegerField()
     SubjectId = IntegerField()
@@ -143,7 +124,6 @@ class ObserverSubjects_Model(FBaseModel):
     SubjectRelationId = IntegerField()
     SubjectAccess = IntegerField()
     Comment = CharField()
-
 
 class ObserverType_Model(FBaseModel):
     id = IntegerField()
@@ -154,31 +134,26 @@ class ObserverType_Model(FBaseModel):
     IsSubject = BooleanField()
     Comment = CharField()
 
-
 class QuantityType_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
-
 
 class ResetType_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
 
-
 class SaveTypes_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
-
 
 class StringDataPoint_Model(FBaseModel):
     id = IntegerField()
     Value = CharField()
     MaxLen = IntegerField()
     Comment = CharField()
-
 
 class Subject_Model(FBaseModel):
     id = IntegerField()
@@ -190,25 +165,21 @@ class Subject_Model(FBaseModel):
     Verified = BooleanField()
     Comment = CharField()
 
-
 class SubjectRelation_Model(FBaseModel):
     id = IntegerField()
     ObserverTypeId = IntegerField()
     Name = CharField()
     Comment = CharField()
 
-
 class SubjectTypes_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
 
-
 class SubjectAccessType_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
-
 
 class Task_Model(FBaseModel):
     id = IntegerField()
@@ -216,12 +187,10 @@ class Task_Model(FBaseModel):
     Type = IntegerField()
     Comment = CharField()
 
-
 class TaskType_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
-
 
 class VectorDataPoint_Model(FBaseModel):
     id = IntegerField()
@@ -231,17 +200,13 @@ class VectorDataPoint_Model(FBaseModel):
     DefaultValue = CharField()
     Comment = CharField()
 
-
 class VectorDataPointTypes_Model(FBaseModel):
     Type = CharField()
     Comment = CharField()
 
-# Display Database Models
-
-
+#Display Database Models
 class Colours_Model(DBaseModel):
     Colour = CharField()
-
 
 class Display_Model(DBaseModel):
     id = IntegerField()
@@ -254,18 +219,15 @@ class Display_Model(DBaseModel):
     FirstWizardDisplay = BooleanField()
     Comment = CharField()
 
-
 class DisplayAlarmStrings_Model(DBaseModel):
     AlarmId = IntegerField()
     StringId = IntegerField()
     Comment = CharField()
 
-
 class DisplayAvailable_Model(DBaseModel):
     id = IntegerField()
     CheckState = IntegerField()
     Comment = CharField()
-
 
 class DisplayComponent_Model(DBaseModel):
     id = IntegerField()
@@ -283,12 +245,10 @@ class DisplayComponent_Model(DBaseModel):
     Transparent = BooleanField()
     Comment = CharField()
 
-
 class DisplayComponentColour_Model(DBaseModel):
     id = IntegerField()
     ForegroundColour = CharField()
     BackgroundColour = CharField()
-
 
 class DisplayComponentTypes_Model(DBaseModel):
     id = IntegerField()
@@ -297,12 +257,10 @@ class DisplayComponentTypes_Model(DBaseModel):
     HasSingleSubject = BooleanField()
     Comment = CharField()
 
-
 class DisplayFont_Model(DBaseModel):
     id = IntegerField()
     FontName = CharField()
     Comment = CharField()
-
 
 class DisplayFrame_Model(DBaseModel):
     id = IntegerField()
@@ -310,24 +268,20 @@ class DisplayFrame_Model(DBaseModel):
     FillBackground = BooleanField()
     Comment = CharField()
 
-
 class DisplayImage_Model(DBaseModel):
     ComponentId = IntegerField()
     ImagesId = IntegerField()
     Comment = CharField()
-
 
 class DisplayImages_Model(DBaseModel):
     id = IntegerField()
     Name = CharField()
     Comment = CharField()
 
-
 class DisplayLabel_Model(DBaseModel):
     id = IntegerField()
     StringId = IntegerField()
     Comment = CharField()
-
 
 class DisplayListView_Model(DBaseModel):
     id = IntegerField()
@@ -337,13 +291,11 @@ class DisplayListView_Model(DBaseModel):
     PrevListId = IntegerField()
     Comment = CharField()
 
-
 class DisplayListViewColumns_Model(DBaseModel):
     ColumnIndex = IntegerField()
     ListViewId = IntegerField()
     ColumnWidth = IntegerField()
     Comment = CharField()
-
 
 class DisplayListViewItem_Model(DBaseModel):
     id = IntegerField()
@@ -352,14 +304,12 @@ class DisplayListViewItem_Model(DBaseModel):
     ExcludeFromFactory = BooleanField()
     Comment = CharField()
 
-
 class DisplayListViewItemComponents_Model(DBaseModel):
     id = IntegerField()
     ListViewItemId = IntegerField()
     ColumnIndex = IntegerField()
     ComponentId = IntegerField()
     Comment = CharField()
-
 
 class DisplayMenuTab_Model(DBaseModel):
     id = IntegerField()
@@ -368,12 +318,10 @@ class DisplayMenuTab_Model(DBaseModel):
     SelectionBackgroundColour = IntegerField()
     Comment = CharField()
 
-
 class DisplayModeCheckBox_Model(DBaseModel):
     id = IntegerField()
     CheckState = IntegerField()
     Comment = CharField()
-
 
 class DisplayMultiNumber_Model(DBaseModel):
     id = IntegerField()
@@ -382,12 +330,10 @@ class DisplayMultiNumber_Model(DBaseModel):
     FieldMaxValue = IntegerField()
     Comment = CharField()
 
-
 class DisplayNumber_Model(DBaseModel):
     id = IntegerField()
     NumberOfDigits = IntegerField()
     Comment = CharField()
-
 
 class DisplayNumberQuantity_Model(DBaseModel):
     id = IntegerField()
@@ -397,12 +343,10 @@ class DisplayNumberQuantity_Model(DBaseModel):
     QuantityFontId = IntegerField()
     Comment = CharField()
 
-
 class DisplayObserver_Model(DBaseModel):
     id = IntegerField()
     ObserverId = IntegerField()
     Comment = CharField()
-
 
 class DisplayObserverSingleSubject_Model(DBaseModel):
     id = IntegerField()
@@ -410,13 +354,11 @@ class DisplayObserverSingleSubject_Model(DBaseModel):
     SubjectAccess = IntegerField()
     Comment = CharField()
 
-
 class DisplayOnOffCheckBox_Model(DBaseModel):
     id = IntegerField()
     OnValue = IntegerField()
     OffValue = IntegerField()
     Comment = CharField()
-
 
 class DisplayText_Model(DBaseModel):
     id = IntegerField()
@@ -428,27 +370,22 @@ class DisplayText_Model(DBaseModel):
     WordWrap = BooleanField()
     Comment = CharField()
 
-
 class DisplayUnitStrings_Model(DBaseModel):
     UnitType = IntegerField()
     UnitNumber = IntegerField()
     StringId = IntegerField()
     Comment = CharField()
 
-
 class display_ids_Model(DBaseModel):
     Expr1000 = IntegerField()
     Expr1001 = CharField()
-
 
 class WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay_Model(DBaseModel):
     id = IntegerField()
     WriteState = IntegerField()
     Comment = CharField()
 
-# Language Database Models
-
-
+#Language Database Models
 class excel_import_Model(LBaseModel):
     L_0 = CharField()
     L_1 = CharField()
@@ -475,13 +412,11 @@ class excel_import_Model(LBaseModel):
     L_22 = CharField()
     L_23 = CharField()
 
-
 class Languages_Model(LBaseModel):
     id = IntegerField()
     Language = CharField()
     iso_name = CharField()
     uk_name = CharField()
-
 
 class StringDefines_Model(LBaseModel):
     id = IntegerField()
@@ -491,15 +426,14 @@ class StringDefines_Model(LBaseModel):
     TypeId = IntegerField()
     DisplayNumbers = CharField()
 
-
 class Strings_Model(LBaseModel):
     id = IntegerField()
     LanguageId = IntegerField()
     String = CharField()
     Status = CharField()
 
-
 class StringTypes_Model(LBaseModel):
     id = IntegerField()
     Type = CharField()
     Description = CharField()
+

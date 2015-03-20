@@ -3,7 +3,7 @@
 from util.log import *
 from models import *
 from tables import *
-from parameters import *
+from template.template import *
 
 
 def handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list):

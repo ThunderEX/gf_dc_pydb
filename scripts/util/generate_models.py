@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from util import pypyodbc
+import pypyodbc
 
 DisplayFactory_TableNames = [
     "Colours",
@@ -91,13 +91,13 @@ field_types = {
 }
 
 # factory数据库
-factory_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
+factory_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../../../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
 # DisplayFactory数据库
-display_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
+display_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../../../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
 # language数据库
-language_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
+language_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../../../cu3x1App_SRC/Control/LangGenerator/input/language.mdb'
 
-output_file = open('models.py', 'w')
+output_file = open('../models.py', 'w')
 template = """# -*- coding: utf-8 -*-
 import os, sys
 from util.peewee import *
