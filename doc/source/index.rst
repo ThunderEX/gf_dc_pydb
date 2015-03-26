@@ -3,13 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-DC Py Database Tool
-===================
+DC Database Helper
+==================
 
-This tool is written by python and used to auto generate data and insert into database for DC project.
+DC Database Helper is a tool that can help to operate database automatically in DC project. The purpose of this tool is to make DC project development conveniently, quickly, and automatically.
 
-.. image:: images/dc_py_db.png
-    :align: center
+This tool can:
+
+* Organize and combine data by feature, write them by script.
+* Auto insert data into database.
+* Query database.
 
 Contents:
 ---------
@@ -18,10 +21,13 @@ Contents:
    :maxdepth: 2
    :glob:
 
-   api
+   pydb/overview
+   pydb/installation
+   pydb/quickstart
+   pydb/template
+   pydb/api
 
-
-索引和搜索
+Indices and tables
 ==================
 
 * :ref:`genindex`

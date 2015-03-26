@@ -3,7 +3,10 @@ from ..models import *
 from ..tables import *
 
 class LabelBlank(object):
-    listview_id = ''              #listview id which will include the new blank line
+    '''
+        Add new blank line in speific listview
+    '''
+    listview_id = ''              #: listview id which will include the new blank line
 
     def __init__(self):
         self.parameters = []
@@ -11,7 +14,6 @@ class LabelBlank(object):
 
     def update_parameters(self):
         self.parameters = [
-            # 为了美观，需要在listview下加一行空格
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,

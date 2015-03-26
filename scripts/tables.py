@@ -14,7 +14,7 @@ class BaseTable(object):
             初始化
 
         :param model: model类
-        :param *args:
+        :param *args: 暂时没用
         :param **kwargs: fields(field=value)
         :return:
         '''
@@ -42,7 +42,6 @@ class BaseTable(object):
         :param defaults: field名的list
         :param **kwargs: fields(field=value)
         '''
-        """填充如Comment的field属性值"""
         for k, v in defaults.items():
             if k not in kwargs.keys() and hasattr(self.model, k):
                 setattr(self.model, k, v)
@@ -50,10 +49,10 @@ class BaseTable(object):
     def delete_attr(self, attr_list=['Comment']):
         '''
             删除特定的attribute
-        如果MSSQL返回错误
-        1. You cannot add or change a record because a related record is required in table 'Subject'
-        2. xxx cannot be a zero-length string
-        这是因为peewee里这些field如果不赋值，会有默认的值，例如0或''，sql语句里会有，此时要删除这些field
+            如果MSSQL返回错误
+            1. You cannot add or change a record because a related record is required in table 'Subject'
+            2. xxx cannot be a zero-length string
+            这是因为peewee里这些field如果不赋值，会有默认的值，例如0或''，sql语句里会有，此时要删除这些field
 
         :param attr_list: 要删除的属性列表
         :return:
@@ -102,7 +101,7 @@ class BaseTable(object):
             debug(("转换外键%s = %s" % (attr_name, str(value))).decode("utf-8"))
             setattr(self.model, attr_name, value)
 
-    def query(self, id=None):
+    def query(self, **kwargs):
         _id = id
         field_dict = self.model.get_field_dict()
         field_names = field_dict.keys()
@@ -113,8 +112,8 @@ class BaseTable(object):
                 field_names[id_index] = field_names[0]
                 field_names[0] = 'id'
         table = PrettyTable(field_names)
-        if _id:
-            results = self.model.select().where(id=_id)
+        if (kwargs):
+            results = self.model.select().where(**kwargs)
         else:
             results = self.model.select()
         if results:
@@ -141,7 +140,7 @@ class BaseTable(object):
 
     def add(self):
         if self.check_exist():
-            log(("记录已存在，跳过......").decode("utf-8"))
+            #log(("记录已存在，跳过......").decode("utf-8"))
             debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             return 0
         else:

@@ -3,13 +3,17 @@ from ..models import *
 from ..tables import *
 
 class LabelAndQuantity(object):
-    label_name = ''               #new label name that added in DisplayComponent
-    quantity_name = ''            #new quantity name that added in DisplayComponent
-    define_name = ''              #string define for new label
-    string = ''                   #string for new label, in many languages
-    listview_id = ''              #listview id which will include the new label and quantity
-    subject_id = ''               #link subject and quantity
-    quantity_type = ''            #quantity type in DisplayNumberQuantity
+    '''
+        New label and quantity
+    '''
+    label_name = ''               #: new label name that added in DisplayComponent
+    quantity_name = ''            #: new quantity name that added in DisplayComponent
+    define_name = ''              #: string define for new label
+    string = ''                   #: string for new label, in many languages
+    listview_id = ''              #: listview id which will include the new label and quantity
+    subject_id = ''               #: link subject and quantity
+    quantity_type = ''            #: quantity type in DisplayNumberQuantity
+
     def __init__(self):
         self.parameters = []
         self.description = 'No description'

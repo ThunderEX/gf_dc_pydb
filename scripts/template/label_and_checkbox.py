@@ -3,18 +3,21 @@ from ..models import *
 from ..tables import *
 
 class LabelAndCheckbox(object):
-    label_name = ''               #new label name that added in DisplayComponent
-    checkbox_name = ''            #new checkbox name that added in DisplayComponent
-    checkbox_type = ''
-    define_name = ''              #string define for new label
-    string = ''                   #string for new label, in many languages
-    listview_id = ''              #listview id which will include the new label and quantity
-    subject_id = ''               #link subject and quantity
-    check_state = 0
-    label_column = 0
-    checkbox_column = 1
-    label_left_margin = 0
-    label_right_margin = 0
+    '''
+        New label and checkbox.
+    '''
+    label_name = ''               #: new label name that added in DisplayComponent
+    checkbox_name = ''            #: new checkbox name that added in DisplayComponent
+    checkbox_type = ''            #: new checkbox type, ModeCheckBox or OnOffCheckBox
+    define_name = ''              #: string define for new label
+    string = ''                   #: string for new label, in many languages
+    listview_id = ''              #: listview id which will include the new label and quantity
+    subject_id = ''               #: link subject and quantity
+    check_state = 0               #: 0 - uncheck, 1 - check
+    label_column_index = 0        #: label column index in the listview
+    checkbox_column_index = 1     #: checkbox column index in the listview
+    label_left_margin = 0         #: left margin of label
+    label_right_margin = 0        #: right margin of label
 
     def __init__(self):
         self.parameters = []
@@ -106,14 +109,14 @@ class LabelAndCheckbox(object):
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.label_name,
-                 'ColumnIndex': self.label_column,
+                 'ColumnIndex': self.label_column_index,
              }
              ),
             # 12. 在新加的item下面添加数值
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.checkbox_name,
-                 'ColumnIndex': self.checkbox_column,
+                 'ColumnIndex': self.checkbox_column_index,
              }
              ),
         ]
@@ -172,7 +175,12 @@ class LabelAndCheckbox(object):
         return rtn
 
     def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
-        """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
+        '''
+            DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下
+        
+        :param display_listview_item: DisplayListViewItem实例
+        :param display_listview_item_components_list: DisplayListViewItemComponents实例列表
+        '''
         # index 从0开始遍历一遍
         for i in range(0, display_listview_item.model.Index):
             try:
@@ -192,6 +200,3 @@ class LabelAndCheckbox(object):
             r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
             x.model.ListViewItemId = r.id
             x.add()
-
-
-

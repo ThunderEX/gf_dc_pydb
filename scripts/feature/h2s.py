@@ -5,6 +5,58 @@ from ..util.log import *
 
 def h2s():
     comment('**************************** Factory部分 ****************************')
+    t = template('NewQuantity')
+    t.description = '---------- 添加quantity:ppm ----------'
+    t.type_name = 'Q_PARTS_PER_MILLION'
+    t.define_name = 'SID_PPM'
+    t.string = 'ppm'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 为ppm加Subject: unit_ppm_actual ----------'
+    t.subject_name = 'unit_ppm_actual'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'units'
+    t.observer_type = 'MpcUnits'
+    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'Q_PARTS_PER_MILLION'
+
+    t.int_value = '0'
+    t.int_type = 'I32'
+    t.int_min = '0'
+    t.int_max = '10'
+    t.int_quantity_type = 'Q_NO_UNIT'
+    t.int_verified = False
+    t.save()
+
+    t = template('NewQuantity')
+    t.description = '---------- 添加quantity:l ----------'
+    t.type_name = 'Q_LEVEL'
+    t.define_name = 'SID_l'
+    #t.string = 'l'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 为l加Subject: unit_level_actual ----------'
+    t.subject_name = 'unit_level_actual'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'units'
+    t.observer_type = 'MpcUnits'
+    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'Q_LEVEL'
+
+    t.int_value = '0'
+    t.int_type = 'I32'
+    t.int_min = '0'
+    t.int_max = '10'
+    t.int_quantity_type = 'Q_NO_UNIT'
+    t.int_verified = False
+    t.save()
+
     t = template('NewObserver')
     t.description = '---------- 加Observer: DDACtrl ----------'
     t.observer_name = 'dosing_pump_ctrl'
@@ -20,6 +72,7 @@ def h2s():
     t.flash_block = 'Config'
     t.observer_name = 'dosing_pump_ctrl'
     t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'dda_control_enabled'
 
     t.bool_value = 0
     t.save()
@@ -33,12 +86,13 @@ def h2s():
     t.flash_block = '-'
     t.observer_name = 'dosing_pump_ctrl'
     t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'h2s_level_act'
 
     t.int_value = '0'
     t.int_type = 'U32'
     t.int_min = '0'
     t.int_max = '99999999'
-    t.int_quantity_type = 'Q_FLOW'
+    t.int_quantity_type = 'Q_PARTS_PER_MILLION'
     t.int_verified = False
 
     t.geni_var_name = 'h2s_level'
@@ -49,14 +103,34 @@ def h2s():
     t.geni_convert_id = 'Dim. less with NA'
     t.save()
 
-    comment('**************************** Display Database部分 ****************************')
-    t = template('Quantity')
-    t.description = '---------- 添加quantity:ppm ----------'
-    t.type_name = 'Q_PARTS_PER_MILLION'
-    t.define_name = 'SID_PPM'
-    t.string = 'ppm'
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: chemical_remaining ----------'
+    t.subject_name = 'chemical_remaining'
+    t.subject_type_id = 'IntDataPoint'
+    t.geni_app_if = True
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'chemical_remaining'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '99999999'
+    t.int_quantity_type = 'Q_LEVEL'
+    t.int_verified = False
+
+    t.geni_var_name = 'chemical_remaining'
+    t.geni_class = 13
+    t.geni_id = 10
+    t.subject_name = 'chemical_remaining'
+    t.auto_generate = True
+    t.geni_convert_id = 'Dim. less with NA'
     t.save()
 
+    comment('**************************** Display Database部分 ****************************')
+    
     t = template('LabelAndQuantity')
     t.description = '---------- 添加label:h2s level于1.1 System Status ----------'
     t.label_name = '1.1 SystemStatus l1 h2s level'
@@ -64,7 +138,7 @@ def h2s():
     t.define_name = 'SID_H2S_LEVEL'
     t.string = 'H2S level'
     t.listview_id = '1.1 SystemStatus List 1'
-    t.subject_id = 'total_energy_j_for_display'
+    t.subject_id = 'h2s_level_act'
     t.quantity_type =  'Q_PARTS_PER_MILLION'
     t.save()
     
@@ -76,8 +150,8 @@ def h2s():
     t.string = 'Chemical remaining'
     t.listview_id = '1.1 SystemStatus List 1'
     #TODO
-    t.subject_id = 'total_energy_j_for_display'
-    t.quantity_type =  'Q_FLOW'
+    t.subject_id = 'chemical_remaining'
+    t.quantity_type =  'Q_LEVEL'
     t.save()
 
     t = template('LabelAndQuantity')
@@ -88,8 +162,8 @@ def h2s():
     t.string = 'Chemical dosed'
     t.listview_id = '1.1 SystemStatus List 1'
     #TODO
-    t.subject_id = 'total_energy_j_for_display'
-    t.quantity_type = 'Q_FLOW'
+    t.subject_id = 'chemical_remaining'
+    t.quantity_type = 'Q_LEVEL'
     t.save()
     
     t = template('LabelAndNewPage')
@@ -155,7 +229,7 @@ def h2s():
     t.checkbox_name = '4.2.14.1 Smart Digital DDA cb'
     t.checkbox_type = 'ModeCheckBox'
     t.check_state = 1
-    t.label_column = 1
+    t.label_column_index = 1
     t.checkbox_column = 2
     t.label_left_margin = 4
     t.label_right_margin = 0
@@ -172,7 +246,7 @@ def h2s():
     t.checkbox_name = '4.2.14.1 Analog dosing pump cb'
     t.checkbox_type = 'ModeCheckBox'
     t.check_state = 0
-    t.label_column = 1
+    t.label_column_index = 1
     t.checkbox_column = 2
     t.label_left_margin = 4
     t.label_right_margin = 0
@@ -223,7 +297,7 @@ def h2s():
     t.label_name = '4.1.7 pumpModules dosing pump'
     t.checkbox_name = '4.1.7 pumpModules dosing pump cb'
     t.checkbox_type = 'OnOffCheckBox'
-    t.label_column = 0
+    t.label_column_index = 0
     t.checkbox_column = 1
     t.label_left_margin = 2
     t.label_right_margin = 0

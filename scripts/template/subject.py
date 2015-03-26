@@ -15,6 +15,8 @@ class NewSubject(object):
     verified = False
     observer_name = ''            #the corresponding observer name
     observer_type = ''            #the corresponding observer type
+    subject_relation_name = ''
+    subject_access = 'Read'
 
     #below attributes are for geni if geni_app_if is True
     geni_var_name = ''
@@ -83,7 +85,7 @@ class NewSubject(object):
         self.parameters.append(
             (SubjectRelation,
              {
-                 'Name': self.subject_name.upper(),  # 必须用大写字母
+                 'Name': self.subject_relation_name.upper(),  # 必须用大写字母
                  'ObserverTypeId': self.observer_type,
              }
              ),
@@ -95,8 +97,8 @@ class NewSubject(object):
                  'SubjectId': self.subject_name,
                  'ObserverId': self.observer_name,
                  'ObserverTypeId': self.observer_type,
-                 'SubjectRelationId': self.subject_name.upper(),
-                 'SubjectAccess': 'Read',
+                 'SubjectRelationId': self.subject_relation_name.upper(),
+                 'SubjectAccess': self.subject_access,
              }
              )
         )
