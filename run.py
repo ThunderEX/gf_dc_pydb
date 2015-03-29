@@ -8,11 +8,25 @@ from scripts.feature.example import example
 
 
 if __name__ == '__main__':
-    #copy_database()
+    copy_database()
     #h2s()
-    x = DisplayComponent()
-    x.query(Name__icontains='4.6', ComponentType=2)
-    #example()
+    example()
     #run_generators()
     #ghs_build()
     #vc_build()
+
+    #x = DisplayComponent()
+    #x.query(Name__icontains='4.6', ComponentType=2)
+    #x = DisplayAlarmStrings()
+    #x.query()
+
+    #x = Strings()
+    #x.query(id=421)
+    #x.query(String__icontains='level')
+    #x = QuantityType()
+    #x.query(Name__icontains='Q_L')
+    #x = DisplayFont()
+    #x.query(FontName__icontains='13')
+    #x = AlarmDataPoint()
+    #x.query()
+    

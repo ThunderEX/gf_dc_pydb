@@ -219,7 +219,7 @@ def h2s():
     t.description = '---------- 4.2.14.1 - Dosing pump 页面里新加一行label:Dosing pump interface ----------'
     t.label_name = '4.2.14.1 H2S dosing pump interface headline'
     t.define_name = 'SID_DOSING_PUMP_INTERFACE'
-    t.string = 'Dosing pump interface'
+    t.label_string = 'Dosing pump interface'
     t.listview_id = '4.2.14.1 H2S Dosing pump List'
     t.save()
     
@@ -234,7 +234,7 @@ def h2s():
     t.label_left_margin = 4
     t.label_right_margin = 0
     t.define_name = 'SID_H2S_DOSING_PUMP_SMART_DIGITAL_DDA'
-    t.string = 'Smart Digital DDA'
+    t.label_string = 'Smart Digital DDA'
     t.listview_id = '4.2.14.1 H2S Dosing pump List'
     # TODO 先用已有的subject数据pit_level_ctrl_type，是个枚举类型
     t.subject_id = 'pit_level_ctrl_type'
@@ -251,7 +251,7 @@ def h2s():
     t.label_left_margin = 4
     t.label_right_margin = 0
     t.define_name = 'SID_H2S_DOSING_PUMP_ANALOG'
-    t.string = 'Analog dosing pump'
+    t.label_string = 'Analog dosing pump'
     t.listview_id = '4.2.14.1 H2S Dosing pump List'
     # TODO 先用已有的subject数据pit_level_ctrl_type，是个枚举类型
     t.subject_id = 'pit_level_ctrl_type'
@@ -302,7 +302,7 @@ def h2s():
     t.label_left_margin = 2
     t.label_right_margin = 0
     t.define_name = 'SID_H2S_DOSING_PUMP_INSTALLED'
-    t.string = 'Dosing pump installed'
+    t.label_string = 'Dosing pump installed'
     t.listview_id = '4.1.7 pumpModules List'
     # TODO 先用已有的subject数据io111_pump_1_installed
     t.subject_id = 'io111_pump_1_installed'

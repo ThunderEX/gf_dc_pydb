@@ -6,9 +6,9 @@ class NewObserver(object):
 
     ''' Add new observer '''
 
-    observer_name = ''           #new observer name
-    observer_type = ''           #new observer type
-    short_name = ''              #short name for new observer
+    observer_name = ''           #: new observer name, normally it is the instance of class
+    observer_type = ''           #: new observer type, normally it is class name in application
+    short_name = ''              #: short name for new observer
 
     def __init__(self):
         self.parameters = []

@@ -83,21 +83,21 @@ class BaseTable(object):
         debug("Max id in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
         self.model.id = max(id_list) + 1
 
-    def convert_foreignkey(self, attr_name, foreign_model, foreign_search_attr_name, foreign_attr_name='id'):
+    def convert_foreignkey(self, attr_name, foreign_model, foreign_attr_from, foreign_attr_to='id'):
         '''
             转换外键
 
         :param attr_name: 要转换的外键field名
         :param foreign_model: 关联表
-        :param foreign_search_attr_name: 关联表搜索的field
-        :param foreign_attr_name: 得到的关联表field
+        :param foreign_attr_from: 关联表搜索的field
+        :param foreign_attr_to: 得到的关联表field
         '''
         if not hasattr(self.model, attr_name):
             log(("没有Field: %s" % (attr_name)).decode("utf-8"))
             raise NameError
         if attr_name in self.foreignkey_items.keys():
-            r = foreign_model.get(**{foreign_search_attr_name: getattr(self.model, attr_name)})
-            value = getattr(r, foreign_attr_name)
+            r = foreign_model.get(**{foreign_attr_from: getattr(self.model, attr_name)})
+            value = getattr(r, foreign_attr_to)
             debug(("转换外键%s = %s" % (attr_name, str(value))).decode("utf-8"))
             setattr(self.model, attr_name, value)
 
@@ -149,6 +149,51 @@ class BaseTable(object):
 
 
 # Factory Database
+class AlarmConfig(BaseTable):
+
+    """操作表AlarmConfig"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = AlarmConfig_Model()
+        super(AlarmConfig, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('AlarmConfigId', Subject_Model, 'Name', 'id')
+        self.convert_foreignkey('AlarmType', SubjectTypes_Model, 'Name', 'id')
+        self.convert_foreignkey('AlarmCriteria', AlarmCriteriaType_Model, 'name', 'value')
+        self.convert_foreignkey('QuantityTypeId', QuantityType_Model, 'Name', 'id')
+
+
+class AlarmCriteriaType(BaseTable):
+
+    """操作表AlarmCriteriaType"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = AlarmCriteriaType_Model()
+        super(AlarmCriteriaType, self).__init__(self.model, *args, **kwargs)
+
+
+class AlarmDataPoint(BaseTable):
+
+    """操作表AlarmDataPoint"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = AlarmDataPoint_Model()
+        super(AlarmDataPoint, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', Subject_Model, 'Name', 'id')
+        self.convert_foreignkey('AlarmConfigId', Subject_Model, 'Name', 'id')
+        self.convert_foreignkey('AlarmConfig2Id', Subject_Model, 'Name', 'id')
+        # TODO 貌似这里需要多转了一次，用StringDefines里的StringId从DisplayAlarmStrings得到AlarmId
+        #self.convert_foreignkey('AlarmId', DisplayAlarmStrings_Model, 'StringId', 'AlarmId')
+
+
+class AlarmPresentType(BaseTable):
+
+    """操作表AlarmPresentType"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = AlarmPresentType_Model()
+        super(AlarmPresentType, self).__init__(self.model, *args, **kwargs)
+
+
 class BoolDataPoint(BaseTable):
 
     """操作表BoolDataPoint"""
@@ -167,6 +212,33 @@ class EnumDataPoint(BaseTable):
         self.model = EnumDataPoint_Model()
         super(EnumDataPoint, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('id', Subject_Model, 'Name', 'id')
+
+
+class EnumTypes(BaseTable):
+
+    """操作表EnumTypes"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = EnumTypes_Model()
+        super(EnumTypes, self).__init__(self.model, *args, **kwargs)
+
+
+class ErroneousUnitType(BaseTable):
+
+    """操作表ErroneousUnitType"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = ErroneousUnitType_Model()
+        super(ErroneousUnitType, self).__init__(self.model, *args, **kwargs)
+
+
+class FlashBlockTypes(BaseTable):
+
+    """操作表FlashBlockTypes"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = FlashBlockTypes_Model()
+        super(FlashBlockTypes, self).__init__(self.model, *args, **kwargs)
 
 
 class FloatDataPoint(BaseTable):
@@ -191,6 +263,24 @@ class GeniAppIf(BaseTable):
         self.convert_foreignkey('GeniConvertId', GeniConvert_Model, 'Comment', 'id')
 
 
+class GeniConvert(BaseTable):
+
+    """操作表GeniConvert"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = GeniConvert_Model()
+        super(GeniConvert, self).__init__(self.model, *args, **kwargs)
+
+
+class IntDataPointTypes(BaseTable):
+
+    """操作表IntDataPointTypes"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = IntDataPointTypes_Model()
+        super(IntDataPointTypes, self).__init__(self.model, *args, **kwargs)
+
+
 class IntDataPoint(BaseTable):
 
     """操作表IntDataPoint"""
@@ -203,16 +293,6 @@ class IntDataPoint(BaseTable):
         if self.model.Type not in ['I16', 'I32', 'U16', 'U32', 'U8']:
             log(('IntDataPoint的Type必须为I16, I32, U16, U32, U8').decode("utf-8"))
             raise TypeError
-
-
-class StringDataPoint(BaseTable):
-
-    """操作表StringDataPoint"""
-
-    def __init__(self, *args, **kwargs):
-        self.model = StringDataPoint_Model()
-        super(StringDataPoint, self).__init__(self.model, *args, **kwargs)
-        self.convert_foreignkey('id', Subject_Model, 'Name', 'id')
 
 
 class Observer(BaseTable):
@@ -249,11 +329,68 @@ class ObserverType(BaseTable):
         self.delete_attr(['Comment', 'NameSpace'])
 
 
+class QuantityType(BaseTable):
+
+    """操作表QuantityType"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = QuantityType_Model()
+        super(QuantityType, self).__init__(self.model, *args, **kwargs)
+        self.get_max_id()
+
+    def get_max_id(self):
+        r = self.model.select()
+        id_list = []
+        for i in r:
+            id_list.append(i.id)
+        id_list.sort()
+        # 最后一个是Q_LAST_UNIT，100，要从倒数第二个+1
+        self.model.id = id_list[-2] + 1
+        debug("new QuantityType id is: %d" % (self.model.id))
+
+    def add(self):
+        stored_id = self.model.id
+        self.model.id = None
+        if self.model.check_exist():
+            log(("记录已存在，跳过......").decode("utf-8"))
+            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
+            return
+        self.model.id = stored_id
+        self.model.save()
+        return self.model.id
+
+
+class ResetType(BaseTable):
+
+    """操作表ResetType"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = ResetType_Model()
+        super(ResetType, self).__init__(self.model, *args, **kwargs)
+
+
+class SaveTypes(BaseTable):
+
+    """操作表SaveTypes"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = SaveTypes_Model()
+        super(SaveTypes, self).__init__(self.model, *args, **kwargs)
+
+
+class StringDataPoint(BaseTable):
+
+    """操作表StringDataPoint"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = StringDataPoint_Model()
+        super(StringDataPoint, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', Subject_Model, 'Name', 'id')
+
+
 class Subject(BaseTable):
 
-    """操作表Subject
-    save : '-', 'All', 'Value'
-    """
+    """ 操作表Subject """
 
     def __init__(self, *args, **kwargs):
         self.model = Subject_Model()
@@ -261,6 +398,15 @@ class Subject(BaseTable):
         self.convert_foreignkey('TypeId', SubjectTypes_Model, 'Name', 'id')
         self.convert_foreignkey('Save', SaveTypes_Model, 'Name', 'id')
         self.convert_foreignkey('FlashBlock', FlashBlockTypes_Model, 'Name', 'id')
+
+
+class SubjectAccessType(BaseTable):
+
+    """操作表SubjectAccessType"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = SubjectAccessType_Model()
+        super(SubjectAccessType, self).__init__(self.model, *args, **kwargs)
 
 
 class SubjectRelation(BaseTable):
@@ -276,6 +422,42 @@ class SubjectRelation(BaseTable):
         self.convert_foreignkey('ObserverTypeId', ObserverType_Model, 'Name', 'id')
 
 
+class SubjectTypes(BaseTable):
+
+    """操作表SubjectTypes"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = SubjectTypes_Model()
+        super(SubjectTypes, self).__init__(self.model, *args, **kwargs)
+
+
+class Task(BaseTable):
+
+    """操作表Task"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = Task_Model()
+        super(Task, self).__init__(self.model, *args, **kwargs)
+
+
+class TaskType(BaseTable):
+
+    """操作表TaskType"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = TaskType_Model()
+        super(TaskType, self).__init__(self.model, *args, **kwargs)
+
+
+class UserIoConfig(BaseTable):
+
+    """操作表UserIoConfig"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = UserIoConfig_Model()
+        super(UserIoConfig, self).__init__(self.model, *args, **kwargs)
+
+
 class VectorDataPoint(BaseTable):
 
     """操作表VectorDataPoint"""
@@ -289,7 +471,25 @@ class VectorDataPoint(BaseTable):
             raise TypeError
 
 
+class VectorDataPointTypes(BaseTable):
+
+    """操作表VectorDataPointTypes"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = VectorDataPointTypes_Model()
+        super(VectorDataPointTypes, self).__init__(self.model, *args, **kwargs)
+
+
 # Display Database
+class Colours(BaseTable):
+
+    """操作表Colours"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = Colours_Model()
+        super(Colours, self).__init__(self.model, *args, **kwargs)
+
+
 class Display(BaseTable):
 
     """操作表Display"""
@@ -301,6 +501,24 @@ class Display(BaseTable):
         self.convert_foreignkey('Name', Strings_Model, 'String', 'id')
 
 
+class DisplayAlarmStrings(BaseTable):
+
+    """操作表DisplayAlarmStrings"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayAlarmStrings_Model()
+        super(DisplayAlarmStrings, self).__init__(self.model, *args, **kwargs)
+
+
+class DisplayAvailable(BaseTable):
+
+    """操作表DisplayAvailable"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayAvailable_Model()
+        super(DisplayAvailable, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+
 class DisplayComponent(BaseTable):
 
     """操作表DisplayComponent"""
@@ -310,6 +528,64 @@ class DisplayComponent(BaseTable):
         super(DisplayComponent, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('ComponentType', DisplayComponentTypes_Model, 'Name', 'id')
         #self.convert_foreignkey('displayid', Display_Model, 'Name', 'id')
+
+
+class DisplayComponentColour(BaseTable):
+
+    """操作表DisplayComponentColour"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayComponentColour_Model()
+        super(DisplayComponentColour, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+
+
+class DisplayComponentTypes(BaseTable):
+
+    """操作表DisplayComponentTypes"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayComponentTypes_Model()
+        super(DisplayComponentTypes, self).__init__(self.model, *args, **kwargs)
+
+
+class DisplayFont(BaseTable):
+
+    """操作表DisplayFont"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayFont_Model()
+        super(DisplayFont, self).__init__(self.model, *args, **kwargs)
+
+
+class DisplayFrame(BaseTable):
+
+    """操作表DisplayFrame"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayFrame_Model()
+        super(DisplayFrame, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+
+
+class DisplayImage(BaseTable):
+
+    """操作表DisplayImage"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayImage_Model()
+        super(DisplayImage, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('ComponentId', DisplayComponent_Model, 'Name', 'id')
+        self.convert_foreignkey('ImagesId', DisplayImages_Model, 'Name', 'id')
+
+
+class DisplayImages(BaseTable):
+
+    """操作表DisplayImages"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayImages_Model()
+        super(DisplayImages, self).__init__(self.model, *args, **kwargs)
 
 
 class DisplayLabel(BaseTable):
@@ -382,6 +658,46 @@ class DisplayListViewItemComponents(BaseTable):
         self.convert_foreignkey('ComponentId', DisplayComponent_Model, 'Name', 'id')
 
 
+class DisplayMenuTab(BaseTable):
+
+    """操作表DisplayMenuTab"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayMenuTab_Model()
+        super(DisplayMenuTab, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+
+
+class DisplayModeCheckBox(BaseTable):
+
+    """操作表DisplayModeCheckBox"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayModeCheckBox_Model()
+        super(DisplayModeCheckBox, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+
+
+class DisplayMultiNumber(BaseTable):
+
+    """操作表DisplayMultiNumber"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayMultiNumber_Model()
+        super(DisplayMultiNumber, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+
+
+class DisplayNumber(BaseTable):
+
+    """操作表DisplayNumber"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayNumber_Model()
+        super(DisplayNumber, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+
+
 class DisplayNumberQuantity(BaseTable):
 
     """操作表DisplayNumberQuantity"""
@@ -395,14 +711,15 @@ class DisplayNumberQuantity(BaseTable):
         self.convert_foreignkey('QuantityFontId', DisplayFont_Model, 'FontName', 'id')
 
 
-class DisplayModeCheckBox(BaseTable):
+class DisplayObserver(BaseTable):
 
-    """操作表DisplayModeCheckBox"""
+    """操作表DisplayObserver"""
 
     def __init__(self, *args, **kwargs):
-        self.model = DisplayModeCheckBox_Model()
-        super(DisplayModeCheckBox, self).__init__(self.model, *args, **kwargs)
+        self.model = DisplayObserver_Model()
+        super(DisplayObserver, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
+        self.convert_foreignkey('ObserverId', Observer_Model, 'Name', 'id')
 
 
 class DisplayObserverSingleSubject(BaseTable):
@@ -425,37 +742,6 @@ class DisplayOnOffCheckBox(BaseTable):
         self.model = DisplayOnOffCheckBox_Model()
         super(DisplayOnOffCheckBox, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
-
-
-class QuantityType(BaseTable):
-
-    """操作表QuantityType"""
-
-    def __init__(self, *args, **kwargs):
-        self.model = QuantityType_Model()
-        super(QuantityType, self).__init__(self.model, *args, **kwargs)
-        self.get_max_id()
-
-    def get_max_id(self):
-        r = self.model.select()
-        id_list = []
-        for i in r:
-            id_list.append(i.id)
-        id_list.sort()
-        # 最后一个是Q_LAST_UNIT，100，要从倒数第二个+1
-        self.model.id = id_list[-2] + 1
-        debug("new QuantityType id is: %d" % (self.model.id))
-
-    def add(self):
-        stored_id = self.model.id
-        self.model.id = None
-        if self.model.check_exist():
-            log(("记录已存在，跳过......").decode("utf-8"))
-            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
-            return
-        self.model.id = stored_id
-        self.model.save()
-        return self.model.id
 
 
 class DisplayText(BaseTable):

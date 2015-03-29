@@ -24,8 +24,10 @@ Contents:
    pydb/overview
    pydb/installation
    pydb/quickstart
+   pydb/query
    pydb/template
    pydb/api
+
 
 Indices and tables
 ==================

@@ -37,6 +37,11 @@ class AlarmConfig_Model(FBaseModel):
     Verified = BooleanField()
     Comment = CharField()
 
+class AlarmCriteriaType_Model(FBaseModel):
+    id = IntegerField()
+    name = CharField()
+    value = CharField()
+
 class AlarmDataPoint_Model(FBaseModel):
     id = IntegerField()
     AlarmConfigId = IntegerField()
@@ -44,6 +49,12 @@ class AlarmDataPoint_Model(FBaseModel):
     ErroneousUnitTypeId = IntegerField()
     ErroneousUnitNumber = IntegerField()
     AlarmId = IntegerField()
+    Comment = CharField()
+
+class AlarmPresentType_Model(FBaseModel):
+    id = IntegerField()
+    Name = CharField()
+    Value = CharField()
     Comment = CharField()
 
 class BoolDataPoint_Model(FBaseModel):
@@ -190,6 +201,11 @@ class Task_Model(FBaseModel):
 class TaskType_Model(FBaseModel):
     id = IntegerField()
     Name = CharField()
+    Comment = CharField()
+
+class UserIoConfig_Model(FBaseModel):
+    id = IntegerField()
+    Destination = CharField()
     Comment = CharField()
 
 class VectorDataPoint_Model(FBaseModel):

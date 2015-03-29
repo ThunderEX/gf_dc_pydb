@@ -3,9 +3,13 @@ from ..models import *
 from ..tables import *
 
 class NewQuantity(object):
-    type_name = 'Q_PARTS_PER_MILLION'
-    define_name = 'SID_PPM'
-    string = 'ppm'
+
+    ''' New quantity '''
+
+    type_name = ''          #: new quantity type name, start with Q_
+    define_name = ''        #: string define for new quantity
+    string = ''             #: display string on screen, multiple languages
+
     def __init__(self):
         self.parameters = []
         self.description = 'No description'

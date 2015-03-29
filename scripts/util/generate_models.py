@@ -37,8 +37,10 @@ DisplayFactory_TableNames = [
 
 Factory_TablesNames = [
     "AlarmConfig",
+    "AlarmCriteriaType",
     "AlarmDataPoint",
     #"AlarmStateType",  #不存在
+    "AlarmPresentType",
     "BoolDataPoint",
     "EnumDataPoint",
     "EnumTypes",
@@ -62,6 +64,7 @@ Factory_TablesNames = [
     "SubjectAccessType",
     "Task",
     "TaskType",
+    "UserIoConfig",
     "VectorDataPoint",
     "VectorDataPointTypes",
     #"zzz_subjectid_relations subform",  #这张表名有空格

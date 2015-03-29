@@ -3,9 +3,9 @@ from ..models import *
 from ..tables import *
 
 class LabelBlank(object):
-    '''
-        Add new blank line in speific listview
-    '''
+
+    ''' Add new blank line in speific listview '''
+
     listview_id = ''              #: listview id which will include the new blank line
 
     def __init__(self):

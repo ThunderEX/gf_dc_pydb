@@ -6,23 +6,25 @@ class LabelAndNewPage(object):
 
     ''' Add new label and click this label will render to a new page. New page combines with a group and display. Under the group, it is a listview. '''
 
-    label_name = ''
-    label_define_name = ''
-    label_string = ''
-    listview_id = ''
-    label_left_margin = 8
-    label_right_margin = 0
+    label_name = ''                         #: new label name that added in DisplayComponent.
+    label_define_name = ''                  #: string define for new label.
+    label_string = ''                       #: string for new label, multiple languages
+    listview_id = ''                        #: listview id which will include the new label and quantity
+    label_left_margin = 8                   #: left margin of label
+    label_right_margin = 0                  #: right margin of label
 
-    group_name = ''
-    group_define_name = ''
+    group_name = ''                         #: new group name that added in DisplayComponent.
+    group_define_name = ''                  #: string define for new group.
 
-    root_group_id_name = '',
-    display_string_name = ''
-    display_number = ''
+    root_group_id_name = ''                 #: group id name in Display table, should be same with group_name
+    display_string_name = ''                #: should be same with label_string
+    display_number = ''                     #: the index number of group
 
-    listview_name = ''
-    listviewid_name = ''
-    listview_column_width = [160, 64, 0]
+    listview_name = ''                      #: new listview name that added in DisplayComponent.
+    listviewid_name = ''                    #: the name same as listview_name, used in DisplayListView
+    listview_column_width = [160, 64, 0]    #: list of column width of new listview.
+    next_list_id = 0                        # next listview to the new listview, 0 is '- None -'
+    prev_list_id = 0                        # previous listview to the new listview, 0 is '- None -'
     
     def __init__(self):
         self.parameters = []
@@ -189,8 +191,8 @@ class LabelAndNewPage(object):
                  'id': self.listviewid_name,
                  'RowHeight': 15,
                  'SelectedRow': 0,
-                 'NextListId': 0,  # - None -
-                 'PrevListId': 0,  # - None -
+                 'NextListId': self.next_list_id,
+                 'PrevListId': self.prev_list_id,  # - None -
              }
              ),
         ]

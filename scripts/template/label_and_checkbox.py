@@ -3,14 +3,14 @@ from ..models import *
 from ..tables import *
 
 class LabelAndCheckbox(object):
-    '''
-        New label and checkbox.
-    '''
+
+    ''' New label and checkbox.  '''
+
     label_name = ''               #: new label name that added in DisplayComponent
     checkbox_name = ''            #: new checkbox name that added in DisplayComponent
     checkbox_type = ''            #: new checkbox type, ModeCheckBox or OnOffCheckBox
     define_name = ''              #: string define for new label
-    string = ''                   #: string for new label, in many languages
+    label_string = ''             #: string for new label, multiple languages
     listview_id = ''              #: listview id which will include the new label and quantity
     subject_id = ''               #: link subject and quantity
     check_state = 0               #: 0 - uncheck, 1 - check
@@ -69,14 +69,14 @@ class LabelAndCheckbox(object):
             # 4. label加相应的字符串
             (Strings,
              {
-                 'String': self.string,
+                 'String': self.label_string,
                  'LanguageId': 'DEV_LANGUAGE',
                  'Status': 'UnEdit',
              }
              ),
             (Strings,
              {
-                 'String': self.string,
+                 'String': self.label_string,
                  'LanguageId': 'UK_LANGUAGE',
                  'Status': 'UnEdit',
              }

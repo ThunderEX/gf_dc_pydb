@@ -7,34 +7,34 @@ class NewSubject(object):
     ''' Add new subject and handle the relation with observer '''
 
     #below attributes need to be defined first
-    subject_name = ''             #new subject name
-    subject_type_id = ''          #which subject type to use
-    geni_app_if = False
-    subject_save = '-'
-    flash_block = '-'
-    verified = False
-    observer_name = ''            #the corresponding observer name
-    observer_type = ''            #the corresponding observer type
-    subject_relation_name = ''
-    subject_access = 'Read'
+    subject_name = ''                       #: new subject name, this name will be used as SP_ + short_name + _ + subject_name (all capitalized) in application.
+    subject_type_id = ''                    #: which subject type to use, IntDataPoint, BoolDataPoint or something else.
+    geni_app_if = False                     #: True - geni interface, False - not geni interface.
+    subject_save = '-'                      #: '-', 'All', 'Value'.
+    flash_block = '-'                       #: '-', 'Config', 'Log', 'GSC', 'No boot', 'Log series 1', 'Log series 2', 'Log series 3', 'Log series 4', 'Log series 5'.
+    verified = False                        #: verified.
+    observer_name = ''                      #: the corresponding observer name.
+    observer_type = ''                      #: the corresponding observer type.
+    subject_relation_name = ''              #: subject relation name, must be all capitalized.
+    subject_access = 'Read'                 #: 'Not decided', 'Write', 'Read', 'Read/Write'
 
-    #below attributes are for geni if geni_app_if is True
-    geni_var_name = ''
-    geni_class = 0
-    geni_id = 0
-    geni_convert_id = 'Dim. less with NA'
-    auto_generate = True
+    # below attributes are for geni if geni_app_if is True
+    geni_var_name = ''                      #: geni variable name
+    geni_class = 0                          #: geni class
+    geni_id = 0                             #: geni id
+    geni_convert_id = 'Dim. less with NA'   #: geni convert id, defined in GeniConvert table
+    auto_generate = True                    #: auto generate geni data for this subject
 
-    #different attributes according to different subject type
-    #BoolDataPoint
-    bool_value = 0
-    #IntDataPoint
-    int_value = '0'
-    int_type = 'U32'
-    int_min = '0'
-    int_max = '99999999'
-    int_quantity_type = 'Q_NO_UNIT'
-    int_verified = False
+    # different attributes according to different subject type
+    #: BoolDataPoint, if subject_type_id=BoolDataPoint
+    bool_value = 0                          #: 0 or 1
+    #IntDataPoint, if subject_type_id=IntDataPoint
+    int_value = '0'                         #: set value
+    int_type = 'U32'                        #: int data type, 'I16', 'I32', 'U16', 'U32', 'U8'
+    int_min = '0'                           #: minimum value
+    int_max = '99999999'                    #: maximum value
+    int_quantity_type = 'Q_NO_UNIT'         #: quantity type for this int data
+    int_verified = False                    #: verified
 
     def __init__(self):
         self.parameters = []

@@ -3,12 +3,15 @@ from ..models import *
 from ..tables import *
 
 class LabelHeadline(object):
-    label_name = ''               #new label name that added in DisplayComponent
-    define_name = ''              #string define for new label
-    string = ''                   #string for new label, in many languages
-    listview_id = ''              #listview id which will include the new label and quantity
-    label_left_margin = 0
-    label_right_margin = 0
+
+    ''' New label that only one line text '''
+
+    label_name = ''               #: new label name that added in DisplayComponent
+    define_name = ''              #: string define for new label
+    label_string = ''             #: string for new label, multiple languages
+    listview_id = ''              #: listview id which will include the new label and quantity
+    label_left_margin = 0         #: left margin of label
+    label_right_margin = 0        #: right margin of label
 
     def __init__(self):
         self.parameters = []
@@ -42,14 +45,14 @@ class LabelHeadline(object):
             # 4. label加相应的字符串
             (Strings,
              {
-                 'String': self.string,
+                 'String': self.label_string,
                  'LanguageId': 'DEV_LANGUAGE',
                  'Status': 'UnEdit',
              }
              ),
             (Strings,
              {
-                 'String': self.string,
+                 'String': self.label_string,
                  'LanguageId': 'UK_LANGUAGE',
                  'Status': 'UnEdit',
              }

@@ -6,6 +6,9 @@ import time
 from util.log import log
 
 def copy_database():
+
+    ''' Copy clean and original factory, DisplayFactory, language database to replace those in input directory. '''
+
     f_database = r'.\backup\Factory.mdb'
     d_database = r'.\backup\DisplayFactory.mdb'
     l_database = r'.\backup\language.mdb'
@@ -22,6 +25,9 @@ def copy_database():
 
 
 def run_generators():
+
+    ''' Run factory, displayfactory, language generators '''
+
     current_dir = os.getcwd()
     FactoryGenerator = r'FactoryGenerator.exe  -generate'
     LangGenerator = r'LangGenerator.exe  -generate'
@@ -39,6 +45,13 @@ def run_generators():
 
 
 def ghs_build(opt=''):
+    '''
+        Run GreenHill build command.
+    
+    :param opt: rebuild
+    :return: 
+    '''
+
     start_time = time.time()
     current_dir = os.getcwd()
     clean_cmd = r'c:\GHS\V35\mips35\build.exe -clean Main_362.bld'
@@ -56,6 +69,9 @@ def ghs_build(opt=''):
 
 
 def vc_build():
+
+    ''' Run Visual Studio build command '''
+
     start_time = time.time()
     current_dir = os.getcwd()
     cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" /build /M4 pc.sln  "Release362|Any CPU"'
