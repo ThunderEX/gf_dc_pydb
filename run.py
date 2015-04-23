@@ -9,19 +9,20 @@ from scripts.feature.example import example
 
 if __name__ == '__main__':
     copy_database()
-    #h2s()
-    example()
-    #run_generators()
-    #ghs_build()
+    h2s()
+    #example()
+    run_generators()
+    #ghs_build('rebuild')
     #vc_build()
 
     #x = DisplayComponent()
+    #x.query(id=100)
     #x.query(Name__icontains='4.6', ComponentType=2)
-    #x = DisplayAlarmStrings()
+    #x = AlarmDataPoint()
     #x.query()
 
     #x = Strings()
-    #x.query(id=421)
+    #x.query(id=460)
     #x.query(String__icontains='level')
     #x = QuantityType()
     #x.query(Name__icontains='Q_L')

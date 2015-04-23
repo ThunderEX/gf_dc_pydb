@@ -83,7 +83,7 @@ class BaseTable(object):
         debug("Max id in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
         self.model.id = max(id_list) + 1
 
-    def convert_foreignkey(self, attr_name, foreign_model, foreign_attr_from, foreign_attr_to='id'):
+    def convert_foreignkey(self, attr_name, foreign_model, foreign_attr_from, foreign_attr_to = 'id', force = False):
         '''
             转换外键
 
@@ -95,11 +95,18 @@ class BaseTable(object):
         if not hasattr(self.model, attr_name):
             log(("没有Field: %s" % (attr_name)).decode("utf-8"))
             raise NameError
-        if attr_name in self.foreignkey_items.keys():
+        if attr_name in self.foreignkey_items.keys() and force is not True:
             r = foreign_model.get(**{foreign_attr_from: getattr(self.model, attr_name)})
             value = getattr(r, foreign_attr_to)
             debug(("转换外键%s = %s" % (attr_name, str(value))).decode("utf-8"))
             setattr(self.model, attr_name, value)
+        elif force is True:
+            r = foreign_model.get(**{foreign_attr_from: getattr(self.model, attr_name)})
+            value = getattr(r, foreign_attr_to)
+            debug(("转换外键%s = %s" % (attr_name, str(value))).decode("utf-8"))
+            setattr(self.model, attr_name, value)
+        else:
+            debug("不存在键%s" % (attr_name))
 
     def query(self, **kwargs):
         _id = id
@@ -157,8 +164,8 @@ class AlarmConfig(BaseTable):
         self.model = AlarmConfig_Model()
         super(AlarmConfig, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('AlarmConfigId', Subject_Model, 'Name', 'id')
-        self.convert_foreignkey('AlarmType', SubjectTypes_Model, 'Name', 'id')
-        self.convert_foreignkey('AlarmCriteria', AlarmCriteriaType_Model, 'name', 'value')
+        #self.convert_foreignkey('AlarmType', SubjectTypes_Model, 'Name', 'id', force=True)
+        self.convert_foreignkey('AlarmCriteria', AlarmCriteriaType_Model, 'name', 'value', force=True)
         self.convert_foreignkey('QuantityTypeId', QuantityType_Model, 'Name', 'id')
 
 
@@ -183,6 +190,11 @@ class AlarmDataPoint(BaseTable):
         self.convert_foreignkey('AlarmConfig2Id', Subject_Model, 'Name', 'id')
         # TODO 貌似这里需要多转了一次，用StringDefines里的StringId从DisplayAlarmStrings得到AlarmId
         #self.convert_foreignkey('AlarmId', DisplayAlarmStrings_Model, 'StringId', 'AlarmId')
+        r = StringDefines_Model.get(**{'DefineName': getattr(self.model, 'AlarmId')})
+        value = getattr(r, 'id')     #得到StringDefines的id
+        r = DisplayAlarmStrings_Model.get(**{'StringId': value})
+        value = getattr(r, 'AlarmId')     #得到DisplayAlarmStrings的AlarmId
+        setattr(self.model, 'AlarmId', value)
 
 
 class AlarmPresentType(BaseTable):
@@ -508,7 +520,16 @@ class DisplayAlarmStrings(BaseTable):
     def __init__(self, *args, **kwargs):
         self.model = DisplayAlarmStrings_Model()
         super(DisplayAlarmStrings, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('StringId', StringDefines_Model, 'DefineName', 'id')
+        self.get_max_id()
 
+    def get_max_id(self):
+        id_list = []
+        r = self.model.select()
+        for i in r:
+            id_list.append(i.AlarmId)
+        debug("Max AlarmId in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
+        self.model.AlarmId = max(id_list) + 1
 
 class DisplayAvailable(BaseTable):
 

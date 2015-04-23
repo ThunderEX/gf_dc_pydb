@@ -11,6 +11,7 @@ from label_blank import *
 from quantity import *
 from observer import *
 from subject import *
+from alarm import *
 
 class Template(object):
     def __init__(self, ):

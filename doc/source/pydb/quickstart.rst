@@ -202,7 +202,7 @@ Elaborate 2
 
     def example2():
         t = template('NewSubject')
-        t.description = '---------- 加Subject: h2s_level_act ----------'
+        t.description = '---------- Add Subject: h2s_level_act ----------'
         t.subject_name = 'h2s_level_act'
         t.subject_type_id = 'IntDataPoint'
         t.geni_app_if = True
@@ -270,3 +270,6 @@ Elaborate 2
 +-----------------------+-------------------------------------------------------------------------------------------------------------------------+
 | geni_convert_id       | geni convert id, defined in GeniConvert table                                                                           |
 +-----------------------+-------------------------------------------------------------------------------------------------------------------------+
+
+.. warning::
+    Please also modify the application that use the new added subject, otherwise, it will cause critical issue.

@@ -25,16 +25,45 @@ class NewSubject(object):
     geni_convert_id = 'Dim. less with NA'   #: geni convert id, defined in GeniConvert table
     auto_generate = True                    #: auto generate geni data for this subject
 
-    # different attributes according to different subject type
-    #: BoolDataPoint, if subject_type_id=BoolDataPoint
+    ''' different attributes according to different subject type '''
+
+    #: BoolDataPoint
     bool_value = 0                          #: 0 or 1
-    #IntDataPoint, if subject_type_id=IntDataPoint
+
+    #IntDataPoint
     int_value = '0'                         #: set value
     int_type = 'U32'                        #: int data type, 'I16', 'I32', 'U16', 'U32', 'U8'
     int_min = '0'                           #: minimum value
     int_max = '99999999'                    #: maximum value
     int_quantity_type = 'Q_NO_UNIT'         #: quantity type for this int data
     int_verified = False                    #: verified
+
+    #AlarmConfig
+    alarm_config_sms_1_enabled = False
+    alarm_config_sms_2_enabled = False
+    alarm_config_sms_3_enabled = False
+    alarm_config_scada_enabled = False
+    alarm_config_custom_relay_for_alarm_enabled = False
+    alarm_config_custom_relay_for_warning_enabled = False
+    alarm_config_alarm_enabled = False
+    alarm_config_warning_enabled = False
+    alarm_config_auto_ack = False
+    alarm_config_alarm_delay = 1
+    alarm_config_alarm_type = 'BoolDataPoint'
+    alarm_config_alarm_criteria = '='
+    alarm_config_alarm_limit = 1
+    alarm_config_warning_limit = 1
+    alarm_config_min_limit = 0
+    alarm_config_max_limit = 1
+    alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    alarm_config_verified = False
+
+    #AlarmDataPoint
+    alarm_alarm_config_id = ''
+    alarm_alarm_config2_id = 'dummy_alarm_conf'
+    alarm_erroneous_unit_type_id = 0
+    alarm_erroneous_unit_number = 0
+    alarm_alarm_id = ''                         #: SID_ALARM_XXXX
 
     def __init__(self):
         self.parameters = []
@@ -77,6 +106,45 @@ class NewSubject(object):
                  }
                  ),
             )
+        elif self.subject_type_id == 'AlarmConfig':
+            self.parameters.append(
+                (AlarmConfig,
+                 {
+                     'AlarmConfigId'                : self.subject_name,
+                     'Sms1Enabled'                  : self.alarm_config_sms_1_enabled,
+                     'Sms2Enabled'                  : self.alarm_config_sms_2_enabled,
+                     'Sms3Enabled'                  : self.alarm_config_sms_3_enabled,
+                     'ScadaEnabled'                 : self.alarm_config_scada_enabled,
+                     'CustomRelayForAlarmEnabled'   : self.alarm_config_custom_relay_for_alarm_enabled,
+                     'CustomRelayForWarningEnabled' : self.alarm_config_custom_relay_for_warning_enabled,
+                     'AlarmEnabled'                 : self.alarm_config_alarm_enabled,
+                     'WarningEnabled'               : self.alarm_config_warning_enabled,
+                     'AutoAck'                      : self.alarm_config_auto_ack,
+                     'AlarmDelay'                   : self.alarm_config_alarm_delay,
+                     'AlarmType'                    : self.alarm_config_alarm_type,
+                     'AlarmCriteria'                : self.alarm_config_alarm_criteria,
+                     'AlarmLimit'                   : self.alarm_config_alarm_limit,
+                     'WarningLimit'                 : self.alarm_config_warning_limit,
+                     'MinLimit'                     : self.alarm_config_min_limit,
+                     'MaxLimit'                     : self.alarm_config_max_limit,
+                     'QuantityTypeId'               : self.alarm_config_quantity_type_id,
+                     'Verified'                     : self.alarm_config_verified,
+                 }
+                 ),
+            )
+        elif self.subject_type_id == 'AlarmDataPoint':
+            self.parameters.append(
+                (AlarmDataPoint,
+                 {
+                     'id'                  : self.subject_name,
+                     'AlarmConfigId'       : self.alarm_alarm_config_id,
+                     'AlarmConfig2Id'      : self.alarm_alarm_config2_id,
+                     'ErroneousUnitTypeId' : self.alarm_erroneous_unit_type_id,
+                     'ErroneousUnitNumber' : self.alarm_erroneous_unit_number,
+                     'AlarmId'             : self.alarm_alarm_id,
+                 }
+                 ),
+            )
         else:
             comment('Not supported datapoint type')
             raise NameError
@@ -96,7 +164,6 @@ class NewSubject(object):
              {
                  'SubjectId': self.subject_name,
                  'ObserverId': self.observer_name,
-                 'ObserverTypeId': self.observer_type,
                  'SubjectRelationId': self.subject_relation_name.upper(),
                  'SubjectAccess': self.subject_access,
              }

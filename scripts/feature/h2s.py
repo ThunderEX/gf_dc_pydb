@@ -129,6 +129,55 @@ def h2s():
     t.geni_convert_id = 'Dim. less with NA'
     t.save()
 
+    t = template('NewAlarm')
+    t.description = '----------- 加DDA Alarm ----------'
+
+    t.alarm_define_name = 'SID_ALARM_254_DDA'
+    t.alarm_string = 'DDA alarm (254)'
+
+    #加alarm config
+    t.alarm_config_subject_name = 'sys_alarm_dda_alarm_conf'
+    t.alarm_config_subject_type_id = 'AlarmConfig'
+    t.alarm_config_geni_app_if = False
+    t.alarm_config_subject_save = 'Value'
+    t.alarm_config_flash_block = 'Config'
+    t.alarm_config_observer_name = 'display_alarm_slippoint'
+    t.alarm_config_observer_type = 'DDACtrl'
+    t.alarm_config_subject_relation_name = 'sys_alarm_dda'
+    t.alarm_config_subject_access = 'Read/Write'
+
+    t.alarm_config_alarm_enabled = True
+    t.alarm_config_warning_enabled = True
+    t.alarm_config_auto_ack = True
+    t.alarm_config_alarm_delay = 5
+    t.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_alarm_criteria = '='
+    t.alarm_config_alarm_limit = '1'
+    t.alarm_config_warning_limit = '0'
+    t.alarm_config_min_limit = '0'
+    t.alarm_config_max_limit = '1'
+    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_verified = False
+
+    #加alarm
+    t.alarm_subject_name = 'sys_alarm_dda_alarm_obj'
+    t.alarm_subject_type_id = 'AlarmDataPoint'
+    t.alarm_geni_app_if = False
+    t.alarm_subject_save = '-'
+    t.alarm_flash_block = '-'
+    t.alarm_observer_name = 'dosing_pump_ctrl'
+    t.alarm_observer_type = 'DDACtrl'
+    t.alarm_subject_relation_name = 'sys_alarm_dda_alarm_obj'
+
+    t.alarm_alarm_config_id = 'sys_alarm_dda_alarm_conf'
+    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_erroneous_unit_type_id = 0
+    t.alarm_erroneous_unit_number = 0
+    t.alarm_alarm_id = 'SID_ALARM_254_DDA'
+    #t.alarm_alarm_id = 'SID_ALARM_190_LEVEL'
+
+    t.save()
+
     comment('**************************** Display Database部分 ****************************')
     
     t = template('LabelAndQuantity')
@@ -230,7 +279,7 @@ def h2s():
     t.checkbox_type = 'ModeCheckBox'
     t.check_state = 1
     t.label_column_index = 1
-    t.checkbox_column = 2
+    t.checkbox_column_index = 2
     t.label_left_margin = 4
     t.label_right_margin = 0
     t.define_name = 'SID_H2S_DOSING_PUMP_SMART_DIGITAL_DDA'
@@ -247,7 +296,7 @@ def h2s():
     t.checkbox_type = 'ModeCheckBox'
     t.check_state = 0
     t.label_column_index = 1
-    t.checkbox_column = 2
+    t.checkbox_column_index = 2
     t.label_left_margin = 4
     t.label_right_margin = 0
     t.define_name = 'SID_H2S_DOSING_PUMP_ANALOG'
@@ -298,7 +347,7 @@ def h2s():
     t.checkbox_name = '4.1.7 pumpModules dosing pump cb'
     t.checkbox_type = 'OnOffCheckBox'
     t.label_column_index = 0
-    t.checkbox_column = 1
+    t.checkbox_column_index = 1
     t.label_left_margin = 2
     t.label_right_margin = 0
     t.define_name = 'SID_H2S_DOSING_PUMP_INSTALLED'
