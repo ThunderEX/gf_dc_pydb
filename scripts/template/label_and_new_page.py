@@ -9,9 +9,15 @@ class LabelAndNewPage(object):
     label_name = ''                         #: new label name that added in DisplayComponent.
     label_define_name = ''                  #: string define for new label.
     label_string = ''                       #: string for new label, multiple languages
-    listview_id = ''                        #: listview id which will include the new label and quantity
+    listview_id = ''                        #: listview id which will include the new label
     label_left_margin = 8                   #: left margin of label
     label_right_margin = 0                  #: right margin of label
+
+    availabel_rule_name = ''                #: set availabel rule for this label
+    availabel_rule_type = 'AvalibleIfSet'   #: availabel rule type
+    availabel_rule_checkstate = 0           #: availabel rule is set if checkstate equal this value
+    availabel_rule_subject_id = ''          #: corresponding subject (checkbox), link the subject to availabel rule
+    availabel_rule_column_index = 0         #: the column width should be 0
 
     group_name = ''                         #: new group name that added in DisplayComponent.
     group_define_name = ''                  #: string define for new group.
@@ -103,6 +109,49 @@ class LabelAndNewPage(object):
              }
              ),
         ]
+
+        if self.availabel_rule_name:
+            self.availabel_rule_parameters = [
+                    # 1. 添加rule
+                    (DisplayComponent,
+                     {
+                         'Name': self.availabel_rule_name,
+                         'ComponentType': self.availabel_rule_type,
+                         'ParentComponent': 0,
+                         'Visible': False,
+                         'ReadOnly': True,
+                         'x1': 0,
+                         'y1': 0,
+                         'x2': 0,
+                         'y2': 0,
+                         'DisplayId' : 0,
+                         'HelpString': 0,
+                         'Transparent': False,
+                     }
+                     ),
+                    (DisplayAvailable,
+                     {
+                         'id': self.availabel_rule_name,
+                         'CheckState': self.availabel_rule_checkstate,
+                     }
+                     ),
+                    (DisplayObserverSingleSubject,
+                     {
+                         'id': self.availabel_rule_name,
+                         'SubjectId': self.availabel_rule_subject_id,
+                         'SubjectAccess': 'Read',
+                     }
+                     ),
+                    (DisplayListViewItemComponents,
+                     {
+                         'ListViewItemId': 0,  #在handle_DisplayListViewItemAndComponents里更新，与label的ListViewItemId相等，而不是外部输入
+                         'ComponentId': self.availabel_rule_name,
+                         'ColumnIndex': self.availabel_rule_column_index,      #TODO, 需要判断哪个ColumnWidth为0
+                     }
+                     ),
+                ]
+        else:
+            self.availabel_rule_parameters = []
 
         self.group_parameters = [
             # 1. 添加group，也就是另起一页
@@ -257,6 +306,10 @@ class LabelAndNewPage(object):
         for x in display_listview_item_components_list:
             r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
             x.model.ListViewItemId = r.id
+            if self.availabel_rule_name:
+                for index, para in enumerate(self.availabel_rule_parameters):
+                    if para[0] == DisplayListViewItemComponents:
+                        self.availabel_rule_parameters[index][1]['ListViewItemId'] = r.id        #确保rule里的listviewitemid和label的一样，TODO 这里实现可以，但总觉得扩展性不好
             x.add()
 
     def update_displayid(self, display_component_tables, display_tables):
@@ -314,6 +367,7 @@ class LabelAndNewPage(object):
         comment(self.description)
         self.update_parameters()
         label_tables = self.add_label(self.label_parameters)
+        availabel_rule_tables = self.add(self.availabel_rule_parameters)
         group_tables = self.add(self.group_parameters)
         display_tables = self.add(self.display_parameters)
         listview_tables = self.add(self.listview_parameters)

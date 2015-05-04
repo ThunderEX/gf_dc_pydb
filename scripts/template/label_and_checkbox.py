@@ -13,7 +13,7 @@ class LabelAndCheckbox(object):
     label_string = ''             #: string for new label, multiple languages
     listview_id = ''              #: listview id which will include the new label and quantity
     subject_id = ''               #: link subject and quantity
-    check_state = 0               #: 0 - uncheck, 1 - check
+    check_state = 0               #: ModeCheckBox use this, value means enum define values in AppTypeDefs.h
     label_column_index = 0        #: label column index in the listview
     checkbox_column_index = 1     #: checkbox column index in the listview
     label_left_margin = 0         #: left margin of label

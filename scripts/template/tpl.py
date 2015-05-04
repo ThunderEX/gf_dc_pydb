@@ -12,6 +12,7 @@ from quantity import *
 from observer import *
 from subject import *
 from alarm import *
+from enum_data import *
 
 class Template(object):
     def __init__(self, ):

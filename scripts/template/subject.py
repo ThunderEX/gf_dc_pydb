@@ -38,6 +38,10 @@ class NewSubject(object):
     int_quantity_type = 'Q_NO_UNIT'         #: quantity type for this int data
     int_verified = False                    #: verified
 
+    #EnumDataPoint
+    enum_enum_type_name = ''
+    enum_value = ''
+
     #AlarmConfig
     alarm_config_sms_1_enabled = False
     alarm_config_sms_2_enabled = False
@@ -103,6 +107,16 @@ class NewSubject(object):
                      'Max': self.int_max,
                      'QuantityType': self.int_quantity_type,
                      'Verified': self.int_verified,
+                 }
+                 ),
+            )
+        elif self.subject_type_id == 'EnumDataPoint':
+            self.parameters.append(
+                (EnumDataPoint,
+                 {
+                     'id': self.subject_name,
+                     'EnumTypeName': self.enum_enum_type_name.upper(),
+                     'Value': self.enum_value.upper(),
                  }
                  ),
             )
