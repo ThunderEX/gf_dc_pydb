@@ -5,6 +5,39 @@ from ..util.log import *
 
 def h2s_display():
     comment('**************************** Display Database部分 ****************************')
+    t = template('NewString')
+    t.description = '''---------- 4.4.4.1 - Function of digital outputs页面里新加一行label:Start, dosing pump ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.4.4.1 - Function of digital outputs          |
+    +-----------------------------------------------+
+    |                                               |
+    |Function, DO1 (CU362)[71]                      |
+    |  No function                          ☑       |
+    |  Start, pump 1                        ☐       |
+    |  Start, pump 2                        ☐       |
+    |  Start, mixer                         ☐       |
+--> |  Start, dosing pump                   ☐       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    #由于该listview的ComponentType是DigitalOutputConfListView类型，只需要添加一个新字符串，并在AppTypeDefs.h和DigitalOutputConfListView.cpp里修改
+    t.define_name = 'SID_DO_START_DOSING_PUMP'
+    t.string_name = 'Start, dosing pump'
+    t.save()
+    
     t = template('LabelAndQuantity')
     t.description = '''---------- 添加label:h2s level于1.1 System Status ----------
     +----------+-------------+---------+------------+
