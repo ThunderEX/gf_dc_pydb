@@ -126,28 +126,55 @@ def h2s_factory():
     t.save()
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject: chemical_remaining ----------'
+    t.description = '---------- 加Subject: dosing_feed_tank_level ----------'
     #SP_DDA_CHEMICAL_REMAINING
-    t.subject_name = 'chemical_remaining'
+    t.subject_name = 'dosing_feed_tank_level'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
     t.observer_name = 'dosing_pump_ctrl'
     t.observer_type = 'DDACtrl'
-    t.subject_relation_name = 'chemical_remaining'
+    t.subject_relation_name = 'dosing_feed_tank_level'
 
     t.int_value = '0'
     t.int_type = 'U32'
     t.int_min = '0'
     t.int_max = '99999999'
-    t.int_quantity_type = 'Q_LEVEL'
+    t.int_quantity_type = 'Q_DEPTH'
     t.int_verified = False
 
-    t.geni_var_name = 'chemical_remaining'
+    t.geni_var_name = 'dosing_feed_tank_level'
     t.geni_class = 13
     t.geni_id = 10
-    t.subject_name = 'chemical_remaining'
+    t.subject_name = 'dosing_feed_tank_level'
+    t.auto_generate = True
+    t.geni_convert_id = 'Dim. less with NA'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: chemical_total_dosed ----------'
+    #SP_DDA_CHEMICAL_REMAINING
+    t.subject_name = 'chemical_total_dosed'
+    t.subject_type_id = 'IntDataPoint'
+    t.geni_app_if = True
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'chemical_total_dosed'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '99999999'
+    t.int_quantity_type = 'Q_VOLUME'
+    t.int_verified = False
+
+    t.geni_var_name = 'chemical_total_dosed'
+    t.geni_class = 13
+    t.geni_id = 11
+    t.subject_name = 'chemical_total_dosed'
     t.auto_generate = True
     t.geni_convert_id = 'Dim. less with NA'
     t.save()

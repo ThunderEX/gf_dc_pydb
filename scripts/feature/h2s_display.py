@@ -105,14 +105,14 @@ def h2s_display():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    t.label_name = '1.1 SystemStatus l1 chemical remaining'
-    t.quantity_name = '1.1 SystemStatus l1 chemical remaining nq'
-    t.define_name = 'SID_CHEMICAL_REMAINING'
-    t.string = 'Chemical remaining'
+    t.label_name = '1.1 SystemStatus l1 dosing feed tank level'
+    t.quantity_name = '1.1 SystemStatus l1 dosing feed tank level nq'
+    t.define_name = 'SID_DOSING_FEED_TANK_LEVEL'
+    t.string = 'Dosing feed tank level'
     t.listview_id = '1.1 SystemStatus List 1'
     #TODO
-    t.subject_id = 'chemical_remaining'
-    t.quantity_type =  'Q_LEVEL'
+    t.subject_id = 'dosing_feed_tank_level'
+    t.quantity_type =  'Q_DEPTH'
     t.save()
 
     t = template('LabelAndQuantity')
@@ -144,14 +144,14 @@ def h2s_display():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    t.label_name = '1.1 SystemStatus l1 chemical dosed'
-    t.quantity_name = '1.1 SystemStatus l1 chemical dosed nq'
-    t.define_name = 'SID_CHEMICAL_DOSED'
-    t.string = 'Chemical dosed'
+    t.label_name = '1.1 SystemStatus l1 chemical total dosed'
+    t.quantity_name = '1.1 SystemStatus l1 chemical total dosed nq'
+    t.define_name = 'SID_CHEMICAL_TOTAL_DOSED'
+    t.string = 'Chemical total dosed'
     t.listview_id = '1.1 SystemStatus List 1'
-    #TODO
-    t.subject_id = 'chemical_remaining'
-    t.quantity_type = 'Q_LEVEL'
+    t.subject_id = 'chemical_total_dosed'
+    #TODO 改单位
+    t.quantity_type = 'Q_VOLUME'
     t.save()
 
     t = template('LabelBlank')
