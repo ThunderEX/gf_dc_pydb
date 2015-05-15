@@ -5,6 +5,224 @@ from ..util.log import *
 
 def h2s_display():
     comment('**************************** Display Database部分 ****************************')
+    #先加一个字符串'DDA alarm (254)'显示在'3.1 - current alarms'里
+    t = template('NewString')
+    t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |3.1 - Current alarms                           |
+    +-----------------------------------------------+
+    |                                               |
+    | (!)CU 362                                     |
+--> |  DDA alarm (254)                              |
+    |  Occured at                   2015-05-15 14:01|
+    |  Disappeared at                     --   --   |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.define_name = 'SID_ALARM_254_DDA'
+    t.string_name = 'DDA alarm (254)'
+    t.save()
+
+    t = template('SystemAlarm')
+    t.description = '''---------- 4.5.1 - System alarms页面里新加一行label:DDA fault ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.5.1 - System alarms                          |
+    +-----------------------------------------------+
+    |                                               |
+    |Select system alarm                            |
+    |  Overflow                                     |
+    |  High level                                   |
+    |  Alarm level                                  |
+    |  Dry running                                  |
+    |  Float switch                                 |
+    |  Level sensor                                 |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+--> |  DDA fault                                    |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '4.5.1 SystemAlarms (dda)'
+    t.label_define_name = 'SID_DDA_FAULT'
+    t.label_string = 'DDA fault'
+    t.slippoint_name = '4.5.1 SystemAlarms (dda) slippoint'
+    t.write_state = 30
+
+    #加subject: sys_alarm_dda_fault_alarm_conf 类型为AlarmConfig
+    t.alarm_config_subject_name = 'sys_alarm_dda_fault_alarm_conf'
+    t.alarm_config_subject_type_id = 'AlarmConfig'
+    t.alarm_config_geni_app_if = False
+    t.alarm_config_subject_save = 'Value'
+    t.alarm_config_flash_block = 'Config'
+    t.alarm_config_observer_name = 'display_alarm_slippoint'
+    t.alarm_config_observer_type = 'AlarmSlipPoint'
+    t.alarm_config_subject_relation_name = 'sys_alarm_dda_fault'
+    t.alarm_config_subject_access = 'Read/Write'
+
+    t.alarm_config_alarm_enabled = True
+    t.alarm_config_warning_enabled = True
+    t.alarm_config_auto_ack = True
+    t.alarm_config_alarm_delay = 5
+    t.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_alarm_criteria = '='
+    t.alarm_config_alarm_limit = '1'
+    t.alarm_config_warning_limit = '0'
+    t.alarm_config_min_limit = '0'
+    t.alarm_config_max_limit = '1'
+    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_verified = False
+
+    #SP_DDA_SYS_ALARM_DDA_FAULT_ALARM_OBJ
+    #加subject:sys_alarm_dda_fault_alarm_obj
+    t.alarm_subject_name = 'sys_alarm_dda_fault_alarm_obj'
+    t.alarm_subject_type_id = 'AlarmDataPoint'
+    t.alarm_geni_app_if = False
+    t.alarm_subject_save = '-'
+    t.alarm_flash_block = '-'
+    t.alarm_observer_name = 'dosing_pump_ctrl'
+    t.alarm_observer_type = 'DDACtrl'
+    t.alarm_subject_relation_name = 'sys_alarm_dda_fault_alarm_obj'
+
+    t.alarm_alarm_config_id = 'sys_alarm_dda_fault_alarm_conf'
+    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_erroneous_unit_type_id = 0
+    t.alarm_erroneous_unit_number = 0
+    t.alarm_alarm_id = 'SID_ALARM_254_DDA'
+
+    comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DDA_FAULT')
+    comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DDA_FAULT,                  SID_DDA_FAULT},')
+    comment('''在AlarmSlipPoint.cpp里插入
+    case SP_ASP_SYS_ALARM_DDA_FAULT:
+      mpAlarmDP[AC_SYS_ALARM_DDA_FAULT][0].Attach(pSubject);
+      break;
+            ''')
+    t.save()
+
+    #先加一个字符串'Dosing pump alarm (255)'显示在'3.1 - current alarms'里
+    t = template('NewString')
+    t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |3.1 - Current alarms                           |
+    +-----------------------------------------------+
+    |                                               |
+    | (!)CU 362                                     |
+--> |  Dosing pump alarm (255)                      |
+    |  Occured at                   2015-05-15 14:01|
+    |  Disappeared at                     --   --   |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.define_name = 'SID_ALARM_255_DOSING_PUMP'
+    t.string_name = 'Dosing pump alarm (255)'
+    t.save()
+
+    t = template('SystemAlarm')
+    t.description = '''---------- 4.5.1 - System alarms页面里新加一行label:Dosing pump ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.5.1 - System alarms                          |
+    +-----------------------------------------------+
+    |                                               |
+    |Select system alarm                            |
+    |  Overflow                                     |
+    |  High level                                   |
+    |  Alarm level                                  |
+    |  Dry running                                  |
+    |  Float switch                                 |
+    |  Level sensor                                 |
+    |  ......                                       |
+    |                                               |
+    |  DDA fault                                    |
+--> |  Dosing pump                                  |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '4.5.1 SystemAlarms (dosing pump)'
+    t.label_define_name = 'SID_DOSING_PUMP_ALARM'
+    t.label_string = 'Dosing pump'
+    t.slippoint_name = '4.5.1 SystemAlarms (dosing pump) slippoint'
+    t.write_state = 31
+
+    #加subject: sys_alarm_dosing_pump_alarm_conf 类型为AlarmConfig
+    t.alarm_config_subject_name = 'sys_alarm_dosing_pump_alarm_conf'
+    t.alarm_config_subject_type_id = 'AlarmConfig'
+    t.alarm_config_geni_app_if = False
+    t.alarm_config_subject_save = 'Value'
+    t.alarm_config_flash_block = 'Config'
+    t.alarm_config_observer_name = 'display_alarm_slippoint'
+    t.alarm_config_observer_type = 'AlarmSlipPoint'
+    t.alarm_config_subject_relation_name = 'sys_alarm_dosing_pump'
+    t.alarm_config_subject_access = 'Read/Write'
+
+    t.alarm_config_alarm_enabled = True
+    t.alarm_config_warning_enabled = True
+    t.alarm_config_auto_ack = True
+    t.alarm_config_alarm_delay = 5
+    t.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_alarm_criteria = '='
+    t.alarm_config_alarm_limit = '1'
+    t.alarm_config_warning_limit = '0'
+    t.alarm_config_min_limit = '0'
+    t.alarm_config_max_limit = '1'
+    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_verified = False
+
+    #SP_DDA_SYS_ALARM_DOSING_PUMP_ALARM_OBJ
+    #加subject:sys_alarm_dosing_pump_alarm_obj
+    t.alarm_subject_name = 'sys_alarm_dosing_pump_alarm_obj'
+    t.alarm_subject_type_id = 'AlarmDataPoint'
+    t.alarm_geni_app_if = False
+    t.alarm_subject_save = '-'
+    t.alarm_flash_block = '-'
+    t.alarm_observer_name = 'dosing_pump_ctrl'
+    t.alarm_observer_type = 'DDACtrl'
+    t.alarm_subject_relation_name = 'sys_alarm_dosing_pump_alarm_obj'
+
+    t.alarm_alarm_config_id = 'sys_alarm_dosing_pump_alarm_conf'
+    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_erroneous_unit_type_id = 0
+    t.alarm_erroneous_unit_number = 0
+    t.alarm_alarm_id = 'SID_ALARM_255_DOSING_PUMP'
+
+    comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DOSING_PUMP')
+    comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DOSING_PUMP,                  SID_DOSING_PUMP_ALARM},')
+    comment('''在AlarmSlipPoint.cpp里插入
+    case SP_ASP_SYS_ALARM_DOSING_PUMP:
+      mpAlarmDP[AC_SYS_ALARM_DOSING_PUMP][0].Attach(pSubject);
+      break;
+            ''')
+    t.save()
+
     t = template('NewString')
     t.description = '''---------- 4.4.4.1 - Function of digital outputs页面里新加一行label:Start, dosing pump ----------
     +----------+-------------+---------+------------+

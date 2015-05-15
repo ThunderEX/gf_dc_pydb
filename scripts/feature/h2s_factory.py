@@ -179,6 +179,7 @@ def h2s_factory():
     t.geni_convert_id = 'Dim. less with NA'
     t.save()
 
+'''
     t = template('NewAlarm')
     t.description = '----------- 加DDA Alarm ----------'
 
@@ -227,3 +228,4 @@ def h2s_factory():
     t.alarm_alarm_id = 'SID_ALARM_254_DDA'
 
     t.save()
+'''

@@ -548,6 +548,7 @@ class DisplayComponent(BaseTable):
         self.model = DisplayComponent_Model()
         super(DisplayComponent, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('ComponentType', DisplayComponentTypes_Model, 'Name', 'id')
+        self.convert_foreignkey('HelpString', StringDefines_Model, 'DefineName', 'id')
         #self.convert_foreignkey('displayid', Display_Model, 'Name', 'id')
 
 
@@ -799,6 +800,14 @@ class DisplayText(BaseTable):
         self.model.save()
         return self.model.id
 
+class WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay(BaseTable):
+
+    """操作表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay_Model()
+        super(WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
 
 # Language Database
 class StringDefines(BaseTable):

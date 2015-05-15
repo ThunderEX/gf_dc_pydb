@@ -13,3 +13,6 @@ if __name__ == '__main__':
     run_generators()
     #ghs_build('rebuild')
     #vc_build()
+
+    #x = DisplayAlarmStrings()
+    #x.query()

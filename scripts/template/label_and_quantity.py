@@ -20,7 +20,7 @@ class LabelAndQuantity(object):
 
     def update_parameters(self):
         self.parameters = [
-            # 1. 添加h2s label
+            # 1. 添加label
             (DisplayComponent,
              {
                  'Name': self.label_name,
@@ -37,7 +37,7 @@ class LabelAndQuantity(object):
                  'Transparent': False,
              }
              ),
-            # 2. 添加数值label
+            # 2. 添加数值
             (DisplayComponent,
              {
                  'Name': self.quantity_name,
