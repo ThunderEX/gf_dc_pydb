@@ -13,7 +13,7 @@ class SystemAlarm(object):
     slippoint_name = ''                             # : system alarm is pair of label and slippoint
     subject_id = 'display_configalarm_slippoint_no' # : link subject and slippoint
     write_state = 0                                 # : write state can help render to new alarm config page
-    listview_id = '4.5.1 SystemAlarms List'         # : listview id which will include the new label and quantity
+    listview_id = '4.5.1 SystemAlarms List'         # : listview id which will include the new label and slippoint
 
     #AlarmConfig
     alarm_config_subject_name          = ''            #: new subject name, this name will be used as SP_ + short_name + _ + subject_name (all capitalized) in application.
@@ -227,7 +227,7 @@ class SystemAlarm(object):
             (DisplayObserverSingleSubject,
              {
                  'id': self.slippoint_name,
-                 'SubjectId': self.subject_id,
+                 'SubjectId': self.subject_id,         #fixed to display_configalarm_slippoint_no
                  'SubjectAccess': 'Write',
              }
              ),

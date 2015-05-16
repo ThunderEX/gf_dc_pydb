@@ -114,6 +114,40 @@ def h2s_display():
             ''')
     t.save()
 
+    t = template('SystemAlarmStatus')
+    t.description = '''---------- 4.5.5 - Status, system alarms页面里新加一行label:DDA fault ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.5.5 - Status, system alarms                  |
+    +-----------------------------------------------+
+    |                                               |
+    |  Overflow                                (!)  |
+    |  High level                              (!)  |
+    |  Alarm level                             (!)  |
+    |  Dry running                             (!)  |
+    |  Float switch                            (!)  |
+    |  Level sensor                            (!)  |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+--> |  DDA fault                               (!)  |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '4.5.5 SystemAlarms Status (dda)'
+    t.label_define_name = 'SID_DDA_FAULT'
+    t.label_string = 'DDA fault'
+    t.alarm_icon_name = '4.5.5 SystemAlarms Status (dda) alarm icon'
+    t.warning_icon_name = '4.5.5 SystemAlarms Status (dda) warning icon'
+    t.subject_id = 'sys_alarm_dda_fault_alarm_conf'
+    t.save()
+
+
     #先加一个字符串'Dosing pump alarm (255)'显示在'3.1 - current alarms'里
     t = template('NewString')
     t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
@@ -222,6 +256,40 @@ def h2s_display():
       break;
             ''')
     t.save()
+
+    t = template('SystemAlarmStatus')
+    t.description = '''---------- 4.5.5 - Status, system alarms页面里新加一行label:Dosing pump ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.5.5 - Status, system alarms                  |
+    +-----------------------------------------------+
+    |                                               |
+    |  Overflow                                (!)  |
+    |  High level                              (!)  |
+    |  Alarm level                             (!)  |
+    |  Dry running                             (!)  |
+    |  Float switch                            (!)  |
+    |  Level sensor                            (!)  |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+--> |  Dosing pump                             (!)  |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '4.5.5 SystemAlarms Status (dosing pump)'
+    t.label_define_name = 'SID_DOSING_PUMP_ALARM'
+    t.label_string = 'Dosing pump'
+    t.alarm_icon_name = '4.5.5 SystemAlarms Status (dosing pump) alarm icon'
+    t.warning_icon_name = '4.5.5 SystemAlarms Status (dosing pump) warning icon'
+    t.subject_id = 'sys_alarm_dosing_pump_alarm_conf'
+    t.save()
+
 
     t = template('NewString')
     t.description = '''---------- 4.4.4.1 - Function of digital outputs页面里新加一行label:Start, dosing pump ----------
