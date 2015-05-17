@@ -101,7 +101,7 @@ def h2s_display():
 
     t.alarm_alarm_config_id = 'sys_alarm_dda_fault_alarm_conf'
     t.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_erroneous_unit_type_id = 0
+    t.alarm_erroneous_unit_type_id = 'SYSTEM'
     t.alarm_erroneous_unit_number = 0
     t.alarm_alarm_id = 'SID_ALARM_254_DDA'
 
@@ -244,7 +244,7 @@ def h2s_display():
 
     t.alarm_alarm_config_id = 'sys_alarm_dosing_pump_alarm_conf'
     t.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_erroneous_unit_type_id = 0
+    t.alarm_erroneous_unit_type_id = 'SYSTEM'
     t.alarm_erroneous_unit_number = 0
     t.alarm_alarm_id = 'SID_ALARM_255_DOSING_PUMP'
 

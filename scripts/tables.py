@@ -188,6 +188,7 @@ class AlarmDataPoint(BaseTable):
         self.convert_foreignkey('id', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('AlarmConfigId', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('AlarmConfig2Id', Subject_Model, 'Name', 'id')
+        self.convert_foreignkey('ErroneousUnitTypeId', ErroneousUnitType_Model, 'Name', 'id')
         # TODO 貌似这里需要多转了一次，用StringDefines里的StringId从DisplayAlarmStrings得到AlarmId
         #self.convert_foreignkey('AlarmId', DisplayAlarmStrings_Model, 'StringId', 'AlarmId')
         r = StringDefines_Model.get(**{'DefineName': getattr(self.model, 'AlarmId')})

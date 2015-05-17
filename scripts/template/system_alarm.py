@@ -12,7 +12,7 @@ class SystemAlarm(object):
     label_string = ''                               # : string for new label, multiple languages
     slippoint_name = ''                             # : system alarm is pair of label and slippoint
     subject_id = 'display_configalarm_slippoint_no' # : link subject and slippoint
-    write_state = 0                                 # : write state can help render to new alarm config page
+    write_state = 0                                 # : write state can help render to new alarm config page, the value should equal the new enum value defined in ALARM_CONFIG_TYPE in AppTypeDefs.h
     listview_id = '4.5.1 SystemAlarms List'         # : listview id which will include the new label and slippoint
 
     #AlarmConfig
@@ -74,8 +74,8 @@ class SystemAlarm(object):
 
     alarm_alarm_config_id = ''
     alarm_alarm_config2_id = ''
-    alarm_erroneous_unit_type_id = 0
-    alarm_erroneous_unit_number = 0
+    alarm_erroneous_unit_type_id = 0              #: error type, defined in ErroneousUnitType table, 0 = system
+    alarm_erroneous_unit_number = 0               #: error title string, defined in DisplayUnitStrings table
     alarm_alarm_id = ''                           #: SID_ALARM_XXXX
 
     def __init__(self):
@@ -121,21 +121,21 @@ class SystemAlarm(object):
         self.alarm_config_subject.alarm_config_verified                         = self.alarm_config_verified
 
 
-        self.alarm_subject.subject_name                                  = self.alarm_subject_name
-        self.alarm_subject.subject_type_id                               = self.alarm_subject_type_id
-        self.alarm_subject.geni_app_if                                   = self.alarm_geni_app_if
-        self.alarm_subject.subject_save                                  = self.alarm_subject_save
-        self.alarm_subject.flash_block                                   = self.alarm_flash_block
-        self.alarm_subject.verified                                      = self.alarm_verified
-        self.alarm_subject.observer_name                                 = self.alarm_observer_name
-        self.alarm_subject.observer_type                                 = self.alarm_observer_type
-        self.alarm_subject.subject_relation_name                         = self.alarm_subject_relation_name
-        self.alarm_subject.subject_access                                = self.alarm_subject_access
-        self.alarm_subject.geni_var_name                                 = self.alarm_geni_var_name
-        self.alarm_subject.geni_class                                    = self.alarm_geni_class
-        self.alarm_subject.geni_id                                       = self.alarm_geni_id
-        self.alarm_subject.geni_convert_id                               = self.alarm_geni_convert_id
-        self.alarm_subject.auto_generate                                 = self.alarm_auto_generate
+        self.alarm_subject.subject_name                 = self.alarm_subject_name
+        self.alarm_subject.subject_type_id              = self.alarm_subject_type_id
+        self.alarm_subject.geni_app_if                  = self.alarm_geni_app_if
+        self.alarm_subject.subject_save                 = self.alarm_subject_save
+        self.alarm_subject.flash_block                  = self.alarm_flash_block
+        self.alarm_subject.verified                     = self.alarm_verified
+        self.alarm_subject.observer_name                = self.alarm_observer_name
+        self.alarm_subject.observer_type                = self.alarm_observer_type
+        self.alarm_subject.subject_relation_name        = self.alarm_subject_relation_name
+        self.alarm_subject.subject_access               = self.alarm_subject_access
+        self.alarm_subject.geni_var_name                = self.alarm_geni_var_name
+        self.alarm_subject.geni_class                   = self.alarm_geni_class
+        self.alarm_subject.geni_id                      = self.alarm_geni_id
+        self.alarm_subject.geni_convert_id              = self.alarm_geni_convert_id
+        self.alarm_subject.auto_generate                = self.alarm_auto_generate
 
         self.alarm_subject.alarm_alarm_config_id        = self.alarm_alarm_config_id
         self.alarm_subject.alarm_alarm_config2_id       = self.alarm_alarm_config2_id
