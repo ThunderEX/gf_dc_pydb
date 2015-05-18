@@ -202,7 +202,7 @@ def h2s_display():
     +-----------------------------------------------+
     '''
     t.label_name = '4.5.1 SystemAlarms (dosing pump)'
-    t.label_define_name = 'SID_DOSING_PUMP_ALARM'
+    t.label_define_name = 'SID_DOSING_PUMP'
     t.label_string = 'Dosing pump'
     t.slippoint_name = '4.5.1 SystemAlarms (dosing pump) slippoint'
     t.write_state = 31
@@ -249,7 +249,7 @@ def h2s_display():
     t.alarm_alarm_id = 'SID_ALARM_255_DOSING_PUMP'
 
     comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DOSING_PUMP')
-    comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DOSING_PUMP,                  SID_DOSING_PUMP_ALARM},')
+    comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DOSING_PUMP,                  SID_DOSING_PUMP},')
     comment('''在AlarmSlipPoint.cpp里插入
     case SP_ASP_SYS_ALARM_DOSING_PUMP:
       mpAlarmDP[AC_SYS_ALARM_DOSING_PUMP][0].Attach(pSubject);
@@ -283,7 +283,7 @@ def h2s_display():
     +-----------------------------------------------+
     '''
     t.label_name = '4.5.5 SystemAlarms Status (dosing pump)'
-    t.label_define_name = 'SID_DOSING_PUMP_ALARM'
+    t.label_define_name = 'SID_DOSING_PUMP'
     t.label_string = 'Dosing pump'
     t.alarm_icon_name = '4.5.5 SystemAlarms Status (dosing pump) alarm icon'
     t.warning_icon_name = '4.5.5 SystemAlarms Status (dosing pump) warning icon'
@@ -579,10 +579,9 @@ def h2s_display():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    #TODO add availabel条件
     t.label_name = '4.2.14 Dosing pump go to setting'
     t.label_define_name = 'SID_H2S_DOSING_PUMP_SETTING'
-    t.label_string = 'Dosing pump'
+    t.label_string = 'Dosing pump setting'
     t.listview_id = '4.2.14 H2S Contol List'
     t.label_left_margin = 2
     t.label_right_margin = 1
@@ -597,7 +596,7 @@ def h2s_display():
     t.group_define_name = 'SID_H2S_DOSING_PUMP_SETTING'
 
     t.root_group_id_name = '4.2.14.1 H2S Dosing pump group'
-    t.display_string_name = 'Dosing pump'
+    t.display_string_name = 'Dosing pump setting'
     t.display_number = '4.2.14.1'
 
     t.listview_name = '4.2.14.1 H2S Dosing pump List'
