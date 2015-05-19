@@ -16,6 +16,7 @@ from enum_data import *
 from string import *
 from system_alarm import *
 from system_alarm_status import *
+from observer_link_subject import *
 
 class Template(object):
     def __init__(self, ):

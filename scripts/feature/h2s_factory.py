@@ -59,24 +59,42 @@ def h2s_factory():
 
     t = template('NewObserver')
     t.description = '---------- 加Observer: DDACtrl ----------'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.short_name = 'DDA'
     t.save()
 
+    t = template('NewObserver')
+    t.description = '---------- 加Observer: NonGFDosingPumpCtrl ----------'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.short_name = 'DPC'
+    t.save()
+
+
     t = template('NewSubject')
-    t.description = '---------- 加Subject: dda_control_enabled ----------'
-    #SP_DDA_DDA_CONTROL_ENABLED
-    t.subject_name =  'dda_control_enabled'
+    t.description = '---------- 加Subject: dosing_pump_enabled ----------'
+    #SP_DDA_dosing_pump_enabled
+    t.subject_name =  'dosing_pump_enabled'
     t.subject_type_id = 'BoolDataPoint'
     t.subject_save = 'Value'
     t.flash_block = 'Config'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
-    t.subject_relation_name = 'dda_control_enabled'
+    t.subject_relation_name = 'dosing_pump_enabled'
 
     t.bool_value = 0
     t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_enabled挂接 ----------'
+    t.subject_name =  'dosing_pump_enabled'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'dosing_pump_enabled'
+    t.subject_access = 'Read/Write'
+    t.save()
+
 
     t = template('NewEnumData')
     t.description = '---------- 加Subject, EnumDataPoint: dosing_pump_type_dda, dosing_pump_type_analog ----------'
@@ -87,7 +105,7 @@ def h2s_factory():
     t.enum_geni_app_if = False
     t.enum_subject_save = 'Value'
     t.enum_flash_block = 'Config'
-    t.enum_observer_name = 'dosing_pump_ctrl'
+    t.enum_observer_name = 'dda_ctrl'
     t.enum_observer_type = 'DDACtrl'
     t.enum_subject_relation_names = ['dosing_pump_type']
     t.enum_subject_access = 'Read/Write'
@@ -98,6 +116,16 @@ def h2s_factory():
     t.save()
     comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, str(t.enum_subject_names).upper()))
 
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_enabled挂接 ----------'
+    t.subject_name =  'dosing_pump_type'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'dosing_pump_type'
+    t.subject_access = 'Read/Write'
+    t.save()
+
+
     t = template('NewSubject')
     t.description = '---------- 加Subject: h2s_level_act ----------'
     #SP_DDA_H2S_LEVEL_ACT
@@ -106,7 +134,7 @@ def h2s_factory():
     t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'h2s_level_act'
 
@@ -133,7 +161,7 @@ def h2s_factory():
     t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'dosing_feed_tank_level'
 
@@ -160,7 +188,7 @@ def h2s_factory():
     t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'chemical_total_dosed'
 
@@ -178,54 +206,3 @@ def h2s_factory():
     t.auto_generate = True
     t.geni_convert_id = 'Dim. less with NA'
     t.save()
-
-'''
-    t = template('NewAlarm')
-    t.description = '----------- 加DDA Alarm ----------'
-
-    t.alarm_define_name = 'SID_ALARM_254_DDA'
-    t.alarm_string = 'DDA alarm (254)'
-
-    #加alarm config
-    t.alarm_config_subject_name = 'sys_alarm_dda_alarm_conf'
-    t.alarm_config_subject_type_id = 'AlarmConfig'
-    t.alarm_config_geni_app_if = False
-    t.alarm_config_subject_save = 'Value'
-    t.alarm_config_flash_block = 'Config'
-    t.alarm_config_observer_name = 'display_alarm_slippoint'
-    t.alarm_config_observer_type = 'DDACtrl'
-    t.alarm_config_subject_relation_name = 'sys_alarm_dda'
-    t.alarm_config_subject_access = 'Read/Write'
-
-    t.alarm_config_alarm_enabled = True
-    t.alarm_config_warning_enabled = True
-    t.alarm_config_auto_ack = True
-    t.alarm_config_alarm_delay = 5
-    t.alarm_config_alarm_type = 'BoolDataPoint'
-    t.alarm_config_alarm_criteria = '='
-    t.alarm_config_alarm_limit = '1'
-    t.alarm_config_warning_limit = '0'
-    t.alarm_config_min_limit = '0'
-    t.alarm_config_max_limit = '1'
-    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
-    t.alarm_config_verified = False
-
-    #SP_DDA_SYS_ALARM_DDA_ALARM_OBJ
-    #加alarm
-    t.alarm_subject_name = 'sys_alarm_dda_alarm_obj'
-    t.alarm_subject_type_id = 'AlarmDataPoint'
-    t.alarm_geni_app_if = False
-    t.alarm_subject_save = '-'
-    t.alarm_flash_block = '-'
-    t.alarm_observer_name = 'dosing_pump_ctrl'
-    t.alarm_observer_type = 'DDACtrl'
-    t.alarm_subject_relation_name = 'sys_alarm_dda_alarm_obj'
-
-    t.alarm_alarm_config_id = 'sys_alarm_dda_alarm_conf'
-    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_erroneous_unit_type_id = 0
-    t.alarm_erroneous_unit_number = 0
-    t.alarm_alarm_id = 'SID_ALARM_254_DDA'
-
-    t.save()
-'''

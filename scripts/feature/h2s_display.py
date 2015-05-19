@@ -95,7 +95,7 @@ def h2s_display():
     t.alarm_geni_app_if = False
     t.alarm_subject_save = '-'
     t.alarm_flash_block = '-'
-    t.alarm_observer_name = 'dosing_pump_ctrl'
+    t.alarm_observer_name = 'dda_ctrl'
     t.alarm_observer_type = 'DDACtrl'
     t.alarm_subject_relation_name = 'sys_alarm_dda_fault_alarm_obj'
 
@@ -239,7 +239,7 @@ def h2s_display():
     t.alarm_subject_save = '-'
     t.alarm_flash_block = '-'
     t.alarm_observer_name = 'dosing_pump_ctrl'
-    t.alarm_observer_type = 'DDACtrl'
+    t.alarm_observer_type = 'NonGFDosingPumpCtrl'
     t.alarm_subject_relation_name = 'sys_alarm_dosing_pump_alarm_obj'
 
     t.alarm_alarm_config_id = 'sys_alarm_dosing_pump_alarm_conf'
@@ -290,6 +290,89 @@ def h2s_display():
     t.subject_id = 'sys_alarm_dosing_pump_alarm_conf'
     t.save()
 
+    t = template('NewString')
+    t.description = '''---------- 4.4.2.4 - Digital inputs and functions页面里新加一行label:Dosing pump ready ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.4.4.1 - Function of digital outputs          |
+    +-----------------------------------------------+
+    |Select input logic                             |
+    |  NO (normally open)                   ☑       |
+    |  NC (normally closed)                 ☐       |
+    |                                               |
+    |Function, DI1 (IO351B-41)                      |
+    |  Not used                             ☐       |
+    |  Automatic/manual, pump 1             ☐       |
+    |  Manual start, pump 1                 ☐       |
+    |  Automatic/manual, pump 2             ☐       |
+    |  Manual start, pump 2                 ☐       |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+--> |  Dosing pump ready                    ☐       |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.define_name = 'SID_DI_DOSING_PUMP_READY'
+    t.string_name = 'Dosing pump ready'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dig_in_func_input_dosing_pump ----------'
+    t.subject_name = 'dig_in_func_input_dosing_pump'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'digital_input_function_handler'
+    t.observer_type = 'DiFuncHandler'
+    t.subject_relation_name = 'dig_in_func_input_dosing_pump'
+    t.subject_access = 'Read/Write'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '30'
+    t.int_quantity_type = 'Q_NO_UNIT'
+    t.int_verified = False
+    t.save()
+
+
+    t = template('NewEnumData')
+    t.description = '---------- 加Subject, EnumDataPoint: dig_in_func_state_dosing_pump ----------'
+    t.enum_subject_names = ['dig_in_func_state_dosing_pump']
+    t.enum_geni_app_if = False
+    t.enum_subject_save = '-'
+    t.enum_flash_block = '-'
+    t.enum_observer_name = 'digital_input_function_handler'
+    t.enum_observer_type = 'DiFuncHandler'
+    t.enum_subject_relation_names = ['dig_in_func_state_dosing_pump']
+    t.enum_subject_access = 'Read/Write'
+
+    t.enum_type_name = 'DIGITAL_INPUT_FUNC_STATE'
+    t.enum_values = ['NOT_CONFIGURED']
+    t.save()
+    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, str(t.enum_subject_names).upper()))
+    comment('modified:   application/display/DigitalInputConfListView.cpp')
+    comment('modified:   application/display/state/DigitalInputFunctionState.cpp')
+    comment('modified:   application/driver/DiFuncHandler.cpp')
+    comment('modified:   include/AppTypeDefs.h')
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与dig_in_func_state_dosing_pump挂接 ----------'
+    t.subject_name =  'dig_in_func_state_dosing_pump'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'DOSING_PUMP_DIG_IN_REQUEST'
+    t.subject_access = 'Read'
+    t.save()
 
     t = template('NewString')
     t.description = '''---------- 4.4.4.1 - Function of digital outputs页面里新加一行label:Start, dosing pump ----------
@@ -507,7 +590,7 @@ def h2s_display():
     t.define_name = 'SID_H2S_DOSING_PUMP_INSTALLED'
     t.label_string = 'Dosing pump installed'
     t.listview_id = '4.1.7 pumpModules List'
-    t.subject_id = 'dda_control_enabled'
+    t.subject_id = 'dosing_pump_enabled'
     t.save()
 
     t = template('LabelAndNewPage')
@@ -589,7 +672,7 @@ def h2s_display():
     t.availabel_rule_name = 'Availabel rule: dosing pump installed'
     t.availabel_rule_type = 'AvalibleIfSet'
     t.availabel_rule_checkstate = 1
-    t.availabel_rule_subject_id = 'dda_control_enabled'
+    t.availabel_rule_subject_id = 'dosing_pump_enabled'
     t.availabel_rule_column_index = 2
 
     t.group_name = '4.2.14.1 H2S Dosing pump group'
