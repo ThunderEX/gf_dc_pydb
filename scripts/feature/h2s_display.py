@@ -387,25 +387,63 @@ def h2s_display():
     |  Start, pump 1                        ☐       |
     |  Start, pump 2                        ☐       |
     |  Start, mixer                         ☐       |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
 --> |  Start, dosing pump                   ☐       |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
     |                                               |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    #由于该listview的ComponentType是DigitalOutputConfListView类型，只需要添加一个新字符串，并在AppTypeDefs.h和DigitalOutputConfListView.cpp里修改
     t.define_name = 'SID_DO_START_DOSING_PUMP'
     t.string_name = 'Start, dosing pump'
     t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: relay_status_relay_func_dosing_pump ----------'
+    #SP_DDA_dosing_pump_enabled
+    t.subject_name =  'relay_status_relay_func_dosing_pump'
+    t.subject_type_id = 'BoolDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'relay_function_handler'
+    t.observer_type = 'RelayFuncHandler'
+    t.subject_relation_name = 'RELAY_FUNC_DOSING_PUMP'
+
+    t.bool_value = 0
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: relay_func_output_dosing_pump ----------'
+    t.subject_name =  'relay_func_output_dosing_pump'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'relay_function_handler'
+    t.observer_type = 'RelayFuncHandler'
+    t.subject_relation_name = 'RELAY_FUNC_OUTPUT_DOSING_PUMP'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '16'
+    t.int_quantity_type = 'Q_NO_UNIT'
+    t.int_verified = False
+    t.save()
+
+    comment("AppTypeDefs.h里添加RELAY_FUNC_DOSING_PUMP")
+    comment("DigitalOutputConfListView.cpp里FIRST_USER_IO_INDEX+1")
+    comment("DigitalOutputConfListView.cpp里添加 { SID_DO_START_DOSING_PUMP,          RELAY_FUNC_DOSING_PUMP               }, 注意放在SID_USERDEFINED_FUNCTION_1之前")
+    comment("DigitalOutputFunctionState.cpp.cpp里添加{ RELAY_FUNC_DOSING_PUMP                  , SID_DO_START_DOSING_PUMP                  }")
+
     
     t = template('LabelAndQuantity')
     t.description = '''---------- 添加label:h2s level于1.1 System Status ----------
