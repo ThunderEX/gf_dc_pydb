@@ -2,6 +2,7 @@
 
 from ..template.tpl import template
 from ..util.log import *
+from ..tables import *
 
 def h2s_display():
     comment('**************************** Display Database部分 ****************************')
@@ -256,6 +257,23 @@ def h2s_display():
       break;
             ''')
     t.save()
+
+    comment('因为加了两项在System Alarm里，导致后面的Pump Alarm等内容错位，需要将write_state>30的依次后推')
+    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
+    table.update(id=1464, WriteState=32)  #1464 | 4.5.2.x PumpAlarms (onoffauto) slippoint, WriteState=30, 有重复，拿出来单独处理
+    # >30的都没有重复，批量更新
+    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
+    results = table.query(WriteState__gte = 31)  #query >=30
+    state_list = []
+    for result in results:
+        _id = getattr(result, 'id')
+        value = getattr(result, 'WriteState')
+        state_list.append([_id, value+2])
+    for l in state_list:
+        table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
+        table.update(id=l[0], WriteState=l[1])
+        log('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
+    
 
     t = template('SystemAlarmStatus')
     t.description = '''---------- 4.5.5 - Status, system alarms页面里新加一行label:Dosing pump ----------

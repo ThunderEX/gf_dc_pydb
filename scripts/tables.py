@@ -108,7 +108,7 @@ class BaseTable(object):
         else:
             debug("不存在键%s" % (attr_name))
 
-    def query(self, **kwargs):
+    def query(self, suppress=False, **kwargs):
         _id = id
         field_dict = self.model.get_field_dict()
         field_names = field_dict.keys()
@@ -130,7 +130,9 @@ class BaseTable(object):
                     #olist.append(str(getattr(result, field)))
                     olist.append(getattr(result, field))
                 table.add_row(olist)
-        print table
+        if not suppress:
+            log(table)
+        return results
 
     def update(self, id=0, **kwargs):
         _id = id
