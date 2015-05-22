@@ -787,7 +787,7 @@ class Model(object):
         insert = self.insert(**field_dict)
         try:
             self.id = insert.execute()
-            log(("表%s成功添加记录，id=%d!" % (self._meta.db_table, self.id)).decode('utf-8'))
+            debug(("表%s成功添加记录，id=%d!" % (self._meta.db_table, self.id)).decode('utf-8'))
             debug(("内容=%s" % (str(field_dict))).decode('utf-8'))
         except Exception as e:
             log(("！！！错误！！！表%s无法添加记录" % (self._meta.db_table)).decode('utf-8'))

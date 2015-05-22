@@ -6,6 +6,24 @@ from ..tables import *
 
 def h2s_display():
     comment('**************************** Display Database部分 ****************************')
+
+    comment('因为加了两项在System Alarm里，导致后面的Pump Alarm等内容错位，需要将write_state>30的依次后推')
+    # >30的都没有重复，批量更新
+    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
+    results = table.query(WriteState__gte = 31)  #query >=30
+    state_list = []
+    for result in results:
+        _id = getattr(result, 'id')
+        value = getattr(result, 'WriteState')
+        state_list.append([_id, value+2])
+    for l in state_list:
+        table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
+        table.update(id=l[0], WriteState=l[1])
+        comment('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
+    #1464 | 4.5.2.x PumpAlarms (onoffauto) slippoint, WriteState=30, 有重复，拿出来单独处理
+    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
+    table.update(id=1464, WriteState=32)
+    
     #先加一个字符串'DDA alarm (254)'显示在'3.1 - current alarms'里
     t = template('NewString')
     t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
@@ -258,21 +276,6 @@ def h2s_display():
             ''')
     t.save()
 
-    comment('因为加了两项在System Alarm里，导致后面的Pump Alarm等内容错位，需要将write_state>30的依次后推')
-    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
-    table.update(id=1464, WriteState=32)  #1464 | 4.5.2.x PumpAlarms (onoffauto) slippoint, WriteState=30, 有重复，拿出来单独处理
-    # >30的都没有重复，批量更新
-    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
-    results = table.query(WriteState__gte = 31)  #query >=30
-    state_list = []
-    for result in results:
-        _id = getattr(result, 'id')
-        value = getattr(result, 'WriteState')
-        state_list.append([_id, value+2])
-    for l in state_list:
-        table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
-        table.update(id=l[0], WriteState=l[1])
-        log('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
     
 
     t = template('SystemAlarmStatus')
@@ -308,12 +311,40 @@ def h2s_display():
     t.subject_id = 'sys_alarm_dosing_pump_alarm_conf'
     t.save()
 
+
+    comment('加DDA的一系列Alarm')
+    dda_alram_strings = [
+        ('SID_ALARM_256_DDA_OVER_PRESSURE'                   , 'Over pressure (256)'),
+        ('SID_ALARM_257_DDA_MEAN_PRESSURE_TO_LOW'            , 'Mean pressure to low (257)'),
+        ('SID_ALARM_258_DDA_GAS_IN_PUMP_HEAD'                , 'Gas in pump head, deaerating problem (258)'),
+        ('SID_ALARM_259_DDA_CAVITATIONS'                     , 'Cavitations (259)'),
+        ('SID_ALARM_260_DDA_PRESSURE_VALVE_LEAKAGE'          , 'Pressure valve leakage (260)'),
+        ('SID_ALARM_261_DDA_SUCTION_VALVE_LEAKAGE'           , 'Suction valve leakage (261)'),
+        ('SID_ALARM_262_DDA_VENTING_VALVE_DEFECT'            , 'Venting valve defect (262)'),
+        ('SID_ALARM_263_DDA_TIME_FOR_SERVICE_IS_EXCEED'      , 'Time for service is exceed (263)'),
+        ('SID_ALARM_264_DDA_SOON_TIME_FOR_SERVICE'           , 'Soon time for service (264)'),
+        ('SID_ALARM_265_DDA_CAPACITY_TOO_LOW'                , 'Capacity too low (265)'),
+        ('SID_ALARM_266_DDA_DIAPHRAGM_BREAK'                 , 'Diaphragm break (266)'),
+        ('SID_ALARM_267_DDA_BLOCKED_MOTOR_OR_PUMP'           , 'Blocked motor/pump (267)'),
+        ('SID_ALARM_268_DDA_PRE_EMPTY_TANK'                  , 'Pre empty tank (268)'),
+        ('SID_ALARM_269_DDA_EMPTY_TANK'                      , 'Empty tank (269)'),
+        ('SID_ALARM_270_DDA_CABLE_BREAKDOWN_ON_FLOW_MONITOR' , 'Cable breakdown on Flow Monitor (270)'),
+        ('SID_ALARM_271_DDA_CABLE_BREAKDOWN_ON_ANALOGUE'     , 'Cable breakdown on Analogue (271)'),
+    ]
+    for alarm_string in dda_alram_strings:
+        t = template('AlarmString')
+        t.description = '---------- 加Alarm String: %s ----------' % (alarm_string[1])
+        t.alarm_define_name = alarm_string[0]
+        t.alarm_string = alarm_string[1]
+        t.save()
+    
+
     t = template('NewString')
     t.description = '''---------- 4.4.2.4 - Digital inputs and functions页面里新加一行label:Dosing pump ready ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.4.4.1 - Function of digital outputs          |
+    |4.4.2.4 - Digital iutputs and functions        |
     +-----------------------------------------------+
     |Select input logic                             |
     |  NO (normally open)                   ☑       |
