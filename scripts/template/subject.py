@@ -38,6 +38,12 @@ class NewSubject(object):
     int_quantity_type = 'Q_NO_UNIT'         #: quantity type for this int data
     int_verified = False                    #: verified
 
+    #FloatDataPoint
+    float_value = 0                         #: set value
+    float_min = 0                           #: minimum value
+    float_max = 99999999                    #: maximum value
+    float_quantity_type = 'Q_NO_UNIT'         #: quantity type for this float data
+
     #EnumDataPoint
     enum_enum_type_name = ''
     enum_value = ''
@@ -107,6 +113,18 @@ class NewSubject(object):
                      'Max': self.int_max,
                      'QuantityType': self.int_quantity_type,
                      'Verified': self.int_verified,
+                 }
+                 ),
+            )
+        elif self.subject_type_id == 'FloatDataPoint':
+            self.parameters.append(
+                (FloatDataPoint,
+                 {
+                     'id': self.subject_name,
+                     'Value': self.float_value,
+                     'Min': self.float_min,
+                     'Max': self.float_max,
+                     'QuantityType': self.float_quantity_type,
                  }
                  ),
             )

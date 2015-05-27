@@ -423,6 +423,7 @@ def h2s_display():
     t.subject_access = 'Read'
     t.save()
 
+
     t = template('NewString')
     t.description = '''---------- 4.4.4.1 - Function of digital outputs页面里新加一行label:Start, dosing pump ----------
     +----------+-------------+---------+------------+
@@ -492,8 +493,86 @@ def h2s_display():
     comment("DigitalOutputConfListView.cpp里FIRST_USER_IO_INDEX+1")
     comment("DigitalOutputConfListView.cpp里添加 { SID_DO_START_DOSING_PUMP,          RELAY_FUNC_DOSING_PUMP               }, 注意放在SID_USERDEFINED_FUNCTION_1之前")
     comment("DigitalOutputFunctionState.cpp.cpp里添加{ RELAY_FUNC_DOSING_PUMP                  , SID_DO_START_DOSING_PUMP                  }")
+    comment('''RelayFuncHandler.cpp里添加
+    case SUBJECT_ID_RELAY_STATUS_RELAY_FUNC_DOSING_PUMP:
+      mpRelayStatus[RELAY_FUNC_DOSING_PUMP].Update(pSubject);
+      break;
+    和
+    case SP_RFH_RELAY_FUNC_DOSING_PUMP:
+      mpRelayStatus[RELAY_FUNC_DOSING_PUMP].Attach(pSubject);
+      break;
+    case SP_RFH_RELAY_FUNC_OUTPUT_DOSING_PUMP:
+      mpRelayFuncOutput[RELAY_FUNC_DOSING_PUMP].Attach(pSubject);
+      break;
+            ''')
 
     
+    t = template('NewString')
+    t.description = '''---------- 4.4.1.x.1 - Analog inputs and measured value页面里新加一行Level, chemical container ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.4.1.1.1 - Analog iutputs and measuered value |
+    +-----------------------------------------------+
+    |                                               |
+    |Function, AI1 (CU 362)                         |
+    |  Not used                             ☐       |
+    |  Flow rate                            ☐       |
+    |  Level, ultrasound                    ☐       |
+    |  Level, pressure                      ☐       |
+    |  Pres, sensor, discharge              ☐       |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+--> |  Level, chemical container            ☐       |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.define_name = 'SID_AI_LEVEL_CHEMICAL_CONTAINER'
+    t.string_name = 'Level, chemical container'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dig_in_func_input_dosing_pump ----------'
+    t.subject_name = 'measured_value_chemical_container'
+    t.subject_type_id = 'FloatDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'ana_in_measure_value_ctrl'
+    t.observer_type = 'AnaInMeasureValueCtrl'
+    t.subject_relation_name = 'measured_value_chemical_container'
+    t.subject_access = 'Write'
+
+    t.float_value = 0
+    t.float_min = 0
+    t.float_max = 100
+    t.float_quantity_type = 'Q_HEIGHT'
+    t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与measured_value_chemical_container挂接 ----------'
+    t.subject_name =  'measured_value_chemical_container'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'measured_value_chemical_container'
+    t.subject_access = 'Read'
+    t.save()
+    comment("modified:   application/AnaInConfigCtrl/AnaInMeasureValueCtrl.cpp")
+    comment("modified:   application/DosingPumpCtrl/NonGFDosingPumpCtrl.cpp")
+    comment("modified:   application/DosingPumpCtrl/NonGFDosingPumpCtrl.h")
+    comment("modified:   application/display/AnalogInputConfListView.cpp")
+    comment("modified:   application/display/state/AnalogInputFunctionState.cpp")
+    comment("modified:   include/AppTypeDefs.h")
+
+
+
     t = template('LabelAndQuantity')
     t.description = '''---------- 添加label:h2s level于1.1 System Status ----------
     +----------+-------------+---------+------------+
