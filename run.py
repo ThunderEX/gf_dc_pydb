@@ -4,6 +4,7 @@ from scripts.util.log import *
 from scripts.tables import *
 from scripts.feature.h2s_factory import h2s_factory
 from scripts.feature.h2s_display import h2s_display
+from scripts.feature.example import example
 
 
 if __name__ == '__main__':
@@ -13,6 +14,7 @@ if __name__ == '__main__':
     run_generators()
     #ghs_build('rebuild')
     #vc_build()
+    #example()
 
     #x = DisplayAlarmStrings()
     #x.query()

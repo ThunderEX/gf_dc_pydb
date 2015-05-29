@@ -540,7 +540,7 @@ def h2s_display():
     t.save()
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject: dig_in_func_input_dosing_pump ----------'
+    t.description = '---------- 加Subject: measured_value_chemical_container ----------'
     t.subject_name = 'measured_value_chemical_container'
     t.subject_type_id = 'FloatDataPoint'
     t.subject_save = '-'
@@ -571,6 +571,63 @@ def h2s_display():
     comment("modified:   application/display/state/AnalogInputFunctionState.cpp")
     comment("modified:   include/AppTypeDefs.h")
 
+
+
+    t = template('LabelAndCheckboxInAO')
+    t.description = '''---------- 4.4.3.x - Function of analog output页面里新加一行Dosing pump setpoint ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.4.3.1 - Function of analog output            |
+    +-----------------------------------------------+
+    |                                               |
+    |Function, AO1 (IO351B-41)                      |
+    |  Not used                             ☐       |
+    |  Surface level                        ☐       |
+    |  VFD frequency, pump 1                ☐       |
+    |  User-defined output 1                ☐       |
+    |  User-defined output 2                ☐       |
+    |  User-defined output 3                ☐       |
+--> |  Dosing pump setpoint                 ☐       |
+    |                                               |
+    |                                               |
+    |Output range                                   |
+    | Min. (0V)                              0m     |
+    | Max. (10V)                             5m     |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '4.4.3.1 AnalogOutputSetup func dosing pump'
+    t.checkbox_name = '4.4.3.1 AnalogOutputSetup func dosing pump cb'
+    t.define_name = 'SID_AO_DOSING_PUMP_SETPOINT'
+    t.label_string = 'Dosing pump setpoint'
+    t.check_state = 11
+    t.listviewitem_index = 11
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: ao_dosing_pump_setpoint ----------'
+    t.subject_name = 'ao_dosing_pump_setpoint'
+    t.subject_type_id = 'FloatDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'ana_out_ctrl'
+    t.observer_type = 'AnaOutCtrl'
+    t.subject_relation_name = 'ANA_OUT_FUNC_DOSING_PUMP'
+    t.subject_access = 'Read'
+
+    t.float_value = 0
+    t.float_min = 0
+    t.float_max = 100
+    t.float_quantity_type = 'Q_HEIGHT'
+    t.save()
+
+    comment("modified:   include/AppTypeDefs.h")
 
 
     t = template('LabelAndQuantity')

@@ -18,6 +18,7 @@ from system_alarm import *
 from system_alarm_status import *
 from observer_link_subject import *
 from alarm_string import *
+from label_and_checkbox_in_ao import *
 
 class Template(object):
     def __init__(self, ):
