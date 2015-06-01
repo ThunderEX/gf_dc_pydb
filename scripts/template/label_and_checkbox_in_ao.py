@@ -206,29 +206,3 @@ class LabelAndCheckboxInAO(object):
              ),
             '''
 
-    def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
-        '''
-            DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下
-        
-        :param display_listview_item: DisplayListViewItem实例
-        :param display_listview_item_components_list: DisplayListViewItemComponents实例列表
-        '''
-        # index 从0开始遍历一遍
-        for i in range(0, display_listview_item.model.Index):
-            try:
-                r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
-                if r:
-                    # 通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
-                    s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
-                    if s:
-                        for display_listview_item_components in display_listview_item_components_list:
-                            if display_listview_item_components.model.ComponentId == s.ComponentId:
-                                log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
-                                return
-            except:
-                debug(("未找到记录").decode('utf-8'))
-        display_listview_item.add()
-        for x in display_listview_item_components_list:
-            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
-            x.model.ListViewItemId = r.id
-            x.add()

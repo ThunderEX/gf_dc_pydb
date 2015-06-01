@@ -816,6 +816,44 @@ def h2s_display():
     t.subject_id = 'dosing_pump_enabled'
     t.save()
 
+    #TODO add new subject link to this counter via geni
+    t = template('LabelAndQuantityInCounters')
+    t.description = '''---------- 4.4.3.x - Function of analog output页面里新加一行Dosing pump setpoint ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.2.5 - Adjustment of counters                 |
+    +-----------------------------------------------+
+    |System                                         |
+    |  Operating hours                   2:02h      |
+    |  Parallel-operation time           0:00h      |
+    |  Overflow time                     0:00h      |
+    |  Number of overflows                  0       |
+    |  Total Volume Overrun Cn              0       |
+--> |  Total chemical dosed                20㎥     |
+    |                                               |
+    |Pump 1                                         |
+    |  Operating hours                   2:02h      |
+    |  Time since service                0:00h      |
+    |  Number of starts                     0       |
+    |                                               |
+    |Pump 1                                         |
+    |  Operating hours                   2:02h      |
+    |  Time since service                0:00h      |
+    |  Number of starts                     0       |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '4.2.5 AdjustCounters total chemical dosed'
+    t.quantity_name = '4.2.5 AdjustCounters total chemical dosed nq'
+    t.define_name = 'SID_CNT_TOTAL_CHEMICAL_DOSED'
+    t.label_string = 'Total chemical dosed'
+    t.subject_id = 'chemical_total_dosed'
+    t.label_column_index = 7    #replace index 7 with new inserted item
+    t.save()
+
+
     t = template('LabelAndNewPage')
     t.description = '''----------  添加label:H2S Contol于4.2 Advanced Functions ----------
     +----------+-------------+---------+------------+
