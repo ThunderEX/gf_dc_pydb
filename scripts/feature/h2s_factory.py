@@ -57,11 +57,12 @@ def h2s_factory():
     t.int_verified = False
     t.save()
 
+    ######################################### Observer ################################################
     t = template('NewObserver')
     t.description = '---------- 加Observer: DDACtrl ----------'
     t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
-    t.short_name = 'DDA'
+    t.short_name = 'DDAC'
     t.save()
 
     t = template('NewObserver')
@@ -71,7 +72,36 @@ def h2s_factory():
     t.short_name = 'DPC'
     t.save()
 
+    t = template('NewObserver')
+    t.description = '---------- 加Observer: DDA ----------'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.short_name = 'DDA'
+    t.save()
 
+    ########################################## GENI Convert ###########################################
+    t = template('NewGeniConvert')
+    t.description = '---------- 加GeniConvert: PERCENTAGE_1PPM ----------'
+    t.name = 'PERCENTAGE_1PPM'
+    t.geni_info = 'COMMON_INFO + COM_INDEX_EXT_PERCENTAGE_1PPM'
+    t.comment = 'Precentage 1ppm'
+    t.save()
+
+    t = template('NewGeniConvert')
+    t.description = '---------- 加GeniConvert: FLOW_DOT1LH ----------'
+    t.name = 'FLOW_DOT1LH'
+    t.geni_info = 'COMMON_INFO + COM_INDEX_EXT_FLOW_DOT1LH'
+    t.comment = 'Flow 0.1L/H'
+    t.save()
+
+    t = template('NewGeniConvert')
+    t.description = '---------- 加GeniConvert: VOLUME_1ML ----------'
+    t.name = 'VOLUME_1ML'
+    t.geni_info = 'COMMON_INFO + COM_INDEX_EXT_VOLUME_1ML'
+    t.comment = 'Volume 1mL'
+    t.save()
+
+    ######################################### Subject ################################################
     t = template('NewSubject')
     t.description = '---------- 加Subject: dosing_pump_enabled ----------'
     #SP_DDA_dosing_pump_enabled
@@ -117,7 +147,7 @@ def h2s_factory():
     comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, str(t.enum_subject_names).upper()))
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_enabled挂接 ----------'
+    t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_type挂接 ----------'
     t.subject_name =  'dosing_pump_type'
     t.observer_name = 'dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
@@ -150,14 +180,14 @@ def h2s_factory():
     t.geni_id = 190
     t.subject_name = 'h2s_level_act'
     t.auto_generate = True
-    t.geni_convert_id = 'Dim. less with NA'
+    t.geni_convert_id = 'Precentage 1ppm'
     t.save()
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: dosing_feed_tank_level ----------'
     #SP_DDA_CHEMICAL_REMAINING
     t.subject_name = 'dosing_feed_tank_level'
-    t.subject_type_id = 'IntDataPoint'
+    t.subject_type_id = 'FloatDataPoint'
     t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
@@ -165,16 +195,14 @@ def h2s_factory():
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'dosing_feed_tank_level'
 
-    t.int_value = '0'
-    t.int_type = 'U32'
-    t.int_min = '0'
-    t.int_max = '99999999'
-    t.int_quantity_type = 'Q_DEPTH'
-    t.int_verified = False
+    t.float_value = 0.1
+    t.float_min = 0
+    t.float_max = 999.9
+    t.float_quantity_type = 'Q_DEPTH'
 
     t.geni_var_name = 'dosing_feed_tank_level'
-    t.geni_class = 13
-    t.geni_id = 10
+    t.geni_class = 14
+    t.geni_id = 193
     t.subject_name = 'dosing_feed_tank_level'
     t.auto_generate = True
     t.geni_convert_id = 'Dim. less with NA'
@@ -184,7 +212,7 @@ def h2s_factory():
     t.description = '---------- 加Subject: chemical_total_dosed ----------'
     #SP_DDA_CHEMICAL_REMAINING
     t.subject_name = 'chemical_total_dosed'
-    t.subject_type_id = 'IntDataPoint'
+    t.subject_type_id = 'FloatDataPoint'
     t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
@@ -192,17 +220,42 @@ def h2s_factory():
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'chemical_total_dosed'
 
-    t.int_value = '0'
-    t.int_type = 'U32'
-    t.int_min = '0'
-    t.int_max = '99999999'
-    t.int_quantity_type = 'Q_VOLUME'
-    t.int_verified = False
+    t.float_value = 0.1
+    t.float_min = 0
+    t.float_max = 999.9
+    t.float_quantity_type = 'Q_HEIGHT'
 
     t.geni_var_name = 'chemical_total_dosed'
-    t.geni_class = 13
-    t.geni_id = 11
+    t.geni_class = 14
+    t.geni_id = 194
     t.subject_name = 'chemical_total_dosed'
     t.auto_generate = True
-    t.geni_convert_id = 'Dim. less with NA'
+    t.geni_convert_id = 'Volume 1mL'
     t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: set_dosing_ref ----------'
+    t.subject_name = 'set_dosing_ref'
+    t.subject_type_id = 'FloatDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.geni_app_if = True
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'set_dosing_ref'
+    t.subject_access = 'Write'
+
+    t.float_value = 0
+    t.float_min = 0
+    t.float_max = 999
+    # TODO set unit
+    t.float_quantity_type = 'Q_HEIGHT'
+
+    t.geni_var_name = 'set_dosing_ref'
+    t.geni_class = 13
+    t.geni_id = 6
+    t.subject_name = 'set_dosing_ref'
+    t.auto_generate = True
+    t.geni_convert_id = 'Flow 0.1L/H'
+    t.save()
+

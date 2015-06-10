@@ -74,7 +74,9 @@ def vc_build():
 
     start_time = time.time()
     current_dir = os.getcwd()
-    cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" /build /M4 pc.sln  "Release362|Win32"'
+    #cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" /build /M4 pc.sln  "Release362|Win32"'
+    #cmd = 'C:\\Windows\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe c:\\Local\\Workspace\\DC_V04.01.00_int\\cu3x1AppPcSim_SRC\\PcMrViewer\\pc.sln /t:CuDll /p:Configuration="Release362"'
+    cmd = 'C:\\Windows\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe pc.sln /t:CuDll /p:Configuration="Release362"'
     #tft_cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" /M4 Tft.vcproj "Release362|Win32"'
     #cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" /M4 ControlUnit.vcproj "Release362|Win32"'
     os.chdir(r'..\cu3x1AppPcSim_SRC\PcMrViewer')

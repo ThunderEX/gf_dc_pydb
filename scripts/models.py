@@ -85,6 +85,9 @@ class FlashBlockTypes_Model(FBaseModel):
 
 class FloatDataPoint_Model(FBaseModel):
     id = IntegerField()
+    Min = FloatField()
+    Max = FloatField()
+    Value = FloatField()
     QuantityType = IntegerField()
     Comment = CharField()
 

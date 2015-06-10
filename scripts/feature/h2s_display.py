@@ -705,6 +705,7 @@ def h2s_display():
     #TODO
     t.subject_id = 'dosing_feed_tank_level'
     t.quantity_type =  'Q_DEPTH'
+    t.number_of_digits = 5
     t.save()
 
     t = template('LabelAndQuantity')
@@ -744,6 +745,7 @@ def h2s_display():
     t.subject_id = 'chemical_total_dosed'
     #TODO 改单位
     t.quantity_type = 'Q_VOLUME'
+    t.number_of_digits = 5
     t.save()
 
     t = template('LabelBlank')
@@ -851,6 +853,7 @@ def h2s_display():
     t.label_string = 'Total chemical dosed'
     t.subject_id = 'chemical_total_dosed'
     t.label_column_index = 7    #replace index 7 with new inserted item
+    t.number_of_digits = 5
     t.save()
 
 

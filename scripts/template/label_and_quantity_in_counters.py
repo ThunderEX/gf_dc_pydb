@@ -7,13 +7,14 @@ class LabelAndQuantityInCounters(object):
     ''' New label and checkbox in 4.2.5 - Adjustment of counters.  '''
 
     label_name = ''               #: new label name that added in DisplayComponent
-    quantity_name = ''                 #: new quantity name that added in DisplayComponent
+    quantity_name = ''            #: new quantity name that added in DisplayComponent
     quantity_type = 'Q_NO_UNIT'   #: quantity type in DisplayNumberQuantity
     define_name = ''              #: string define for new label
     label_string = ''             #: string for new label, multiple languages
     listview_id = '4.2.5 AdjustCounters List'              #: listview id which will include the new label and quantity
     subject_id = ''               #: link subject and quantity
     label_column_index = 0        #: label column index that to insert in the listview
+    number_of_digits = 3          #: length of digital, 3 is int, 5 can display float
 
     def __init__(self):
         self.parameters = []
@@ -111,7 +112,7 @@ class LabelAndQuantityInCounters(object):
              {
                  'id': self.quantity_name,
                  'QuantityType': self.quantity_type,
-                 'NumberOfDigits': 3,
+                 'NumberOfDigits': self.number_of_digits,
                  'NumberFontId': 'DEFAULT_FONT_13_LANGUAGE_INDEP',
                  'QuantityFontId': 'DEFAULT_FONT_13_LANGUAGE_INDEP',
              }

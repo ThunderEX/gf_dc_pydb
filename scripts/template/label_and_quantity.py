@@ -13,6 +13,7 @@ class LabelAndQuantity(object):
     listview_id = ''              #: listview id which will include the new label and quantity
     subject_id = ''               #: link subject and quantity
     quantity_type = ''            #: quantity type in DisplayNumberQuantity
+    number_of_digits = 3        #: length of digital, 3 is int, 5 can display float
 
     def __init__(self):
         self.parameters = []
@@ -111,7 +112,7 @@ class LabelAndQuantity(object):
              {
                  'id': self.quantity_name,
                  'QuantityType': self.quantity_type,
-                 'NumberOfDigits': 3,
+                 'NumberOfDigits': self.number_of_digits,
                  'NumberFontId': 'DEFAULT_FONT_13_LANGUAGE_INDEP',
                  'QuantityFontId': 'DEFAULT_FONT_13_LANGUAGE_INDEP',
              }

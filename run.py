@@ -12,8 +12,8 @@ if __name__ == '__main__':
     h2s_factory()
     h2s_display()
     run_generators()
-    #ghs_build('rebuild')
     #vc_build()
+    #ghs_build('rebuild')
     #example()
 
     #x = DisplayAlarmStrings()
