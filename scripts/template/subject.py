@@ -181,26 +181,28 @@ class NewSubject(object):
             comment('Not supported datapoint type')
             raise NameError
 
-        # 添加SubjectRelation
-        self.parameters.append(
-            (SubjectRelation,
-             {
-                 'Name': self.subject_relation_name.upper(),  # 必须用大写字母
-                 'ObserverTypeId': self.observer_type,
-             }
-             ),
-        )
-        # 添加ObserverSubjects，会用到SubjectRelation添加的Name
-        self.parameters.append(
-            (ObserverSubjects,
-             {
-                 'SubjectId': self.subject_name,
-                 'ObserverId': self.observer_name,
-                 'SubjectRelationId': self.subject_relation_name.upper(),
-                 'SubjectAccess': self.subject_access,
-             }
-             )
-        )
+        #只有在有Relation时才添加这两张表
+        if len(self.subject_relation_name):
+            # 添加SubjectRelation
+            self.parameters.append(
+                (SubjectRelation,
+                 {
+                     'Name': self.subject_relation_name.upper(),  # 必须用大写字母
+                     'ObserverTypeId': self.observer_type,
+                 }
+                 ),
+            )
+            # 添加ObserverSubjects，会用到SubjectRelation添加的Name
+            self.parameters.append(
+                (ObserverSubjects,
+                 {
+                     'SubjectId': self.subject_name,
+                     'ObserverId': self.observer_name,
+                     'SubjectRelationId': self.subject_relation_name.upper(),
+                     'SubjectAccess': self.subject_access,
+                 }
+                 )
+            )
 
         #Geni
         if self.geni_app_if:

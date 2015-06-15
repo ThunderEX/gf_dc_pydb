@@ -815,7 +815,7 @@ def h2s_display():
     t.define_name = 'SID_H2S_DOSING_PUMP_INSTALLED'
     t.label_string = 'Dosing pump installed'
     t.listview_id = '4.1.7 pumpModules List'
-    t.subject_id = 'dosing_pump_enabled'
+    t.subject_id = 'dosing_pump_installed'
     t.save()
 
     #TODO add new subject link to this counter via geni
@@ -936,7 +936,7 @@ def h2s_display():
     t.availabel_rule_name = 'Availabel rule: dosing pump installed'
     t.availabel_rule_type = 'AvalibleIfSet'
     t.availabel_rule_checkstate = 1
-    t.availabel_rule_subject_id = 'dosing_pump_enabled'
+    t.availabel_rule_subject_id = 'dosing_pump_installed'
     t.availabel_rule_column_index = 2
 
     t.group_name = '4.2.14.1 H2S Dosing pump group'

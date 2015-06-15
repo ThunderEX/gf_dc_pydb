@@ -3,7 +3,7 @@ import os
 import subprocess
 import shutil
 import time
-from util.log import log
+from util.log import log, debug
 
 def copy_database():
 
@@ -19,6 +19,7 @@ def copy_database():
         shutil.copy(f_database, f_dest)
         shutil.copy(d_database, d_dest)
         shutil.copy(l_database, l_dest)
+        debug('copy database done')
     except:
         log('Set backup database please')
         raise NameError

@@ -20,5 +20,6 @@ debug = logging.debug
 
 
 def comment(str):
-    str = str.decode("utf-8")
-    logging.info(str)
+    for s in str.split('\n'):
+        s = s.decode("utf-8")
+        logging.info(s)
