@@ -7,7 +7,7 @@ from ..tables import *
 def h2s_display():
     comment('**************************** Display Database部分 ****************************')
 
-    comment('因为加了两项在System Alarm里，导致后面的Pump Alarm等内容错位，需要将write_state>30的依次后推')
+    comment('在4.5.x里，因为加了两项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state>30的依次后推')
     # >30的都没有重复，批量更新
     table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
     results = table.query(WriteState__gte = 31)  #query >=30
@@ -24,7 +24,7 @@ def h2s_display():
     table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
     table.update(id=1464, WriteState=32)
     
-    #先加一个字符串'DDA alarm (254)'显示在'3.1 - current alarms'里
+    #先加一个字符串'DDA alarm (256)'显示在'3.1 - current alarms'里
     t = template('NewString')
     t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
     +----------+-------------+---------+------------+
@@ -34,7 +34,7 @@ def h2s_display():
     +-----------------------------------------------+
     |                                               |
     | (!)CU 362                                     |
---> |  DDA alarm (254)                              |
+--> |  DDA alarm (256)                              |
     |  Occured at                   2015-05-15 14:01|
     |  Disappeared at                     --   --   |
     |                                               |
@@ -50,8 +50,8 @@ def h2s_display():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    t.define_name = 'SID_ALARM_254_DDA'
-    t.string_name = 'DDA alarm (254)'
+    t.define_name = 'SID_ALARM_256_DDA'
+    t.string_name = 'DDA alarm (256)'
     t.save()
 
     t = template('SystemAlarm')
@@ -114,15 +114,15 @@ def h2s_display():
     t.alarm_geni_app_if = False
     t.alarm_subject_save = '-'
     t.alarm_flash_block = '-'
-    t.alarm_observer_name = 'dda_ctrl'
-    t.alarm_observer_type = 'DDACtrl'
+    t.alarm_observer_name = 'dda'
+    t.alarm_observer_type = 'DDA'
     t.alarm_subject_relation_name = 'sys_alarm_dda_fault_alarm_obj'
 
     t.alarm_alarm_config_id = 'sys_alarm_dda_fault_alarm_conf'
     t.alarm_alarm_config2_id = 'dummy_alarm_conf'
     t.alarm_erroneous_unit_type_id = 'SYSTEM'
     t.alarm_erroneous_unit_number = 0
-    t.alarm_alarm_id = 'SID_ALARM_254_DDA'
+    t.alarm_alarm_id = 'SID_ALARM_256_DDA'
 
     comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DDA_FAULT')
     comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DDA_FAULT,                  SID_DDA_FAULT},')
@@ -167,7 +167,7 @@ def h2s_display():
     t.save()
 
 
-    #先加一个字符串'Dosing pump alarm (255)'显示在'3.1 - current alarms'里
+    #先加一个字符串'Dosing pump alarm (257)'显示在'3.1 - current alarms'里
     t = template('NewString')
     t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
     +----------+-------------+---------+------------+
@@ -177,7 +177,7 @@ def h2s_display():
     +-----------------------------------------------+
     |                                               |
     | (!)CU 362                                     |
---> |  Dosing pump alarm (255)                      |
+--> |  Dosing pump alarm (257)                      |
     |  Occured at                   2015-05-15 14:01|
     |  Disappeared at                     --   --   |
     |                                               |
@@ -193,8 +193,8 @@ def h2s_display():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    t.define_name = 'SID_ALARM_255_DOSING_PUMP'
-    t.string_name = 'Dosing pump alarm (255)'
+    t.define_name = 'SID_ALARM_257_DOSING_PUMP'
+    t.string_name = 'Dosing pump alarm (257)'
     t.save()
 
     t = template('SystemAlarm')
@@ -265,7 +265,7 @@ def h2s_display():
     t.alarm_alarm_config2_id = 'dummy_alarm_conf'
     t.alarm_erroneous_unit_type_id = 'SYSTEM'
     t.alarm_erroneous_unit_number = 0
-    t.alarm_alarm_id = 'SID_ALARM_255_DOSING_PUMP'
+    t.alarm_alarm_id = 'SID_ALARM_257_DOSING_PUMP'
 
     comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DOSING_PUMP')
     comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DOSING_PUMP,                  SID_DOSING_PUMP},')
@@ -314,22 +314,22 @@ def h2s_display():
 
     comment('加DDA的一系列Alarm')
     dda_alram_strings = [
-        ('SID_ALARM_256_DDA_OVER_PRESSURE'                   , 'Over pressure (256)'),
-        ('SID_ALARM_257_DDA_MEAN_PRESSURE_TO_LOW'            , 'Mean pressure to low (257)'),
-        ('SID_ALARM_258_DDA_GAS_IN_PUMP_HEAD'                , 'Gas in pump head, deaerating problem (258)'),
-        ('SID_ALARM_259_DDA_CAVITATIONS'                     , 'Cavitations (259)'),
-        ('SID_ALARM_260_DDA_PRESSURE_VALVE_LEAKAGE'          , 'Pressure valve leakage (260)'),
-        ('SID_ALARM_261_DDA_SUCTION_VALVE_LEAKAGE'           , 'Suction valve leakage (261)'),
-        ('SID_ALARM_262_DDA_VENTING_VALVE_DEFECT'            , 'Venting valve defect (262)'),
-        ('SID_ALARM_263_DDA_TIME_FOR_SERVICE_IS_EXCEED'      , 'Time for service is exceed (263)'),
-        ('SID_ALARM_264_DDA_SOON_TIME_FOR_SERVICE'           , 'Soon time for service (264)'),
-        ('SID_ALARM_265_DDA_CAPACITY_TOO_LOW'                , 'Capacity too low (265)'),
-        ('SID_ALARM_266_DDA_DIAPHRAGM_BREAK'                 , 'Diaphragm break (266)'),
-        ('SID_ALARM_267_DDA_BLOCKED_MOTOR_OR_PUMP'           , 'Blocked motor/pump (267)'),
-        ('SID_ALARM_268_DDA_PRE_EMPTY_TANK'                  , 'Pre empty tank (268)'),
-        ('SID_ALARM_269_DDA_EMPTY_TANK'                      , 'Empty tank (269)'),
-        ('SID_ALARM_270_DDA_CABLE_BREAKDOWN_ON_FLOW_MONITOR' , 'Cable breakdown on Flow Monitor (270)'),
-        ('SID_ALARM_271_DDA_CABLE_BREAKDOWN_ON_ANALOGUE'     , 'Cable breakdown on Analogue (271)'),
+        ('SID_ALARM_258_DDA_OVER_PRESSURE'                   , 'Over pressure (258)'),
+        ('SID_ALARM_259_DDA_MEAN_PRESSURE_TO_LOW'            , 'Mean pressure to low (259)'),
+        ('SID_ALARM_260_DDA_GAS_IN_PUMP_HEAD'                , 'Gas in pump head, deaerating problem (260)'),
+        ('SID_ALARM_261_DDA_CAVITATIONS'                     , 'Cavitations (261)'),
+        ('SID_ALARM_262_DDA_PRESSURE_VALVE_LEAKAGE'          , 'Pressure valve leakage (262)'),
+        ('SID_ALARM_263_DDA_SUCTION_VALVE_LEAKAGE'           , 'Suction valve leakage (263)'),
+        ('SID_ALARM_264_DDA_VENTING_VALVE_DEFECT'            , 'Venting valve defect (264)'),
+        ('SID_ALARM_265_DDA_TIME_FOR_SERVICE_IS_EXCEED'      , 'Time for service is exceed (265)'),
+        ('SID_ALARM_266_DDA_SOON_TIME_FOR_SERVICE'           , 'Soon time for service (266)'),
+        ('SID_ALARM_267_DDA_CAPACITY_TOO_LOW'                , 'Capacity too low (267)'),
+        ('SID_ALARM_268_DDA_DIAPHRAGM_BREAK'                 , 'Diaphragm break (268)'),
+        ('SID_ALARM_269_DDA_BLOCKED_MOTOR_OR_PUMP'           , 'Blocked motor/pump (269)'),
+        ('SID_ALARM_270_DDA_PRE_EMPTY_TANK'                  , 'Pre empty tank (270)'),
+        ('SID_ALARM_271_DDA_EMPTY_TANK'                      , 'Empty tank (271)'),
+        ('SID_ALARM_272_DDA_CABLE_BREAKDOWN_ON_FLOW_MONITOR' , 'Cable breakdown on Flow Monitor (272)'),
+        ('SID_ALARM_273_DDA_CABLE_BREAKDOWN_ON_ANALOGUE'     , 'Cable breakdown on Analogue (273)'),
     ]
     for alarm_string in dda_alram_strings:
         t = template('AlarmString')
@@ -624,10 +624,12 @@ def h2s_display():
     t.float_value = 0
     t.float_min = 0
     t.float_max = 100
-    t.float_quantity_type = 'Q_HEIGHT'
+    t.float_quantity_type = 'Q_FLOW'
     t.save()
 
     comment("modified:   include/AppTypeDefs.h")
+    comment("modified:   AnaOutCtrl/AnaOutCtrl.cpp")
+    comment("modified:   display/state/AnalogOutputFunctionState.cpp")
 
 
     t = template('LabelAndQuantity')

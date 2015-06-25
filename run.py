@@ -10,13 +10,10 @@ if __name__ == '__main__':
     from scripts.tables import *
     from scripts.feature.h2s_factory import h2s_factory
     from scripts.feature.h2s_display import h2s_display
-    from scripts.feature.example import example
+    from scripts.feature.example import *
     h2s_factory()
     h2s_display()
     run_generators()
     #vc_build()
     #ghs_build('rebuild')
     #example()
-
-    #x = DisplayAlarmStrings()
-    #x.query()

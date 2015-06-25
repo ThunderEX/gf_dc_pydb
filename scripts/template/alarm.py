@@ -68,7 +68,7 @@ class NewAlarm(object):
     alarm_alarm_config2_id = ''
     alarm_erroneous_unit_type_id = 0
     alarm_erroneous_unit_number = 0
-    alarm_alarm_id = ''                           #: SID_ALARM_XXXX
+    #alarm_alarm_id = ''                           #: SID_ALARM_XXXX
 
     #Alarm
     alarm_define_name = ''
@@ -138,7 +138,7 @@ class NewAlarm(object):
         self.alarm_subject.alarm_alarm_config2_id       = self.alarm_alarm_config2_id
         self.alarm_subject.alarm_erroneous_unit_type_id = self.alarm_erroneous_unit_type_id
         self.alarm_subject.alarm_erroneous_unit_number  = self.alarm_erroneous_unit_number
-        self.alarm_subject.alarm_alarm_id               = self.alarm_alarm_id
+        self.alarm_subject.alarm_alarm_id               = self.alarm_define_name
 
         self.parameters = [
             # 1. 加字符串定义

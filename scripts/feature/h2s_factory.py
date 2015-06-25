@@ -125,6 +125,29 @@ def h2s_factory():
     t.subject_access = 'Read/Write'
     t.save()
 
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dda_installed ----------'
+    #SP_DDA_dda_installed
+    t.subject_name =  'dda_installed'
+    t.subject_type_id = 'BoolDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'dda_installed'
+
+    t.bool_value = 0
+    t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- DDA与dda_installed挂接 ----------'
+    t.subject_name =  'dda_installed'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'dda_installed'
+    t.subject_access = 'Read/Write'
+    t.save()
+
 
     t = template('NewEnumData')
     t.description = '---------- 加Subject, EnumDataPoint: dosing_pump_type_dda, dosing_pump_type_analog ----------'
@@ -291,8 +314,8 @@ def h2s_factory():
     t.subject_save = '-'
     t.flash_block = '-'
     t.geni_app_if = True
-    t.observer_name = 'dda'
-    t.observer_type = 'DDA'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'set_dosing_ref'
     t.subject_access = 'Write'
 
@@ -307,4 +330,129 @@ def h2s_factory():
     t.geni_id = 6
     t.auto_generate = True
     t.geni_convert_id = 'Flow 0.1L/H'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dda_reference ----------'
+    #SP_DDA_dda_reference
+    t.subject_name =  'dda_reference'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'dda_reference'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '99999'
+    # TODO set unit
+    t.int_quantity_type = 'Q_HEIGHT'
+    t.int_verified = False
+    t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- DDA与dda_reference挂接 ----------'
+    t.subject_name =  'dda_reference'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'dda_reference'
+    t.subject_access = 'Read/Write'
+    t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- DDA与alarm_reset_event挂接 ----------'
+    t.subject_name =  'alarm_reset_event'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'SYSTEM_ALARM_RESET_EVENT'
+    t.subject_access = 'Read/Write'
+    t.save()
+
+
+    t = template('NewAlarm')
+    t.description = '''---------- 新加alarm: ----------'''
+    t.alarm_config_subject_name = 'h2s_sensor_fault_conf'
+    t.alarm_config_subject_type_id = 'AlarmConfig'
+    t.alarm_config_geni_app_if = False
+    t.alarm_config_subject_save = 'Value'
+    t.alarm_config_flash_block = 'Config'
+    #t.alarm_config_observer_name = 'dda'
+    #t.alarm_config_observer_type = 'DDA'
+    #t.alarm_config_subject_relation_name = 'DDA_GENI_COMM_FAULT'
+    t.alarm_config_subject_access = 'Read/Write'
+
+    t.alarm_config_alarm_enabled = True
+    #t.alarm_config_warning_enabled = True
+    t.alarm_config_auto_ack = True
+    t.alarm_config_alarm_delay = 5
+    t.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_alarm_criteria = '='
+    t.alarm_config_alarm_limit = '1'
+    t.alarm_config_warning_limit = '0'
+    t.alarm_config_min_limit = '0'
+    t.alarm_config_max_limit = '1'
+    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_verified = False
+
+    t.alarm_subject_name = 'h2s_sensor_fault_obj'
+    t.alarm_subject_type_id = 'AlarmDataPoint'
+    t.alarm_geni_app_if = False
+    t.alarm_subject_save = '-'
+    t.alarm_flash_block = '-'
+    t.alarm_observer_name = 'dda_ctrl'
+    t.alarm_observer_type = 'DDACtrl'
+    t.alarm_subject_relation_name = 'H2S_SENSOR_FAULT_OBJ'
+
+    t.alarm_alarm_config_id = 'h2s_sensor_fault_conf'
+    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_erroneous_unit_type_id = 'SYSTEM'
+    t.alarm_erroneous_unit_number = 0
+    t.alarm_define_name = 'SID_ALARM_254_H2S_SENSOR_FAULT'
+    t.alarm_string = 'H2S sensor fault (254)'
+
+    t.save()
+
+    t = template('NewAlarm')
+    t.description = '''---------- 新加alarm: ----------'''
+    t.alarm_config_subject_name = 'dda_geni_comm_fault_conf'
+    t.alarm_config_subject_type_id = 'AlarmConfig'
+    t.alarm_config_geni_app_if = False
+    t.alarm_config_subject_save = 'Value'
+    t.alarm_config_flash_block = 'Config'
+    #t.alarm_config_observer_name = 'dda'
+    #t.alarm_config_observer_type = 'DDA'
+    #t.alarm_config_subject_relation_name = 'DDA_GENI_COMM_FAULT'
+    t.alarm_config_subject_access = 'Read/Write'
+
+    t.alarm_config_alarm_enabled = True
+    #t.alarm_config_warning_enabled = True
+    t.alarm_config_auto_ack = True
+    t.alarm_config_alarm_delay = 5
+    t.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_alarm_criteria = '='
+    t.alarm_config_alarm_limit = '1'
+    t.alarm_config_warning_limit = '0'
+    t.alarm_config_min_limit = '0'
+    t.alarm_config_max_limit = '1'
+    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_verified = False
+
+    t.alarm_subject_name = 'dda_geni_comm_fault_obj'
+    t.alarm_subject_type_id = 'AlarmDataPoint'
+    t.alarm_geni_app_if = False
+    t.alarm_subject_save = '-'
+    t.alarm_flash_block = '-'
+    t.alarm_observer_name = 'dda'
+    t.alarm_observer_type = 'DDA'
+    t.alarm_subject_relation_name = 'DDA_GENI_COMM_FAULT_OBJ'
+
+    t.alarm_alarm_config_id = 'dda_geni_comm_fault_conf'
+    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_erroneous_unit_type_id = 'SYSTEM'
+    t.alarm_erroneous_unit_number = 0
+    t.alarm_define_name = 'SID_ALARM_255_GENIBUS_COMM_ERROR_DDA'
+    t.alarm_string = 'GeniBus(DDA) communication error (255)'
+
     t.save()
