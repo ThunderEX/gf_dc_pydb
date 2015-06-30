@@ -2,6 +2,7 @@
 
 from ..template.tpl import template
 from ..util.log import *
+from ..tables import *
 
 def h2s_factory():
     comment('**************************** Factory部分 ****************************')
@@ -307,6 +308,60 @@ def h2s_factory():
     t.geni_convert_id = 'Volume 1mL'
     t.save()
 
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: set_h2s_level ----------'
+    t.subject_name = 'set_h2s_level'
+    t.subject_type_id = 'IntDataPoint'
+    t.geni_app_if = True
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'set_h2s_level'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '99999999'
+    t.int_quantity_type = 'Q_PARTS_PER_MILLION'
+    t.int_verified = False
+
+    t.geni_var_name = 'set_h2s_level'
+    t.geni_class = 13
+    t.geni_id = 4
+    t.auto_generate = True
+    t.geni_convert_id = 'Precentage 1ppm'
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: set_h2s_fault ----------'
+    t.subject_name = 'set_h2s_fault'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.geni_app_if = True
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'set_h2s_fault'
+    t.subject_access = 'Read/Write'
+
+    t.int_value = '0'
+    t.int_type = 'U16'
+    t.int_min = '0'
+    t.int_max = '0xFFFF'
+    t.int_quantity_type = 'Q_NO_UNIT'
+    t.int_verified = False
+
+    t.geni_var_name = 'set_h2s_fault'
+    t.geni_class = 13
+    t.geni_id = 5
+    t.auto_generate = True
+    t.geni_convert_id = 'Bits without NA'
+    t.save()
+
+
     t = template('NewSubject')
     t.description = '---------- 加Subject: set_dosing_ref ----------'
     t.subject_name = 'set_dosing_ref'
@@ -333,7 +388,7 @@ def h2s_factory():
     t.save()
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject: dda_reference ----------'
+    t.description = '---------- 加Subject: dda_reference，DDA driver和DDACtrl交换数据用----------'
     #SP_DDA_dda_reference
     t.subject_name =  'dda_reference'
     t.subject_type_id = 'IntDataPoint'
@@ -370,17 +425,36 @@ def h2s_factory():
     t.subject_access = 'Read/Write'
     t.save()
 
+    ######################################### Alarm ################################################
+    t = template('Erroneous')
+    t.description = '''---------- 新建一个alarm的类型: DOSING_PUMP ----------'''
+    t.id = 18
+    t.name = 'DOSING_PUMP'
+    t.string_id = 'SID_UNIT_CU361'
+    t.unit_number = 0
+    t.save()
+
+    #原来system_alarm_status_4和system_warning_status_4是个dummy值，要把它加到GeniAppIf里
+    table = GeniAppIf(**{'GeniVarName':'pit_alarms4', 'GeniClass':11, 'GeniId':55, 'SubjectId':'system_alarm_status_4', 'GeniConvertId':'Bits without NA', 'AutoGenerate':True, })
+    table.add()
+    table = GeniAppIf(**{'GeniVarName':'pit_warn4', 'GeniClass':11, 'GeniId':56, 'SubjectId':'system_warning_status_4', 'GeniConvertId':'Bits without NA', 'AutoGenerate':True, })
+    table.add()
+    
+
+    #先加一个字符串'Dosing pump alarm'显示在'3.1 - current alarms'里
+    t = template('NewString')
+    t.description = '''---------- 新加alarm的string: H2S sensor fault (118) ----------'''
+    t.define_name = 'SID_ALARM_118_H2S_SENSOR_FAULT'
+    t.string_name = 'H2S sensor fault (118)'
+    t.save()
 
     t = template('NewAlarm')
-    t.description = '''---------- 新加alarm: ----------'''
+    t.description = '''---------- 新加alarm: h2s_sensor_fault_obj ----------'''
     t.alarm_config_subject_name = 'h2s_sensor_fault_conf'
     t.alarm_config_subject_type_id = 'AlarmConfig'
     t.alarm_config_geni_app_if = False
     t.alarm_config_subject_save = 'Value'
     t.alarm_config_flash_block = 'Config'
-    #t.alarm_config_observer_name = 'dda'
-    #t.alarm_config_observer_type = 'DDA'
-    #t.alarm_config_subject_relation_name = 'DDA_GENI_COMM_FAULT'
     t.alarm_config_subject_access = 'Read/Write'
 
     t.alarm_config_alarm_enabled = True
@@ -407,23 +481,21 @@ def h2s_factory():
 
     t.alarm_alarm_config_id = 'h2s_sensor_fault_conf'
     t.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_erroneous_unit_type_id = 'SYSTEM'
+    t.alarm_erroneous_unit_type_id = 'SYSTEM'       # in pit_alarm_3, so it is system alarm
     t.alarm_erroneous_unit_number = 0
-    t.alarm_define_name = 'SID_ALARM_254_H2S_SENSOR_FAULT'
-    t.alarm_string = 'H2S sensor fault (254)'
+    t.alarm_define_name = 'SID_ALARM_118_H2S_SENSOR_FAULT'
+    t.alarm_id = 118
 
     t.save()
 
+    #这里沿用已有的string，所以不需要新加string
     t = template('NewAlarm')
-    t.description = '''---------- 新加alarm: ----------'''
+    t.description = '''---------- 新加alarm: dda_geni_comm_fault_obj ----------'''
     t.alarm_config_subject_name = 'dda_geni_comm_fault_conf'
     t.alarm_config_subject_type_id = 'AlarmConfig'
     t.alarm_config_geni_app_if = False
     t.alarm_config_subject_save = 'Value'
     t.alarm_config_flash_block = 'Config'
-    #t.alarm_config_observer_name = 'dda'
-    #t.alarm_config_observer_type = 'DDA'
-    #t.alarm_config_subject_relation_name = 'DDA_GENI_COMM_FAULT'
     t.alarm_config_subject_access = 'Read/Write'
 
     t.alarm_config_alarm_enabled = True
@@ -452,7 +524,6 @@ def h2s_factory():
     t.alarm_alarm_config2_id = 'dummy_alarm_conf'
     t.alarm_erroneous_unit_type_id = 'SYSTEM'
     t.alarm_erroneous_unit_number = 0
-    t.alarm_define_name = 'SID_ALARM_255_GENIBUS_COMM_ERROR_DDA'
-    t.alarm_string = 'GeniBus(DDA) communication error (255)'
+    t.alarm_define_name = 'SID_ALARM_225_GENIBUS_ERROR'
 
     t.save()

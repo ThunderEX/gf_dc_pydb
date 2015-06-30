@@ -5,7 +5,32 @@ from subject import NewSubject
 
 class SystemAlarmStatus(object):
 
-    ''' Add new system alarm in 4.5.1 - System alarms '''
+    '''
+    Add new system alarm status in 4.5.5 - System alarms 
+
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.5.5 - Status, system alarms                  |
+    +-----------------------------------------------+
+    |                                               |
+    |  Overflow                                (!)  |
+    |  High level                              (!)  |
+    |  Alarm level                             (!)  |
+    |  Dry running                             (!)  |
+    |  Float switch                            (!)  |
+    |  Level sensor                            (!)  |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+--> |  DDA fault                               (!)  |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
 
     label_name = ''                                 # : new label name that added in DisplayComponent.
     label_define_name = ''                          # : string define for new label.

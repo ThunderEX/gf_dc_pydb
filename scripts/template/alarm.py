@@ -72,7 +72,7 @@ class NewAlarm(object):
 
     #Alarm
     alarm_define_name = ''
-    alarm_string = ''
+    alarm_id = 0
 
 
     def __init__(self):
@@ -140,35 +140,16 @@ class NewAlarm(object):
         self.alarm_subject.alarm_erroneous_unit_number  = self.alarm_erroneous_unit_number
         self.alarm_subject.alarm_alarm_id               = self.alarm_define_name
 
-        self.parameters = [
-            # 1. 加字符串定义
-            (StringDefines,
-             {
-                 'DefineName': self.alarm_define_name,
-                 'TypeId': 'Alarm',
-             }
-             ),
-            # 2. alarm加相应的字符串
-            (Strings,
-             {
-                 'String': self.alarm_string,
-                 'LanguageId': 'DEV_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            (Strings,
-             {
-                 'String': self.alarm_string,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            (DisplayAlarmStrings,
-             {
-                 'StringId': self.alarm_define_name,
-             }
-             ),
-        ]
+        self.parameters = []
+        if self.alarm_id:
+            self.parameters.append(
+                (DisplayAlarmStrings,
+                 {
+                     'AlarmId': self.alarm_id,
+                     'StringId': self.alarm_define_name,
+                 }
+                 ),
+            )
 
     def save(self):
         comment(self.description)

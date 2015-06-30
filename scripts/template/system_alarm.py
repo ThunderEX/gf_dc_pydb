@@ -5,7 +5,30 @@ from subject import NewSubject
 
 class SystemAlarm(object):
 
-    ''' Add new system alarm in 4.5.1 - System alarms '''
+    ''' 
+    Add new system alarm in 4.5.1 - System alarms 
+
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.5.1 - System alarms                          |
+    +-----------------------------------------------+
+    |                                               |
+    |Select system alarm                            |
+    |  Overflow                                     |
+    |  High level                                   |
+    |  Alarm level                                  |
+    |  Dry running                                  |
+    |  Float switch                                 |
+    |  Level sensor                                 |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+--> |  DDA fault                                    |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
 
     label_name = ''                                 # : new label name that added in DisplayComponent.
     label_define_name = ''                          # : string define for new label.
@@ -76,7 +99,8 @@ class SystemAlarm(object):
     alarm_alarm_config2_id = ''
     alarm_erroneous_unit_type_id = 0              #: error type, defined in ErroneousUnitType table, 0 = system
     alarm_erroneous_unit_number = 0               #: error title string, defined in DisplayUnitStrings table
-    alarm_alarm_id = ''                           #: SID_ALARM_XXXX
+    alarm_alarm_id = 0                            #: specify the id of alarm, which is also the event code in geni profile
+    alarm_alarm_string_id = ''                    #: SID_ALARM_XXXX
 
     def __init__(self):
         self.parameters = []
@@ -141,7 +165,7 @@ class SystemAlarm(object):
         self.alarm_subject.alarm_alarm_config2_id       = self.alarm_alarm_config2_id
         self.alarm_subject.alarm_erroneous_unit_type_id = self.alarm_erroneous_unit_type_id
         self.alarm_subject.alarm_erroneous_unit_number  = self.alarm_erroneous_unit_number
-        self.alarm_subject.alarm_alarm_id               = self.alarm_alarm_id
+        self.alarm_subject.alarm_alarm_id               = self.alarm_alarm_string_id
 
         self.parameters = [
             # 1. 添加label
@@ -200,11 +224,7 @@ class SystemAlarm(object):
                  'Status': 'UnEdit',
              }
              ),
-            (DisplayAlarmStrings,
-             {
-                 'StringId': self.alarm_alarm_id,
-             }
-             ),
+            
             # 5. 将字符串和label对应起来
             (DisplayLabel,
              {
@@ -260,6 +280,16 @@ class SystemAlarm(object):
              }
              ),
         ]
+
+        if self.alarm_alarm_id:
+            self.parameters.append(
+            (DisplayAlarmStrings,
+             {
+                'AlarmId': self.alarm_alarm_id,
+                'StringId': self.alarm_alarm_string_id,
+             }
+             ),
+            )
 
 
     def add_alarm(self, parameters):

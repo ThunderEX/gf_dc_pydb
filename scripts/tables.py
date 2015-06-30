@@ -524,15 +524,15 @@ class DisplayAlarmStrings(BaseTable):
         self.model = DisplayAlarmStrings_Model()
         super(DisplayAlarmStrings, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('StringId', StringDefines_Model, 'DefineName', 'id')
-        self.get_max_id()
+        #self.set_alarm_id()
 
-    def get_max_id(self):
+    def set_alarm_id(self):
         id_list = []
         r = self.model.select()
         for i in r:
             id_list.append(i.AlarmId)
         debug("Max AlarmId in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
-        self.model.AlarmId = max(id_list) + 1
+        self.model.AlarmId = max(id_list) + 1   #得到最大AlarmId并+1
 
 class DisplayAvailable(BaseTable):
 
@@ -802,6 +802,16 @@ class DisplayText(BaseTable):
                 return
         self.model.save()
         return self.model.id
+
+class DisplayUnitStrings(BaseTable):
+
+    """操作表DisplayUnitStrings"""
+
+    def __init__(self, *args, **kwargs):
+        self.model = DisplayUnitStrings_Model()
+        super(DisplayUnitStrings, self).__init__(self.model, *args, **kwargs)
+        self.convert_foreignkey('UnitType', ErroneousUnitType_Model, 'Name', 'id')
+        self.convert_foreignkey('StringId', StringDefines_Model, 'DefineName', 'id')
 
 class WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay(BaseTable):
 

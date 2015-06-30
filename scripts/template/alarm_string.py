@@ -9,6 +9,7 @@ class AlarmString(object):
     #Alarm
     alarm_define_name = ''
     alarm_string = ''
+    alarm_id = 0
 
 
     def __init__(self):
@@ -41,6 +42,7 @@ class AlarmString(object):
              ),
             (DisplayAlarmStrings,
              {
+                 'AlarmId': self.alarm_id,
                  'StringId': self.alarm_define_name,
              }
              ),
@@ -55,8 +57,15 @@ class AlarmString(object):
             table = para[0]
             kwargs = para[1]
             x = table(**kwargs)
-            x.add()
             if table == DisplayAlarmStrings:
-                comment('新加入AlarmString的AlarmId 为：%d' % (x.model.AlarmId))
+                comment('添加AlarmId：%d' % (x.model.AlarmId))
+                try:
+                    result = x.model.get(AlarmId=x.model.AlarmId) #报错，说明没有
+                    getattr(result, 'AlarmId')
+                    comment('已有AlarmId：%d，不能重复加入' % (x.model.AlarmId))
+                    raise NameError
+                except:
+                    pass
+            x.add()
             rtn.append(x)
         return rtn
