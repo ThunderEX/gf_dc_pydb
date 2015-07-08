@@ -431,7 +431,6 @@ def h2s_display():
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: relay_status_relay_func_dosing_pump ----------'
-    #SP_DDA_dosing_pump_enabled
     t.subject_name =  'relay_status_relay_func_dosing_pump'
     t.subject_type_id = 'BoolDataPoint'
     t.subject_save = '-'
@@ -477,6 +476,15 @@ def h2s_display():
       mpRelayFuncOutput[RELAY_FUNC_DOSING_PUMP].Attach(pSubject);
       break;
             ''')
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与relay_status_relay_func_dosing_pump挂接 ----------'
+    t.subject_name =  'relay_status_relay_func_dosing_pump'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'RELAY_STATUS_RELAY_FUNC_DOSING_PUMP'
+    t.subject_access = 'Write'
+    t.save()
 
 
     t = template('NewString')
@@ -529,10 +537,10 @@ def h2s_display():
     t.save()
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- NonGFDosingPumpCtrl与measured_value_chemical_container挂接 ----------'
+    t.description = '---------- DDACtrl与measured_value_chemical_container挂接 ----------'
     t.subject_name =  'measured_value_chemical_container'
-    t.observer_name = 'dosing_pump_ctrl'
-    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'measured_value_chemical_container'
     t.subject_access = 'Read'
     t.save()
@@ -599,6 +607,15 @@ def h2s_display():
     t.float_quantity_type = 'Q_FLOW'
     t.save()
 
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与ao_dosing_pump_setpoint挂接 ----------'
+    t.subject_name =  'ao_dosing_pump_setpoint'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'AO_DOSING_PUMP_SETPOINT'
+    t.subject_access = 'Write'
+    t.save()
+
     comment("modified:   include/AppTypeDefs.h")
     comment("modified:   AnaOutCtrl/AnaOutCtrl.cpp")
     comment("modified:   display/state/AnalogOutputFunctionState.cpp")
@@ -627,8 +644,8 @@ def h2s_display():
     | Number of overrflows                  6       |
     | Energy                              866kWh    |
 --> | H2S level                            12PPM    |
-    | Chemical remaining                  866l      |
-    | Chemical dosed                      351l      |
+    | Dosing feed tank level             23.1m      |
+    | Chemical total dosed               32.5㎥     |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
@@ -665,8 +682,8 @@ def h2s_display():
     | Number of overrflows                  6       |
     | Energy                              866kWh    |
     | H2S level                            12PPM    |
---> | Chemical remaining                  866l      |
-    | Chemical dosed                      351l      |
+--> | Dosing feed tank level             23.1m      |
+    | Chemical total dosed               32.5㎥     |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
@@ -676,7 +693,6 @@ def h2s_display():
     t.define_name = 'SID_DOSING_FEED_TANK_LEVEL'
     t.string = 'Dosing feed tank level'
     t.listview_id = '1.1 SystemStatus List 1'
-    #TODO
     t.subject_id = 'dosing_feed_tank_level'
     t.quantity_type =  'Q_DEPTH'
     t.number_of_digits = 5
@@ -705,8 +721,8 @@ def h2s_display():
     | Number of overrflows                  6       |
     | Energy                              866kWh    |
     | H2S level                            12PPM    |
-    | Chemical remaining                  866l      |
---> | Chemical dosed                      351l      |
+    | Dosing feed tank level             23.1m      |
+--> | Chemical total dosed               32.5㎥     |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+

@@ -85,7 +85,7 @@ def h2s_factory():
     t.description = '---------- 加GeniConvert: PERCENTAGE_1PPM ----------'
     t.name = 'PERCENTAGE_1PPM'
     t.geni_info = 'COMMON_INFO + COM_INDEX_EXT_PERCENTAGE_1PPM'
-    t.comment = 'Precentage 1ppm'
+    t.comment = 'Percentage 1ppm'
     t.save()
 
     t = template('NewGeniConvert')
@@ -203,7 +203,7 @@ def h2s_factory():
     t.geni_class = 14
     t.geni_id = 190
     t.auto_generate = True
-    t.geni_convert_id = 'Precentage 1ppm'
+    t.geni_convert_id = 'Percentage 1ppm'
     t.save()
 
 
@@ -230,7 +230,7 @@ def h2s_factory():
     t.geni_class = 14
     t.geni_id = 191
     t.auto_generate = True
-    t.geni_convert_id = 'Precentage 1ppm'
+    t.geni_convert_id = 'Percentage 1ppm'
     t.save()
 
     t = template('NewSubject')
@@ -256,7 +256,7 @@ def h2s_factory():
     t.geni_class = 14
     t.geni_id = 192
     t.auto_generate = True
-    t.geni_convert_id = 'Precentage 1ppm'
+    t.geni_convert_id = 'Percentage 1ppm'
     t.save()
 
 
@@ -281,7 +281,7 @@ def h2s_factory():
     t.geni_class = 14
     t.geni_id = 193
     t.auto_generate = True
-    t.geni_convert_id = 'Dim. less with NA'
+    t.geni_convert_id = 'Dim. less with NA'  #TODO not display float in geni tool
     t.save()
 
     t = template('NewSubject')
@@ -299,7 +299,7 @@ def h2s_factory():
     t.float_value = 0.1
     t.float_min = 0
     t.float_max = 999.9
-    t.float_quantity_type = 'Q_HEIGHT'
+    t.float_quantity_type = 'Q_VOLUME'
 
     t.geni_var_name = 'chemical_total_dosed'
     t.geni_class = 14
@@ -313,12 +313,13 @@ def h2s_factory():
     t.description = '---------- 加Subject: set_h2s_level ----------'
     t.subject_name = 'set_h2s_level'
     t.subject_type_id = 'IntDataPoint'
-    t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
+    t.geni_app_if = True
     t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'set_h2s_level'
+    t.subject_access = 'Read/Write'
 
     t.int_value = '0'
     t.int_type = 'U32'
@@ -331,7 +332,7 @@ def h2s_factory():
     t.geni_class = 13
     t.geni_id = 4
     t.auto_generate = True
-    t.geni_convert_id = 'Precentage 1ppm'
+    t.geni_convert_id = 'Percentage 1ppm'
     t.save()
 
 
@@ -386,6 +387,16 @@ def h2s_factory():
     t.auto_generate = True
     t.geni_convert_id = 'Flow 0.1L/H'
     t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与set_dosing_ref挂接 ----------'
+    t.subject_name =  'set_dosing_ref'
+    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'set_dosing_ref'
+    t.subject_access = 'Read/Write'
+    t.save()
+
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: dda_reference，DDA driver和DDACtrl交换数据用----------'
