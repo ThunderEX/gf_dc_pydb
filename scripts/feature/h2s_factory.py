@@ -59,6 +59,15 @@ def h2s_factory():
     t.save()
 
     ######################################### Observer ################################################
+    #需要用到constructor_args的Observer放前面，不然有Bug
+    t = template('NewObserver')
+    t.description = '---------- 加Observer: DDA ----------'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.short_name = 'DDA'
+    t.constructor_args = 'DDA_NO_1'
+    t.save()
+
     t = template('NewObserver')
     t.description = '---------- 加Observer: DDACtrl ----------'
     t.observer_name = 'dda_ctrl'
@@ -73,12 +82,6 @@ def h2s_factory():
     t.short_name = 'DPC'
     t.save()
 
-    t = template('NewObserver')
-    t.description = '---------- 加Observer: DDA ----------'
-    t.observer_name = 'dda'
-    t.observer_type = 'DDA'
-    t.short_name = 'DDA'
-    t.save()
 
     ########################################## GENI Convert ###########################################
     t = template('NewGeniConvert')
@@ -262,7 +265,6 @@ def h2s_factory():
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: dosing_feed_tank_level ----------'
-    #SP_DDAC_CHEMICAL_REMAINING
     t.subject_name = 'dosing_feed_tank_level'
     t.subject_type_id = 'FloatDataPoint'
     t.geni_app_if = True
@@ -272,7 +274,7 @@ def h2s_factory():
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'dosing_feed_tank_level'
 
-    t.float_value = 0.1
+    t.float_value = 0.0
     t.float_min = 0
     t.float_max = 999.9
     t.float_quantity_type = 'Q_DEPTH'
@@ -286,7 +288,6 @@ def h2s_factory():
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: chemical_total_dosed ----------'
-    #SP_DDAC_CHEMICAL_REMAINING
     t.subject_name = 'chemical_total_dosed'
     t.subject_type_id = 'FloatDataPoint'
     t.geni_app_if = True
@@ -296,9 +297,9 @@ def h2s_factory():
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'chemical_total_dosed'
 
-    t.float_value = 0.1
+    t.float_value = 0.0
     t.float_min = 0
-    t.float_max = 999.9
+    t.float_max = 999999.9
     t.float_quantity_type = 'Q_VOLUME'
 
     t.geni_var_name = 'chemical_total_dosed'
@@ -377,7 +378,7 @@ def h2s_factory():
 
     t.float_value = 0
     t.float_min = 0
-    t.float_max = 999
+    t.float_max = 999999
     # TODO set unit
     t.float_quantity_type = 'Q_HEIGHT'
 

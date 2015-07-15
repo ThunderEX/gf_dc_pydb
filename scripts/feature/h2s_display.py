@@ -733,7 +733,6 @@ def h2s_display():
     t.string = 'Chemical total dosed'
     t.listview_id = '1.1 SystemStatus List 1'
     t.subject_id = 'chemical_total_dosed'
-    #TODO 改单位
     t.quantity_type = 'Q_VOLUME'
     t.number_of_digits = 5
     t.save()
@@ -822,7 +821,7 @@ def h2s_display():
     |  Overflow time                     0:00h      |
     |  Number of overflows                  0       |
     |  Total Volume Overrun Cn              0       |
---> |  Total chemical dosed                20㎥     |
+--> |  Chemical total dosed                20㎥     |
     |                                               |
     |Pump 1                                         |
     |  Operating hours                   2:02h      |
@@ -839,8 +838,8 @@ def h2s_display():
     '''
     t.label_name = '4.2.5 AdjustCounters total chemical dosed'
     t.quantity_name = '4.2.5 AdjustCounters total chemical dosed nq'
-    t.define_name = 'SID_CNT_TOTAL_CHEMICAL_DOSED'
-    t.label_string = 'Total chemical dosed'
+    t.define_name = 'SID_CHEMICAL_TOTAL_DOSED'
+    #t.label_string = 'Total chemical dosed'
     t.subject_id = 'chemical_total_dosed'
     t.label_column_index = 7    #replace index 7 with new inserted item
     t.number_of_digits = 5

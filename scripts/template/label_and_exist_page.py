@@ -9,7 +9,7 @@ class LabelAndExistPage(object):
     label_name = ''             #: new label name that added in DisplayComponent.
     label_define_name = ''      #: string define for new label.
     display_id = 0              #: display id of item in DisplayComponent, the page you want go after click the label.
-    listview_id = ''            #: listview id which will include the new label and quantity
+    listview_id = ''            #: listview id which will include the new label
     label_left_margin = 2       #: left margin of label
     label_right_margin = 1      #: right margin of label
 

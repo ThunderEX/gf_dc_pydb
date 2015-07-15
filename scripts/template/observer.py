@@ -9,6 +9,7 @@ class NewObserver(object):
     observer_name = ''           #: new observer name, normally it is the instance of class
     observer_type = ''           #: new observer type, normally it is class name in application
     short_name = ''              #: short name for new observer
+    constructor_args = None
 
     def __init__(self):
         self.parameters = []
@@ -33,7 +34,7 @@ class NewObserver(object):
                  'TaskId': 'LowPrioPeriodicTask',
                  #'TaskOrder'       : None,
                  #'SubjectId'       : None,
-                 #'ConstructorArgs' : None,
+                 'ConstructorArgs' : self.constructor_args,
              }
              ),
         ]

@@ -67,12 +67,12 @@ class BaseTable(object):
     def get_foreignkey_items(self, **kwargs):
         """查找外键，存入字典里"""
         field_types = self.model.get_field_type()
-        foreignkey_items = {}
+        foreignkey_items = []
         for k, v in kwargs.items():
             if hasattr(self.model, k):
                 # 如果类型不同，则提取外键（一般是用描述性字符串代替外键的id）
                 if not isinstance(v, field_types[k]):
-                    foreignkey_items[k] = v
+                    foreignkey_items.append(k)
         return foreignkey_items
 
     def get_max_id(self):
@@ -95,7 +95,7 @@ class BaseTable(object):
         if not hasattr(self.model, attr_name):
             log(("没有Field: %s" % (attr_name)).decode("utf-8"))
             raise NameError
-        if attr_name in self.foreignkey_items.keys() and force is not True:
+        if attr_name in self.foreignkey_items and force is not True:
             r = foreign_model.get(**{foreign_attr_from: getattr(self.model, attr_name)})
             value = getattr(r, foreign_attr_to)
             debug(("转换外键%s = %s" % (attr_name, str(value))).decode("utf-8"))
@@ -315,10 +315,21 @@ class Observer(BaseTable):
     """操作表Observer"""
 
     def __init__(self, *args, **kwargs):
+        #TODO Bug！ 有的Observer用到ConstructorArgs，有的用不到，但由于delete_attr引起的bug，会导致前面用不到的Observer把ConstructorArgs删掉了，后面加不上去。这个在peewee的meta里，不懂怎么处理的。
+        #现在只能让用到ConstructorArgs的Observer放在前面，用不到的放在后面
         self.model = Observer_Model()
-        super(Observer, self).__init__(self.model, *args, **kwargs)
+        #super(Observer, self).__init__(self.model, *args, **kwargs)
+        self.fill_fields(**kwargs)
+        self.foreignkey_items = ['TaskId']
+        if hasattr(self.model, 'ConstructorArgs') and getattr(self.model, 'ConstructorArgs') != None:
+            #log(self.model._meta.get_field_by_name('ConstructorArgs'))
+            saved_constructor_args = self.model._meta.get_field_by_name('ConstructorArgs')
+        default_list = ['Comment', 'SubjectId', 'ConstructorArgs']
+        if len(default_list) != 0:
+            self.delete_attr(default_list)
+        if hasattr(self.model, 'ConstructorArgs') and getattr(self.model, 'ConstructorArgs') != None:
+            self.model._meta.fields['ConstructorArgs'] = saved_constructor_args
         self.convert_foreignkey('TaskId', Task_Model, 'Name', 'id')
-        self.delete_attr(['Comment', 'SubjectId', 'ConstructorArgs'])
 
 
 class ObserverSubjects(BaseTable):

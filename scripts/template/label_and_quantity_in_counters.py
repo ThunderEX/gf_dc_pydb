@@ -21,7 +21,33 @@ class LabelAndQuantityInCounters(object):
         self.description = 'No description'
 
     def update_parameters(self):
-        self.parameters = [
+        self.parameters = []
+        if self.label_string:
+            self.parameters.extend([
+            # 3. 加字符串定义
+            (StringDefines,
+             {
+                 'DefineName': self.define_name,
+                 'TypeId': 'Value type',
+             }
+             ),
+            # 4. label加相应的字符串
+            (Strings,
+             {
+                 'String': self.label_string,
+                 'LanguageId': 'DEV_LANGUAGE',
+                 'Status': 'UnEdit',
+             }
+             ),
+            (Strings,
+             {
+                 'String': self.label_string,
+                 'LanguageId': 'UK_LANGUAGE',
+                 'Status': 'UnEdit',
+             }
+             ),
+            ])
+        self.parameters.extend([
             # 1. 添加label
             (DisplayComponent,
              {
@@ -56,28 +82,7 @@ class LabelAndQuantityInCounters(object):
                  'Transparent': False,
              }
              ),
-            # 3. 加字符串定义
-            (StringDefines,
-             {
-                 'DefineName': self.define_name,
-                 'TypeId': 'Value type',
-             }
-             ),
-            # 4. label加相应的字符串
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'DEV_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
+            
             # 5. 将字符串和label对应起来
             (DisplayLabel,
              {
@@ -145,7 +150,7 @@ class LabelAndQuantityInCounters(object):
                  'ColumnIndex': 2,
              }
              ),
-        ]
+        ])
 
     def save(self):
         comment(self.description)

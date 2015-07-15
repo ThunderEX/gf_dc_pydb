@@ -25,7 +25,7 @@ def copy_database():
         raise NameError
 
 
-def run_generators():
+def run_generators(generators=['Factory', 'Langguage', 'WebPage']):
 
     ''' Run factory, displayfactory, language generators '''
 
@@ -34,15 +34,18 @@ def run_generators():
     LangGenerator = r'LangGenerator.exe  -generate'
     WebPageGenerator = r'WebPageGenerator.exe  -generate'
     os.chdir(current_dir)
-    os.chdir(r'..\cu3x1App_SRC\Control\FactoryGenerator')
-    subprocess.call(FactoryGenerator)
-    os.chdir(current_dir)
-    os.chdir(r'..\cu3x1App_SRC\Control\LangGenerator')
-    subprocess.call(LangGenerator)
-    os.chdir(current_dir)
-    os.chdir(r'..\cu3x1App_SRC\Control\WebPageGenerator')
-    subprocess.call(WebPageGenerator)
-    os.chdir(current_dir)
+    if 'Factory' in generators:
+        os.chdir(r'..\cu3x1App_SRC\Control\FactoryGenerator')
+        subprocess.call(FactoryGenerator)
+        os.chdir(current_dir)
+    if 'Langguage' in generators:
+        os.chdir(r'..\cu3x1App_SRC\Control\LangGenerator')
+        subprocess.call(LangGenerator)
+        os.chdir(current_dir)
+    if 'WebPage' in generators:
+        os.chdir(r'..\cu3x1App_SRC\Control\WebPageGenerator')
+        subprocess.call(WebPageGenerator)
+        os.chdir(current_dir)
 
 
 def ghs_build(opt=''):
@@ -86,3 +89,28 @@ def vc_build():
     elapsed_time = time.time() - start_time
     log('Elapsed time for building VC project: %s' % (elapsed_time))
 
+def generate_firmware():
+
+    source = r'..\cu3x1App_SRC\Control\source\exe\CU362.bin'
+    dest = r'c:\Local\Workspace\FirmwareGenerator\36x_DC\input\CU362.bin'
+    try:
+        shutil.copy(source, dest)
+        debug('copy firmware done')
+    except:
+        raise NameError
+
+    generator_dir = r'c:\Local\Workspace\FirmwareGenerator'
+    os.chdir(generator_dir)
+    try:
+        subprocess.call('Generate DC_362 firmware.bat')
+    except:
+        raise NameError
+
+    dest = r'c:\local\Work\tools\tftpd64\MPC\cu362_firmware.bin'
+    source = r'c:\Local\Workspace\FirmwareGenerator\36x_DC\output\cu362_firmware.bin'
+    
+    try:
+        shutil.copy(source, dest)
+        debug('copy firmware to tftp done')
+    except:
+        raise NameError
