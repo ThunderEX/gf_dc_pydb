@@ -44,6 +44,12 @@ class NewSubject(object):
     float_max = 99999999                    #: maximum value
     float_quantity_type = 'Q_NO_UNIT'         #: quantity type for this float data
 
+    #VectorDataPoint
+    vector_type = ''
+    vector_initial_size = 0
+    vector_max_size = 0
+    vector_default_value = '-1'
+
     #EnumDataPoint
     enum_enum_type_name = ''
     enum_value = ''
@@ -125,6 +131,18 @@ class NewSubject(object):
                      'Min': self.float_min,
                      'Max': self.float_max,
                      'QuantityType': self.float_quantity_type,
+                 }
+                 ),
+            )
+        elif self.subject_type_id == 'VectorDataPoint':
+            self.parameters.append(
+                (VectorDataPoint,
+                 {
+                     'id': self.subject_name,
+                     'Type': self.vector_type,
+                     'InitialSize': self.vector_initial_size,
+                     'MaxSize': self.vector_max_size,
+                     'DefaultValue': self.vector_default_value,
                  }
                  ),
             )

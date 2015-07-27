@@ -106,4 +106,4 @@ def query_alarm():
 
 if __name__ == '__main__':
     #query_alarm()
-    query_by_subject_relation('SP_RFH_RELAY_FUNC_VFD_4_REVERSE')
+    query_by_subject_relation('SP_MP204_MODULE_ALARM_RESET_EVENT')

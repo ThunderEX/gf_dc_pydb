@@ -212,7 +212,6 @@ def h2s_factory():
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: h2s_level_today ----------'
-    #SP_DDAC_H2S_LEVEL_TODAY
     t.subject_name = 'h2s_level_today'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
@@ -238,7 +237,6 @@ def h2s_factory():
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: h2s_level_yesterday ----------'
-    #SP_DDAC_H2S_LEVEL_YESTERDAY
     t.subject_name = 'h2s_level_yesterday'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
@@ -283,30 +281,163 @@ def h2s_factory():
     t.geni_class = 14
     t.geni_id = 193
     t.auto_generate = True
-    t.geni_convert_id = 'Dim. less with NA'  #TODO not display float in geni tool
+    t.geni_convert_id = 'Dim. less with NA'
     t.save()
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: chemical_total_dosed ----------'
     t.subject_name = 'chemical_total_dosed'
     t.subject_type_id = 'FloatDataPoint'
-    t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
-    t.observer_name = 'dda_ctrl'
-    t.observer_type = 'DDACtrl'
-    t.subject_relation_name = 'chemical_total_dosed'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'CHEMICAL_TOTAL_DOSED'
 
     t.float_value = 0.0
     t.float_min = 0
-    t.float_max = 999999.9
+    #t.float_max = 999999.9
+    t.float_max = 999.999
+    t.float_quantity_type = 'Q_VOLUME'
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: running_dosing_volume ----------'
+    t.subject_name = 'running_dosing_volume'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'RUNNING_DOSING_VOLUME'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '0xFFFFFFFF'
+    t.int_quantity_type = 'Q_VOLUME'
+    t.int_verified = False
+    t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- LoggingCtrl与running_dosing_volume挂接 ----------'
+    t.subject_name =  'running_dosing_volume'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_relation_name = 'RUNNING_DOSING_VOLUME'
+    t.subject_access = 'Read/Write'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dosing_volume_total_log ----------'
+    t.subject_name = 'dosing_volume_total_log'
+    t.subject_type_id = 'FloatDataPoint'
+    t.geni_app_if = True
+    t.subject_save = 'Value'
+    t.flash_block = 'Log'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'DOSING_VOLUME_TOTAL_LOG'
+
+    t.float_value = 0.0
+    t.float_min = 0.0
+    t.float_max = 999999.9999
     t.float_quantity_type = 'Q_VOLUME'
 
-    t.geni_var_name = 'chemical_total_dosed'
+    t.geni_var_name = 'dosing_volume_total_log'
     t.geni_class = 14
     t.geni_id = 194
     t.auto_generate = True
     t.geni_convert_id = 'Volume 1mL'
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dosing_volume_today_log ----------'
+    t.subject_name = 'dosing_volume_today_log'
+    t.subject_type_id = 'FloatDataPoint'
+    t.geni_app_if = True
+    t.subject_save = 'Value'
+    t.flash_block = 'Log'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'DOSING_VOLUME_TODAY_LOG'
+
+    t.float_value = 0.0
+    t.float_min = 0.0
+    t.float_max = 999999.9999
+    t.float_quantity_type = 'Q_VOLUME'
+
+    t.geni_var_name = 'dosing_volume_today_log'
+    t.geni_class = 14
+    t.geni_id = 195
+    t.auto_generate = True
+    t.geni_convert_id = 'Volume 1mL'
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dosing_volume_yesterday_log ----------'
+    t.subject_name = 'dosing_volume_yesterday_log'
+    t.subject_type_id = 'FloatDataPoint'
+    t.geni_app_if = True
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'DOSING_VOLUME_YESTERDAY_LOG'
+
+    t.float_value = 0.0
+    t.float_min = 0.0
+    t.float_max = 999999.9999
+    t.float_quantity_type = 'Q_VOLUME'
+
+    t.geni_var_name = 'dosing_volume_yesterday_log'
+    t.geni_class = 14
+    t.geni_id = 196
+    t.auto_generate = True
+    t.geni_convert_id = 'Volume 1mL'
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dosing_volume_1h_acc ----------'
+    t.subject_name = 'dosing_volume_1h_acc'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Log'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'DOSING_VOLUME_1H_ACC'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '10000000'
+    t.int_quantity_type = 'Q_VOLUME'
+    t.int_verified = False
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dosing_volume_72h_log ----------'
+    t.subject_name = 'dosing_volume_72h_log'
+    t.subject_type_id = 'VectorDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'DOSING_VOLUME_72H_LOG'
+
+    t.vector_type = 'I32'
+    t.vector_initial_size = 72
+    t.vector_max_size = 72
+    t.vector_default_value = '-1'
     t.save()
 
 
@@ -379,7 +510,6 @@ def h2s_factory():
     t.float_value = 0
     t.float_min = 0
     t.float_max = 999999
-    # TODO set unit
     t.float_quantity_type = 'Q_HEIGHT'
 
     t.geni_var_name = 'set_dosing_ref'
@@ -414,7 +544,6 @@ def h2s_factory():
     t.int_type = 'U32'
     t.int_min = '0'
     t.int_max = '99999'
-    # TODO set unit
     t.int_quantity_type = 'Q_HEIGHT'
     t.int_verified = False
     t.save()

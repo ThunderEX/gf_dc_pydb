@@ -660,7 +660,7 @@ def h2s_display():
     t.save()
 
     t = template('LabelAndQuantity')
-    t.description = '''---------- 1.1 - System 页面里新加一行label:Chemical remaining和quantity:l ----------
+    t.description = '''---------- 1.1 - System 页面里新加一行label:Dosing feed tank level ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
@@ -699,7 +699,7 @@ def h2s_display():
     t.save()
 
     t = template('LabelAndQuantity')
-    t.description = '''---------- 1.1 - System 页面里新加一行label:Chemical dosed和quantity:l ----------
+    t.description = '''---------- 1.1 - System 页面里新加一行label:Chemical dosed----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
@@ -734,7 +734,7 @@ def h2s_display():
     t.listview_id = '1.1 SystemStatus List 1'
     t.subject_id = 'chemical_total_dosed'
     t.quantity_type = 'Q_VOLUME'
-    t.number_of_digits = 5
+    t.number_of_digits = 7
     t.save()
 
     t = template('LabelBlank')
@@ -842,6 +842,7 @@ def h2s_display():
     #t.label_string = 'Total chemical dosed'
     t.subject_id = 'chemical_total_dosed'
     t.label_column_index = 7    #replace index 7 with new inserted item
+    t.quantity_type = 'Q_VOLUME'
     t.number_of_digits = 5
     t.save()
 

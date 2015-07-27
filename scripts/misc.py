@@ -70,6 +70,9 @@ def ghs_build(opt=''):
     os.chdir(current_dir)
     elapsed_time = time.time() - start_time
     log('Elapsed time for building Multi2000 project: %s' % (elapsed_time))
+    if result != 0:
+        log('编译错误')
+        raise NameError
 
 
 def vc_build():
