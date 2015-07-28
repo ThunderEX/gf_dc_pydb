@@ -210,16 +210,26 @@ def h2s_factory():
     t.save()
 
 
+    t = template('ObserverLinkSubject')
+    t.description = '---------- LoggingCtrl与h2s_level_act挂接 ----------'
+    t.subject_name =  'h2s_level_act'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_relation_name = 'H2S_LEVEL_ACT'
+    t.subject_access = 'Read/Write'
+    t.save()
+
+
     t = template('NewSubject')
-    t.description = '---------- 加Subject: h2s_level_today ----------'
-    t.subject_name = 'h2s_level_today'
+    t.description = '---------- 加Subject: h2s_level_today_log ----------'
+    t.subject_name = 'h2s_level_today_log'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
-    t.observer_name = 'dda_ctrl'
-    t.observer_type = 'DDACtrl'
-    t.subject_relation_name = 'h2s_level_today'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_relation_name = 'H2S_LEVEL_TODAY_LOG'
 
     t.int_value = '0'
     t.int_type = 'U32'
@@ -228,7 +238,7 @@ def h2s_factory():
     t.int_quantity_type = 'Q_PARTS_PER_MILLION'
     t.int_verified = False
 
-    t.geni_var_name = 'h2s_level_today'
+    t.geni_var_name = 'h2s_level_today_log'
     t.geni_class = 14
     t.geni_id = 191
     t.auto_generate = True
@@ -236,15 +246,15 @@ def h2s_factory():
     t.save()
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject: h2s_level_yesterday ----------'
-    t.subject_name = 'h2s_level_yesterday'
+    t.description = '---------- 加Subject: h2s_level_yesterday_log ----------'
+    t.subject_name = 'h2s_level_yesterday_log'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
     t.subject_save = '-'
     t.flash_block = '-'
-    t.observer_name = 'dda_ctrl'
-    t.observer_type = 'DDACtrl'
-    t.subject_relation_name = 'h2s_level_yesterday'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_relation_name = 'H2S_LEVEL_YESTERDAY_LOG'
 
     t.int_value = '0'
     t.int_type = 'U32'
@@ -253,11 +263,29 @@ def h2s_factory():
     t.int_quantity_type = 'Q_PARTS_PER_MILLION'
     t.int_verified = False
 
-    t.geni_var_name = 'h2s_level_yesterday'
+    t.geni_var_name = 'h2s_level_yesterday_log'
     t.geni_class = 14
     t.geni_id = 192
     t.auto_generate = True
     t.geni_convert_id = 'Percentage 1ppm'
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: h2s_level_72h_log ----------'
+    t.subject_name = 'h2s_level_72h_log'
+    t.subject_type_id = 'VectorDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'logging_ctrl'
+    t.observer_type = 'LoggingCtrl'
+    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'H2S_LEVEL_72H_LOG'
+
+    t.vector_type = 'I32'
+    t.vector_initial_size = 72
+    t.vector_max_size = 72
+    t.vector_default_value = '-1'
     t.save()
 
 
@@ -285,7 +313,7 @@ def h2s_factory():
     t.save()
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject: chemical_total_dosed ----------'
+    t.description = '---------- 加Subject: chemical_total_dosed, 显示在HMI上 ----------'
     t.subject_name = 'chemical_total_dosed'
     t.subject_type_id = 'FloatDataPoint'
     t.subject_save = '-'
@@ -442,6 +470,31 @@ def h2s_factory():
 
 
     t = template('NewSubject')
+    t.description = '---------- 加Subject: dosing_ref_act ----------'
+    t.subject_name = 'dosing_ref_act'
+    t.subject_type_id = 'FloatDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.geni_app_if = True
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'dosing_ref_act'
+    t.subject_access = 'Write'
+
+    t.float_value = 0
+    t.float_min = 0
+    t.float_max = 999999
+    t.float_quantity_type = 'Q_VOLUME'
+
+    t.geni_var_name = 'dosing_ref_act'
+    t.geni_class = 14
+    t.geni_id = 197
+    t.auto_generate = True
+    t.geni_convert_id = 'Flow 0.1L/H'
+    t.save()
+
+
+    t = template('NewSubject')
     t.description = '---------- 加Subject: set_h2s_level ----------'
     t.subject_name = 'set_h2s_level'
     t.subject_type_id = 'IntDataPoint'
@@ -510,7 +563,7 @@ def h2s_factory():
     t.float_value = 0
     t.float_min = 0
     t.float_max = 999999
-    t.float_quantity_type = 'Q_HEIGHT'
+    t.float_quantity_type = 'Q_VOLUME'
 
     t.geni_var_name = 'set_dosing_ref'
     t.geni_class = 13
