@@ -309,7 +309,7 @@ def h2s_factory():
     t.geni_class = 14
     t.geni_id = 193
     t.auto_generate = True
-    t.geni_convert_id = 'Dim. less with NA'
+    t.geni_convert_id = 'Head/Distance, 0.01 m'
     t.save()
 
     t = template('NewSubject')
