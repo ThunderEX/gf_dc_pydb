@@ -32,32 +32,7 @@ def h2s_factory():
     t.int_verified = False
     t.save()
 
-    t = template('NewQuantity')
-    t.description = '---------- 添加quantity:l ----------'
-    t.type_name = 'Q_LEVEL'
-    t.define_name = 'SID_l'
-    #t.string = 'l'
-    t.save()
-
-    t = template('NewSubject')
-    t.description = '---------- 为l加Subject: unit_level_actual ----------'
-    t.subject_name = 'unit_level_actual'
-    t.subject_type_id = 'IntDataPoint'
-    t.subject_save = 'Value'
-    t.flash_block = 'Config'
-    t.observer_name = 'units'
-    t.observer_type = 'MpcUnits'
-    t.subject_access = 'Read/Write'
-    t.subject_relation_name = 'Q_LEVEL'
-
-    t.int_value = '0'
-    t.int_type = 'I32'
-    t.int_min = '0'
-    t.int_max = '10'
-    t.int_quantity_type = 'Q_NO_UNIT'
-    t.int_verified = False
-    t.save()
-
+    
     ######################################### Observer ################################################
     #需要用到constructor_args的Observer放前面，不然有Bug
     t = template('NewObserver')
@@ -189,8 +164,8 @@ def h2s_factory():
     t.subject_name = 'h2s_level_act'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
-    t.subject_save = '-'
-    t.flash_block = '-'
+    t.subject_save = 'Value'
+    t.flash_block = 'Log'
     t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'h2s_level_act'
@@ -202,7 +177,7 @@ def h2s_factory():
     t.int_quantity_type = 'Q_PARTS_PER_MILLION'
     t.int_verified = False
 
-    t.geni_var_name = 'h2s_level'
+    t.geni_var_name = 'h2s_level_act'
     t.geni_class = 14
     t.geni_id = 190
     t.auto_generate = True
@@ -225,8 +200,8 @@ def h2s_factory():
     t.subject_name = 'h2s_level_today_log'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
-    t.subject_save = '-'
-    t.flash_block = '-'
+    t.subject_save = 'Value'
+    t.flash_block = 'Log'
     t.observer_name = 'logging_ctrl'
     t.observer_type = 'LoggingCtrl'
     t.subject_relation_name = 'H2S_LEVEL_TODAY_LOG'
@@ -250,8 +225,8 @@ def h2s_factory():
     t.subject_name = 'h2s_level_yesterday_log'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
-    t.subject_save = '-'
-    t.flash_block = '-'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
     t.observer_name = 'logging_ctrl'
     t.observer_type = 'LoggingCtrl'
     t.subject_relation_name = 'H2S_LEVEL_YESTERDAY_LOG'

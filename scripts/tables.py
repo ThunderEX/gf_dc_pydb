@@ -46,7 +46,7 @@ class BaseTable(object):
             if k not in kwargs.keys() and hasattr(self.model, k):
                 setattr(self.model, k, v)
 
-    def delete_attr(self, attr_list=['Comment']):
+    def delete_attr(self, attr_list=None):
         '''
             删除特定的attribute
             如果MSSQL返回错误
@@ -58,6 +58,8 @@ class BaseTable(object):
         :return:
         '''
         # TODO Bug:如果连续使用一张table，第二次就没有Comment这个field了
+        if attr_list is None:
+            attr_list = ['Comment']
         for attr in attr_list:
             if hasattr(self.model, attr) and getattr(self.model, attr) == None:
                 # print self.model._meta.fields[attr]
@@ -76,10 +78,8 @@ class BaseTable(object):
         return foreignkey_items
 
     def get_max_id(self):
-        id_list = []
         r = self.model.select()
-        for i in r:
-            id_list.append(i.id)
+        id_list = [i.id for i in r]
         debug("Max id in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
         self.model.id = max(id_list) + 1
 
@@ -125,10 +125,7 @@ class BaseTable(object):
             results = self.model.select()
         if results:
             for result in results:
-                olist = []
-                for field in field_names:
-                    #olist.append(str(getattr(result, field)))
-                    olist.append(getattr(result, field))
+                olist = [getattr(result, field) for field in field_names]
                 table.add_row(olist)
         if not suppress:
             log(table)
@@ -366,9 +363,7 @@ class QuantityType(BaseTable):
 
     def get_max_id(self):
         r = self.model.select()
-        id_list = []
-        for i in r:
-            id_list.append(i.id)
+        id_list = [i.id for i in r]
         id_list.sort()
         # 最后一个是Q_LAST_UNIT，100，要从倒数第二个+1
         self.model.id = id_list[-2] + 1
@@ -538,10 +533,8 @@ class DisplayAlarmStrings(BaseTable):
         #self.set_alarm_id()
 
     def set_alarm_id(self):
-        id_list = []
         r = self.model.select()
-        for i in r:
-            id_list.append(i.AlarmId)
+        id_list = [i.AlarmId for i in r]
         debug("Max AlarmId in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
         self.model.AlarmId = max(id_list) + 1   #得到最大AlarmId并+1
 
@@ -670,9 +663,7 @@ class DisplayListViewItem(BaseTable):
     def get_max_id(self):
         # 找出同一个listview下的item有多少个，选出最大的index
         r = DisplayListViewItem_Model.select().where(ListViewId=self.model.ListViewId)
-        idx_list = []
-        for i in r:
-            idx_list.append(i.Index)
+        idx_list = [i.Index for i in r]
         if len(idx_list):
             max_idx = max(idx_list)
             debug("max index in DisplayListViewItem table and id=%d is %d" % (self.model.ListViewId, max_idx))
