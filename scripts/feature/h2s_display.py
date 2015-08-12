@@ -192,7 +192,7 @@ def h2s_display():
     +-----------------------------------------------+
     '''
     t.define_name = 'SID_ALARM_DOSING_PUMP'
-    t.string_name = 'Dosing pump alarm'
+    t.string_name = 'Dosing pump not ready (102)'
     t.save()
 
     t = template('SystemAlarm')
@@ -255,7 +255,7 @@ def h2s_display():
     t.alarm_geni_app_if = False
     t.alarm_subject_save = '-'
     t.alarm_flash_block = '-'
-    t.alarm_observer_name = 'dosing_pump_ctrl'
+    t.alarm_observer_name = 'nongf_dosing_pump_ctrl'
     t.alarm_observer_type = 'NonGFDosingPumpCtrl'
     t.alarm_subject_relation_name = 'sys_alarm_dosing_pump_alarm_obj'
 
@@ -263,7 +263,7 @@ def h2s_display():
     t.alarm_alarm_config2_id = 'dummy_alarm_conf'
     t.alarm_erroneous_unit_type_id = 'SYSTEM'
     t.alarm_erroneous_unit_number = 0
-    t.alarm_alarm_id = 999      #TODO 不属于system alarm，还非要给个alarm id, 那应该等于多少？？
+    t.alarm_alarm_id = 102
     t.alarm_alarm_string_id = 'SID_ALARM_DOSING_PUMP'      #不同于DDA的Alarm，这里只有一个Alarm，所以新加一个字串，固定显示
 
     comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DOSING_PUMP')
@@ -368,19 +368,19 @@ def h2s_display():
 
     t = template('NewEnumData')
     t.description = '---------- 加Subject, EnumDataPoint: dig_in_func_state_dosing_pump ----------'
-    t.enum_subject_names = ['dig_in_func_state_dosing_pump']
+    t.enum_subject_name = 'dig_in_func_state_dosing_pump'
     t.enum_geni_app_if = False
     t.enum_subject_save = '-'
     t.enum_flash_block = '-'
     t.enum_observer_name = 'digital_input_function_handler'
     t.enum_observer_type = 'DiFuncHandler'
-    t.enum_subject_relation_names = ['dig_in_func_state_dosing_pump']
+    t.enum_subject_relation_name = 'dig_in_func_state_dosing_pump'
     t.enum_subject_access = 'Read/Write'
 
     t.enum_type_name = 'DIGITAL_INPUT_FUNC_STATE'
-    t.enum_values = ['NOT_CONFIGURED']
+    t.enum_value = 'NOT_CONFIGURED'
     t.save()
-    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, str(t.enum_subject_names).upper()))
+    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, t.enum_subject_name.upper()))
     comment('modified:   application/display/DigitalInputConfListView.cpp')
     comment('modified:   application/display/state/DigitalInputFunctionState.cpp')
     comment('modified:   application/driver/DiFuncHandler.cpp')
@@ -389,7 +389,7 @@ def h2s_display():
     t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与dig_in_func_state_dosing_pump挂接 ----------'
     t.subject_name =  'dig_in_func_state_dosing_pump'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
     t.subject_relation_name = 'DOSING_PUMP_DIG_IN_REQUEST'
     t.subject_access = 'Read'
@@ -480,7 +480,7 @@ def h2s_display():
     t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与relay_status_relay_func_dosing_pump挂接 ----------'
     t.subject_name =  'relay_status_relay_func_dosing_pump'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
     t.subject_relation_name = 'RELAY_STATUS_RELAY_FUNC_DOSING_PUMP'
     t.subject_access = 'Write'
@@ -610,11 +610,26 @@ def h2s_display():
     t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与ao_dosing_pump_setpoint挂接 ----------'
     t.subject_name =  'ao_dosing_pump_setpoint'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
     t.subject_relation_name = 'AO_DOSING_PUMP_SETPOINT'
     t.subject_access = 'Write'
     t.save()
+
+    #ao_dosing_pump_setpoint需要小数位，而原来为整数位，需要处理一下，并由FloatToString里对小数位的处理方法，在AnaOutCtrl里修改Min，Max的值
+    table = DisplayNumberQuantity()
+    table.update(id=5159, NumberOfDigits=5)    #4.4.3.1 AnalogOutputSetup min NQ
+    table.update(id=5161, NumberOfDigits=5)    #4.4.3.1 AnalogOutputSetup max NQ
+    #同时，1.10.3 AOStatus里也要显示相应的小数位
+    table.update(id=5051, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-41 NQ
+    table.update(id=5056, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-41 NQ
+    table.update(id=5061, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-41 NQ
+    table.update(id=5066, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-42 NQ
+    table.update(id=5071, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-42 NQ
+    table.update(id=5076, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-42 NQ
+    table.update(id=5081, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-43 NQ
+    table.update(id=5086, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-43 NQ
+    table.update(id=5091, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-43 NQ
 
     comment("modified:   include/AppTypeDefs.h")
     comment("modified:   AnaOutCtrl/AnaOutCtrl.cpp")
@@ -843,7 +858,7 @@ def h2s_display():
     t.subject_id = 'chemical_total_dosed'
     t.label_column_index = 7    #replace index 7 with new inserted item
     t.quantity_type = 'Q_VOLUME'
-    t.number_of_digits = 5
+    t.number_of_digits = 7
     t.save()
 
 

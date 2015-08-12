@@ -429,8 +429,9 @@ class InsertQuery(BaseQuery):
             # string是MSSQL保留字，会报语法错误，需要用[]包起来
             if k.lower() in ['string', 'value']:
                 k = "[" + k + "]"
-            cols.append(k)
-            vals.append(str(field.lookup_value(None, v)))
+            if v not in ['', "", None]:
+                cols.append(k)
+                vals.append(str(field.lookup_value(None, v)))
 
         return cols, vals
 

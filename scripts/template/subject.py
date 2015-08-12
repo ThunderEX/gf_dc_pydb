@@ -24,6 +24,7 @@ class NewSubject(object):
     geni_id = 0                             #: geni id
     geni_convert_id = 'Dim. less with NA'   #: geni convert id, defined in GeniConvert table
     auto_generate = True                    #: auto generate geni data for this subject
+    geni_comment = ''
 
     ''' different attributes according to different subject type '''
 
@@ -233,7 +234,7 @@ class NewSubject(object):
                      'SubjectId': self.subject_name,
                      'GeniConvertId': self.geni_convert_id,
                      'AutoGenerate': self.auto_generate,
-                     #'Comment': self.geni_comment,
+                     'Comment': self.geni_comment,
                  }
                  ),
             )

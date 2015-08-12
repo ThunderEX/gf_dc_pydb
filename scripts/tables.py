@@ -21,7 +21,7 @@ class BaseTable(object):
         self.model = model
         self.fill_fields(**kwargs)
         self.foreignkey_items = self.get_foreignkey_items(**kwargs)
-        self.delete_attr()
+        #self.delete_attr()
 
     def fill_fields(self, **kwargs):
         '''
@@ -91,6 +91,7 @@ class BaseTable(object):
         :param foreign_model: 关联表
         :param foreign_attr_from: 关联表搜索的field
         :param foreign_attr_to: 得到的关联表field
+        :force 强制转换外键，不论改键是不是在foreignkey_items里
         '''
         if not hasattr(self.model, attr_name):
             log(("没有Field: %s" % (attr_name)).decode("utf-8"))

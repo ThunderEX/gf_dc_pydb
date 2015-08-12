@@ -52,7 +52,7 @@ def h2s_factory():
 
     t = template('NewObserver')
     t.description = '---------- 加Observer: NonGFDosingPumpCtrl ----------'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
     t.short_name = 'DPC'
     t.save()
@@ -98,7 +98,7 @@ def h2s_factory():
     t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_installed挂接 ----------'
     t.subject_name =  'dosing_pump_installed'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
     t.subject_relation_name = 'dosing_pump_installed'
     t.subject_access = 'Read/Write'
@@ -129,34 +129,80 @@ def h2s_factory():
 
 
     t = template('NewEnumData')
-    t.description = '---------- 加Subject, EnumDataPoint: dosing_pump_type_dda, dosing_pump_type_analog ----------'
-    #SP_DDAC_DOSING_PUMP_TYPE_DDA, SP_DDAC_DOSING_PUMP_TYPE_ANALOG
-    #TODO 确认到底需要定义几个EnumDataPoint
-    #t.enum_subject_names = ['dosing_pump_type_dda', 'dosing_pump_type_analog']
-    t.enum_subject_names = ['dosing_pump_type']
-    t.enum_geni_app_if = False
+    t.description = '---------- 加Subject, EnumDataPoint: dosing_pump_type ----------'
+    t.enum_subject_name = 'dosing_pump_type'
+    t.enum_geni_app_if = True
     t.enum_subject_save = 'Value'
     t.enum_flash_block = 'Config'
     t.enum_observer_name = 'dda_ctrl'
     t.enum_observer_type = 'DDACtrl'
-    t.enum_subject_relation_names = ['dosing_pump_type']
+    t.enum_subject_relation_name = 'dosing_pump_type'
     t.enum_subject_access = 'Read/Write'
-
     t.enum_type_name = 'DOSING_PUMP_TYPE'
-    t.enum_values = ['DDA']
+    t.enum_value = 'DDA'
 
+    t.enum_geni_var_name = 'pit_pump_conn_type'
+    t.enum_geni_class = 11
+    t.enum_geni_id = 35
+    t.enum_auto_generate = False
+    t.enum_geni_convert_id = 'Bits without NA'
+    t.enum_geni_comment = 'pit_pump_conn_type'
     t.save()
-    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, str(t.enum_subject_names).upper()))
+    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, t.enum_subject_name.upper()))
 
     t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_type挂接 ----------'
     t.subject_name =  'dosing_pump_type'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
     t.subject_relation_name = 'dosing_pump_type'
     t.subject_access = 'Read/Write'
     t.save()
 
+
+    t = template('NewEnumData')
+    t.description = '---------- 加Subject, EnumDataPoint: dosing_pump_operating_mode ----------'
+    t.enum_subject_name = 'dosing_pump_operating_mode'
+    t.enum_geni_app_if = True
+    t.enum_subject_save = '-'
+    t.enum_flash_block = '-'
+    t.enum_observer_name = 'dda'
+    t.enum_observer_type = 'DDA'
+    t.enum_subject_relation_name = 'OPERATION_MODE_DOSING_PUMP'
+    t.enum_subject_access = 'Write'
+    t.enum_type_name = 'ACTUAL_OPERATION_MODE'
+    t.enum_value = 'NOT_INSTALLED'
+
+    t.enum_geni_var_name = 'pit_pump_mode'
+    t.enum_geni_class = 11
+    t.enum_geni_id = 32
+    t.enum_auto_generate = False
+    t.enum_geni_convert_id = 'Bits without NA'
+    t.enum_geni_comment = 'pit_pump_mode'
+    t.save()
+
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_operating_mode挂接 ----------'
+    t.subject_name =  'dosing_pump_operating_mode'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'OPERATION_MODE_DOSING_PUMP'
+    t.subject_access = 'Write'
+    t.save()
+
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_operating_mode挂接 ----------'
+    t.subject_name =  'dosing_pump_operating_mode'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'OPERATION_MODE_DOSING_PUMP'
+    t.subject_access = 'Write'
+    t.save()
+
+
+    #--------------------------------------------------------------------------------------------------------#
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: h2s_level_act ----------'
@@ -304,6 +350,15 @@ def h2s_factory():
     t.float_quantity_type = 'Q_VOLUME'
     t.save()
 
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与chemical_total_dosed挂接 ----------'
+    t.subject_name =  'chemical_total_dosed'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'CHEMICAL_TOTAL_DOSED'
+    t.subject_access = 'Read/Write'
+    t.save()
+
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: running_dosing_volume ----------'
@@ -324,6 +379,15 @@ def h2s_factory():
     t.save()
 
     t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与running_dosing_volume挂接 ----------'
+    t.subject_name =  'running_dosing_volume'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'RUNNING_DOSING_VOLUME'
+    t.subject_access = 'Read/Write'
+    t.save()
+
+    t = template('ObserverLinkSubject')
     t.description = '---------- LoggingCtrl与running_dosing_volume挂接 ----------'
     t.subject_name =  'running_dosing_volume'
     t.observer_name = 'logging_ctrl'
@@ -338,7 +402,7 @@ def h2s_factory():
     t.subject_type_id = 'FloatDataPoint'
     t.geni_app_if = True
     t.subject_save = 'Value'
-    t.flash_block = 'Log'
+    t.flash_block = 'Config'
     t.observer_name = 'dda'
     t.observer_type = 'DDA'
     t.subject_relation_name = 'DOSING_VOLUME_TOTAL_LOG'
@@ -353,6 +417,15 @@ def h2s_factory():
     t.geni_id = 194
     t.auto_generate = True
     t.geni_convert_id = 'Volume 1mL'
+    t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与dosing_volume_total_log挂接 ----------'
+    t.subject_name =  'dosing_volume_total_log'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'DOSING_VOLUME_TOTAL_LOG'
+    t.subject_access = 'Read/Write'
     t.save()
 
 
@@ -550,7 +623,7 @@ def h2s_factory():
     t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与set_dosing_ref挂接 ----------'
     t.subject_name =  'set_dosing_ref'
-    t.observer_name = 'dosing_pump_ctrl'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
     t.subject_relation_name = 'set_dosing_ref'
     t.subject_access = 'Read/Write'
@@ -693,6 +766,6 @@ def h2s_factory():
     t.alarm_alarm_config2_id = 'dummy_alarm_conf'
     t.alarm_erroneous_unit_type_id = 'SYSTEM'
     t.alarm_erroneous_unit_number = 0
-    t.alarm_define_name = 'SID_ALARM_225_GENIBUS_ERROR'
+    t.alarm_define_name = 'SID_ALARM_226_GENIBUS_ERROR'
 
     t.save()

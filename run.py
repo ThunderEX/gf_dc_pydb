@@ -6,7 +6,7 @@ from scripts.util.log import *
 if __name__ == '__main__':
     #example()
     option = 'update_database'
-    option = 'build'
+    #option = 'build'
 
     if option == 'update_database':
         copy_database()

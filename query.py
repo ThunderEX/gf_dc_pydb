@@ -43,7 +43,7 @@ def query_by_subject_relation(str):
         table.add_row(olist)
     print table
 
-    print '\n'
+    #print '\n'
     print '遍历所有由该SubjectRelation找出的subject'
     for subject_id in subject_list:
         table = PrettyTable(field_names)
@@ -56,7 +56,7 @@ def query_by_subject_relation(str):
                 item = translate(field, value)
                 olist.append(item)
             table.add_row(olist)
-        print '\n'
+        #print '\n'
         print table
 
 
@@ -101,9 +101,8 @@ def query_alarm():
             table.add_row(olist)
     log(table)
     return results
-    
-    
+
 
 if __name__ == '__main__':
     #query_alarm()
-    query_by_subject_relation('SP_MP204_MODULE_ALARM_RESET_EVENT')
+    query_by_subject_relation('SP_VFM_VFD_MIN_FREQUENCY')
