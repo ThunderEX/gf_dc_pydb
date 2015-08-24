@@ -218,10 +218,10 @@ def h2s_display():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    t.label_name = '4.5.1 SystemAlarms (dosing pump)'
-    t.label_define_name = 'SID_DOSING_PUMP'
-    t.label_string = 'Dosing pump'
-    t.slippoint_name = '4.5.1 SystemAlarms (dosing pump) slippoint'
+    t.label_name = '4.5.1 SystemAlarms (analog dosing pump)'
+    t.label_define_name = 'SID_ANALOG_DOSING_PUMP'
+    t.label_string = 'Analog Dosing pump'
+    t.slippoint_name = '4.5.1 SystemAlarms (analog dosing pump) slippoint'
     t.write_state = 31
 
     #加subject: sys_alarm_dosing_pump_alarm_conf 类型为AlarmConfig
@@ -267,7 +267,7 @@ def h2s_display():
     t.alarm_alarm_string_id = 'SID_ALARM_DOSING_PUMP'      #不同于DDA的Alarm，这里只有一个Alarm，所以新加一个字串，固定显示
 
     comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DOSING_PUMP')
-    comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DOSING_PUMP,                  SID_DOSING_PUMP},')
+    comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DOSING_PUMP,                  SID_ANALOG_DOSING_PUMP},')
     comment('''在AlarmSlipPoint.cpp里插入
     case SP_ASP_SYS_ALARM_DOSING_PUMP:
       mpAlarmDP[AC_SYS_ALARM_DOSING_PUMP][0].Attach(pSubject);
@@ -302,8 +302,8 @@ def h2s_display():
     +-----------------------------------------------+
     '''
     t.label_name = '4.5.5 SystemAlarms Status (dosing pump)'
-    t.label_define_name = 'SID_DOSING_PUMP'
-    t.label_string = 'Dosing pump'
+    t.label_define_name = 'SID_ANALOG_DOSING_PUMP'
+    t.label_string = 'Analog dosing pump'
     t.alarm_icon_name = '4.5.5 SystemAlarms Status (dosing pump) alarm icon'
     t.warning_icon_name = '4.5.5 SystemAlarms Status (dosing pump) warning icon'
     t.subject_id = 'sys_alarm_dosing_pump_alarm_conf'
@@ -603,8 +603,8 @@ def h2s_display():
 
     t.float_value = 0
     t.float_min = 0
-    t.float_max = 100
-    t.float_quantity_type = 'Q_FLOW'
+    t.float_max = 1000000.0
+    t.float_quantity_type = 'Q_SMALL_FLOW'
     t.save()
 
     t = template('ObserverLinkSubject')
@@ -617,19 +617,19 @@ def h2s_display():
     t.save()
 
     #ao_dosing_pump_setpoint需要小数位，而原来为整数位，需要处理一下，并由FloatToString里对小数位的处理方法，在AnaOutCtrl里修改Min，Max的值
-    table = DisplayNumberQuantity()
-    table.update(id=5159, NumberOfDigits=5)    #4.4.3.1 AnalogOutputSetup min NQ
-    table.update(id=5161, NumberOfDigits=5)    #4.4.3.1 AnalogOutputSetup max NQ
+    #table = DisplayNumberQuantity()
+    #table.update(id=5159, NumberOfDigits=5)    #4.4.3.1 AnalogOutputSetup min NQ
+    #table.update(id=5161, NumberOfDigits=5)    #4.4.3.1 AnalogOutputSetup max NQ
     #同时，1.10.3 AOStatus里也要显示相应的小数位
-    table.update(id=5051, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-41 NQ
-    table.update(id=5056, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-41 NQ
-    table.update(id=5061, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-41 NQ
-    table.update(id=5066, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-42 NQ
-    table.update(id=5071, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-42 NQ
-    table.update(id=5076, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-42 NQ
-    table.update(id=5081, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-43 NQ
-    table.update(id=5086, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-43 NQ
-    table.update(id=5091, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-43 NQ
+    #table.update(id=5051, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-41 NQ
+    #table.update(id=5056, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-41 NQ
+    #table.update(id=5061, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-41 NQ
+    #table.update(id=5066, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-42 NQ
+    #table.update(id=5071, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-42 NQ
+    #table.update(id=5076, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-42 NQ
+    #table.update(id=5081, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-43 NQ
+    #table.update(id=5086, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-43 NQ
+    #table.update(id=5091, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-43 NQ
 
     comment("modified:   include/AppTypeDefs.h")
     comment("modified:   AnaOutCtrl/AnaOutCtrl.cpp")
@@ -824,7 +824,7 @@ def h2s_display():
 
     #TODO add new subject link to this counter via geni
     t = template('LabelAndQuantityInCounters')
-    t.description = '''---------- 4.4.3.x - Function of analog output页面里新加一行Dosing pump setpoint ----------
+    t.description = '''---------- 4.2.5 - Adjustment of counters页面里新加一行Chemical total dosed ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
@@ -1106,8 +1106,8 @@ def h2s_display():
     t.checkbox_column_index = 1
     t.label_left_margin = 4
     t.label_right_margin = 0
-    t.define_name = 'SID_H2S_DOSING_PUMP_ANALOG'
-    t.label_string = 'Analog dosing pump'
+    t.define_name = 'SID_ANALOG_DOSING_PUMP'
+    #t.label_string = 'Analog dosing pump'
     t.listview_id = '4.2.14.1 H2S Dosing pump List'
     t.subject_id = 'dosing_pump_type'
     t.save()

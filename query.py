@@ -105,4 +105,4 @@ def query_alarm():
 
 if __name__ == '__main__':
     #query_alarm()
-    query_by_subject_relation('SP_VFM_VFD_MIN_FREQUENCY')
+    query_by_subject_relation('SP_AOCSP_CURRENT_NO')

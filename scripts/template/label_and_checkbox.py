@@ -59,6 +59,9 @@ class LabelAndCheckbox(object):
                  'Transparent': False,
              }
              ),
+        ]
+        if self.label_string:
+            self.parameters.extend([
             # 3. 加字符串定义
             (StringDefines,
              {
@@ -81,6 +84,8 @@ class LabelAndCheckbox(object):
                  'Status': 'UnEdit',
              }
              ),
+            ])
+        self.parameters.extend([
             # 5. 将字符串和label对应起来
             (DisplayLabel,
              {
@@ -119,7 +124,7 @@ class LabelAndCheckbox(object):
                  'ColumnIndex': self.checkbox_column_index,
              }
              ),
-        ]
+        ])
         if self.checkbox_type == 'ModeCheckBox':
             self.parameters.append(
                 (DisplayModeCheckBox,

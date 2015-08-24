@@ -32,6 +32,33 @@ def h2s_factory():
     t.int_verified = False
     t.save()
 
+
+    t = template('NewQuantity')
+    t.description = '---------- 添加quantity:ml/h ----------'
+    t.type_name = 'Q_SMALL_FLOW'
+    t.define_name = 'SID_ml_h'
+    t.string = 'ml/h'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 为ml/h加Subject: unit_small_flow ----------'
+    t.subject_name = 'unit_small_flow_actual'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'units'
+    t.observer_type = 'MpcUnits'
+    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'Q_SMALL_FLOW'
+
+    t.int_value = '0'
+    t.int_type = 'I32'
+    t.int_min = '0'
+    t.int_max = '10'
+    t.int_quantity_type = 'Q_NO_UNIT'
+    t.int_verified = False
+    t.save()
+
     
     ######################################### Observer ################################################
     #需要用到constructor_args的Observer放前面，不然有Bug
@@ -140,6 +167,7 @@ def h2s_factory():
     t.enum_subject_access = 'Read/Write'
     t.enum_type_name = 'DOSING_PUMP_TYPE'
     t.enum_value = 'DDA'
+    t.enum_subject_access = 'Read/Write'
 
     t.enum_geni_var_name = 'pit_pump_conn_type'
     t.enum_geni_class = 11
@@ -215,6 +243,7 @@ def h2s_factory():
     t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'h2s_level_act'
+    t.subject_access = 'Read/Write'
 
     t.int_value = '0'
     t.int_type = 'U32'
@@ -320,6 +349,7 @@ def h2s_factory():
     t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'dosing_feed_tank_level'
+    t.subject_access = 'Read/Write'
 
     t.float_value = 0.0
     t.float_min = 0
@@ -342,6 +372,7 @@ def h2s_factory():
     t.observer_name = 'dda'
     t.observer_type = 'DDA'
     t.subject_relation_name = 'CHEMICAL_TOTAL_DOSED'
+    t.subject_access = 'Read/Write'
 
     t.float_value = 0.0
     t.float_min = 0
