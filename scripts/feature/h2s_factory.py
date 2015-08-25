@@ -61,15 +61,6 @@ def h2s_factory():
 
     
     ######################################### Observer ################################################
-    #需要用到constructor_args的Observer放前面，不然有Bug
-    t = template('NewObserver')
-    t.description = '---------- 加Observer: DDA ----------'
-    t.observer_name = 'dda'
-    t.observer_type = 'DDA'
-    t.short_name = 'DDA'
-    t.constructor_args = 'DDA_NO_1'
-    t.save()
-
     t = template('NewObserver')
     t.description = '---------- 加Observer: DDACtrl ----------'
     t.observer_name = 'dda_ctrl'
@@ -82,6 +73,14 @@ def h2s_factory():
     t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
     t.short_name = 'DPC'
+    t.save()
+
+    t = template('NewObserver')
+    t.description = '---------- 加Observer: DDA ----------'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.short_name = 'DDA'
+    t.constructor_args = 'DDA_NO_1'
     t.save()
 
 

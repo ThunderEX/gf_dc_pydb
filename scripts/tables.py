@@ -21,7 +21,6 @@ class BaseTable(object):
         self.model = model
         self.fill_fields(**kwargs)
         self.foreignkey_items = self.get_foreignkey_items(**kwargs)
-        #self.delete_attr()
 
     def fill_fields(self, **kwargs):
         '''
@@ -35,49 +34,23 @@ class BaseTable(object):
             if hasattr(self.model, k):
                 setattr(self.model, k, v)
 
-    def fill_default_fileds(self, defaults, **kwargs):
-        '''
-            填充如Comment的field属性值
-
-        :param defaults: field名的list
-        :param **kwargs: fields(field=value)
-        '''
-        for k, v in defaults.items():
-            if k not in kwargs.keys() and hasattr(self.model, k):
-                setattr(self.model, k, v)
-
-    def delete_attr(self, attr_list=None):
-        '''
-            删除特定的attribute
-            如果MSSQL返回错误
-            1. You cannot add or change a record because a related record is required in table 'Subject'
-            2. xxx cannot be a zero-length string
-            这是因为peewee里这些field如果不赋值，会有默认的值，例如0或''，sql语句里会有，此时要删除这些field
-
-        :param attr_list: 要删除的属性列表
-        :return:
-        '''
-        # TODO Bug:如果连续使用一张table，第二次就没有Comment这个field了
-        if attr_list is None:
-            attr_list = ['Comment']
-        for attr in attr_list:
-            if hasattr(self.model, attr) and getattr(self.model, attr) == None:
-                # print self.model._meta.fields[attr]
-                if attr in self.model._meta.fields.keys():
-                    self.model._meta.fields.pop(attr)
-
     def get_foreignkey_items(self, **kwargs):
-        """查找外键，存入字典里"""
+        '''
+            查找外键，存入字典里
+        
+        :param **kwargs: fields(field=value)
+        :return: 外键名形成的list
+        '''
         field_types = self.model.get_field_type()
-        foreignkey_items = []
-        for k, v in kwargs.items():
-            if hasattr(self.model, k):
-                # 如果类型不同，则提取外键（一般是用描述性字符串代替外键的id）
-                if not isinstance(v, field_types[k]):
-                    foreignkey_items.append(k)
+        # 如果属性存在且类型不同，则提取外键（一般是用描述性字符串代替外键的id）
+        foreignkey_items = [k for k, v in kwargs.items() if hasattr(self.model, k) and not isinstance(v, field_types[k])]
         return foreignkey_items
 
     def get_max_id(self):
+        '''
+            得到id的最大值并将id的值设为最大值+1
+        :return: 
+        '''
         r = self.model.select()
         id_list = [i.id for i in r]
         debug("Max id in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
@@ -91,7 +64,7 @@ class BaseTable(object):
         :param foreign_model: 关联表
         :param foreign_attr_from: 关联表搜索的field
         :param foreign_attr_to: 得到的关联表field
-        :force 强制转换外键，不论改键是不是在foreignkey_items里
+        :force 强制转换外键，不论该键是不是在foreignkey_items里
         '''
         if not hasattr(self.model, attr_name):
             log(("没有Field: %s" % (attr_name)).decode("utf-8"))
@@ -109,7 +82,14 @@ class BaseTable(object):
         else:
             debug("不存在键%s" % (attr_name))
 
-    def query(self, suppress=False, **kwargs):
+    def query(self, suppress_log=False, **kwargs):
+        '''
+            查询数据库
+        
+        :param suppress_log: 不输出log
+        :param **kwargs: 查询的条件
+        :return: 
+        '''
         _id = id
         field_dict = self.model.get_field_dict()
         field_names = field_dict.keys()
@@ -117,8 +97,7 @@ class BaseTable(object):
         if 'id' in field_names:
             id_index = field_names.index('id')
             if id_index is not 0:
-                field_names[id_index] = field_names[0]
-                field_names[0] = 'id'
+                field_names[id_index], field_names[0] = field_names[0], 'id'
         table = PrettyTable(field_names)
         if (kwargs):
             results = self.model.select().where(**kwargs)
@@ -128,11 +107,18 @@ class BaseTable(object):
             for result in results:
                 olist = [getattr(result, field) for field in field_names]
                 table.add_row(olist)
-        if not suppress:
+        if not suppress_log:
             log(table)
         return results
 
     def update(self, id=0, **kwargs):
+        '''
+            根据id更新数据库
+        
+        :param id: id
+        :param **kwargs: 更新的内容
+        :return: 
+        '''
         _id = id
         if _id:
             self.model.update(**kwargs).where(id=_id).execute()
@@ -141,13 +127,12 @@ class BaseTable(object):
             #debug(("更新记录%d" %(_id)).decode("utf-8"))
 
     def check_exist(self):
-        if self.model.check_exist():
-            return True
-        return False
+        ''' 检查记录是否存在 '''
+        return True if self.model.check_exist() else False
 
     def add(self):
         if self.check_exist():
-            #log(("记录已存在，跳过......").decode("utf-8"))
+            debug(("记录已存在，跳过......").decode("utf-8"))
             debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             return 0
         else:
@@ -313,20 +298,8 @@ class Observer(BaseTable):
     """操作表Observer"""
 
     def __init__(self, *args, **kwargs):
-        #TODO Bug！ 有的Observer用到ConstructorArgs，有的用不到，但由于delete_attr引起的bug，会导致前面用不到的Observer把ConstructorArgs删掉了，后面加不上去。这个在peewee的meta里，不懂怎么处理的。
-        #现在只能让用到ConstructorArgs的Observer放在前面，用不到的放在后面
         self.model = Observer_Model()
-        #super(Observer, self).__init__(self.model, *args, **kwargs)
-        self.fill_fields(**kwargs)
-        self.foreignkey_items = ['TaskId']
-        if hasattr(self.model, 'ConstructorArgs') and getattr(self.model, 'ConstructorArgs') != None:
-            #log(self.model._meta.get_field_by_name('ConstructorArgs'))
-            saved_constructor_args = self.model._meta.get_field_by_name('ConstructorArgs')
-        default_list = ['Comment', 'SubjectId', 'ConstructorArgs']
-        if len(default_list) != 0:
-            self.delete_attr(default_list)
-        if hasattr(self.model, 'ConstructorArgs') and getattr(self.model, 'ConstructorArgs') != None:
-            self.model._meta.fields['ConstructorArgs'] = saved_constructor_args
+        super(Observer, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('TaskId', Task_Model, 'Name', 'id')
 
 
@@ -350,7 +323,6 @@ class ObserverType(BaseTable):
     def __init__(self, *args, **kwargs):
         self.model = ObserverType_Model()
         super(ObserverType, self).__init__(self.model, *args, **kwargs)
-        self.delete_attr(['Comment', 'NameSpace'])
 
 
 class QuantityType(BaseTable):
@@ -371,6 +343,7 @@ class QuantityType(BaseTable):
         debug("new QuantityType id is: %d" % (self.model.id))
 
     def add(self):
+        ''' 在检查是否存在记录时需要去掉id来检查 '''
         stored_id = self.model.id
         self.model.id = None
         if self.model.check_exist():
@@ -436,9 +409,6 @@ class SubjectRelation(BaseTable):
     """操作表SubjectRelation"""
 
     def __init__(self, *args, **kwargs):
-        """
-        SubjectRelation.name - 用于组成SubjectPointer，前面加SP_和ObserverType里的ShortName，如SP_UNITS_XXX
-        """
         self.model = SubjectRelation_Model()
         super(SubjectRelation, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('ObserverTypeId', ObserverType_Model, 'Name', 'id')
@@ -531,13 +501,6 @@ class DisplayAlarmStrings(BaseTable):
         self.model = DisplayAlarmStrings_Model()
         super(DisplayAlarmStrings, self).__init__(self.model, *args, **kwargs)
         self.convert_foreignkey('StringId', StringDefines_Model, 'DefineName', 'id')
-        #self.set_alarm_id()
-
-    def set_alarm_id(self):
-        r = self.model.select()
-        id_list = [i.AlarmId for i in r]
-        debug("Max AlarmId in %s table is %d" % (self.model.__class__.__name__, max(id_list)))
-        self.model.AlarmId = max(id_list) + 1   #得到最大AlarmId并+1
 
 class DisplayAvailable(BaseTable):
 
@@ -672,9 +635,6 @@ class DisplayListViewItem(BaseTable):
         else:
             self.model.Index = 0
 
-    def get_listviewid_index(self):
-        return self.model.ListViewId, self.model.Index
-
 
 class DisplayListViewItemComponents(BaseTable):
 
@@ -796,7 +756,6 @@ class DisplayText(BaseTable):
 
     def add(self):
         """id在这张表里是唯一的，用id检查记录是否存在"""
-        #r = self.model.get(id=self.model.id)
         r = self.model.select().where(id=self.model.id)
         if r:
             for i in r:
@@ -805,6 +764,7 @@ class DisplayText(BaseTable):
                 return
         self.model.save()
         return self.model.id
+
 
 class DisplayUnitStrings(BaseTable):
 
@@ -835,7 +795,6 @@ class StringDefines(BaseTable):
         super(StringDefines, self).__init__(self.model, *args, **kwargs)
         self.get_max_id()
         self.convert_foreignkey('TypeId', StringTypes_Model, 'Type', 'id')
-        self.delete_attr(['Location', 'UKDescription', 'DisplayNumbers'])
 
     def add(self):
         stored_id = self.model.id
@@ -861,6 +820,11 @@ class Strings(BaseTable):
             self.get_strings_max_id(kwargs['String'])
 
     def get_strings_max_id(self, str):
+        '''
+            检查是否已有字符串，如果有，则用相同的id，没有取最大id+1
+        
+        :param str: 用来查询的字符串
+        '''
         r = Strings_Model.select().where(String=str)
         if r:
             for i in r:
