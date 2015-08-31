@@ -12,6 +12,7 @@ def h2s_factory():
     t.define_name = 'SID_PPM'
     t.string = 'ppm'
     t.save()
+    comment('Note: 需要修改UnitTypes.h, mpcunits.conf.cpp和mpcunits.cpp')
 
     t = template('NewSubject')
     t.description = '---------- 为ppm加Subject: unit_ppm_actual ----------'
@@ -39,6 +40,7 @@ def h2s_factory():
     t.define_name = 'SID_ml_h'
     t.string = 'ml/h'
     t.save()
+    comment('Note: 需要修改UnitTypes.h, mpcunits.conf.cpp和mpcunits.cpp')
 
     t = template('NewSubject')
     t.description = '---------- 为ml/h加Subject: unit_small_flow ----------'
@@ -154,28 +156,29 @@ def h2s_factory():
     t.save()
 
 
-    t = template('NewEnumData')
+    t = template('NewSubject')
     t.description = '---------- 加Subject, EnumDataPoint: dosing_pump_type ----------'
-    t.enum_subject_name = 'dosing_pump_type'
-    t.enum_geni_app_if = True
-    t.enum_subject_save = 'Value'
-    t.enum_flash_block = 'Config'
-    t.enum_observer_name = 'dda_ctrl'
-    t.enum_observer_type = 'DDACtrl'
-    t.enum_subject_relation_name = 'dosing_pump_type'
-    t.enum_subject_access = 'Read/Write'
+    t.subject_name = 'dosing_pump_type'
+    t.subject_type_id = 'EnumDataPoint'
+    t.geni_app_if = True
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'dosing_pump_type'
+    t.subject_access = 'Read/Write'
     t.enum_type_name = 'DOSING_PUMP_TYPE'
     t.enum_value = 'DDA'
-    t.enum_subject_access = 'Read/Write'
+    t.subject_access = 'Read/Write'
 
-    t.enum_geni_var_name = 'pit_pump_conn_type'
-    t.enum_geni_class = 11
-    t.enum_geni_id = 35
-    t.enum_auto_generate = False
-    t.enum_geni_convert_id = 'Bits without NA'
-    t.enum_geni_comment = 'pit_pump_conn_type'
+    t.geni_var_name = 'pit_pump_conn_type'
+    t.geni_class = 11
+    t.geni_id = 35
+    t.auto_generate = False
+    t.geni_convert_id = 'Bits without NA'
+    t.geni_comment = 'pit_pump_conn_type'
     t.save()
-    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, t.enum_subject_name.upper()))
+    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, t.subject_name.upper()))
 
     t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_type挂接 ----------'
@@ -187,25 +190,26 @@ def h2s_factory():
     t.save()
 
 
-    t = template('NewEnumData')
+    t = template('NewSubject')
     t.description = '---------- 加Subject, EnumDataPoint: dosing_pump_operating_mode ----------'
-    t.enum_subject_name = 'dosing_pump_operating_mode'
-    t.enum_geni_app_if = True
-    t.enum_subject_save = '-'
-    t.enum_flash_block = '-'
-    t.enum_observer_name = 'dda'
-    t.enum_observer_type = 'DDA'
-    t.enum_subject_relation_name = 'OPERATION_MODE_DOSING_PUMP'
-    t.enum_subject_access = 'Write'
+    t.subject_name = 'dosing_pump_operating_mode'
+    t.subject_type_id = 'EnumDataPoint'
+    t.geni_app_if = True
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'OPERATION_MODE_DOSING_PUMP'
+    t.subject_access = 'Write'
     t.enum_type_name = 'ACTUAL_OPERATION_MODE'
     t.enum_value = 'NOT_INSTALLED'
 
-    t.enum_geni_var_name = 'pit_pump_mode'
-    t.enum_geni_class = 11
-    t.enum_geni_id = 32
-    t.enum_auto_generate = False
-    t.enum_geni_convert_id = 'Bits without NA'
-    t.enum_geni_comment = 'pit_pump_mode'
+    t.geni_var_name = 'pit_pump_mode'
+    t.geni_class = 11
+    t.geni_id = 32
+    t.auto_generate = False
+    t.geni_convert_id = 'Bits without NA'
+    t.geni_comment = 'pit_pump_mode'
     t.save()
 
 

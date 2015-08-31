@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class NewObserver(object):
+class NewObserver(Base):
 
     ''' Add new observer '''
 
@@ -10,10 +11,6 @@ class NewObserver(object):
     observer_type = ''           #: new observer type, normally it is class name in application
     short_name = ''              #: short name for new observer
     constructor_args = None
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -44,7 +41,6 @@ class NewObserver(object):
         self.update_parameters()
         rtn = []
         for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
             table = para[0]
             kwargs = para[1]
             x = table(**kwargs)

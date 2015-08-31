@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class ObserverLinkSubject(object):
+class ObserverLinkSubject(Base):
 
     ''' Add new observer '''
 
@@ -11,10 +12,6 @@ class ObserverLinkSubject(object):
     observer_type = ''           #: new observer type, normally it is class name in application
     subject_relation_name = ''   #: subject relation name, must be all capitalized.
     subject_access = 'Read'      #: 'Not decided', 'Write', 'Read', 'Read/Write'
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -42,7 +39,6 @@ class ObserverLinkSubject(object):
         self.update_parameters()
         rtn = []
         for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
             table = para[0]
             kwargs = para[1]
             x = table(**kwargs)

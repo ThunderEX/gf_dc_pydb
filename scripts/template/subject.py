@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class NewSubject(object):
+class NewSubject(Base):
 
     ''' Add new subject and handle the relation with observer '''
 
@@ -43,7 +44,7 @@ class NewSubject(object):
     float_value = 0                         #: set value
     float_min = 0                           #: minimum value
     float_max = 99999999                    #: maximum value
-    float_quantity_type = 'Q_NO_UNIT'         #: quantity type for this float data
+    float_quantity_type = 'Q_NO_UNIT'       #: quantity type for this float data
 
     #VectorDataPoint
     vector_type = ''
@@ -52,7 +53,7 @@ class NewSubject(object):
     vector_default_value = '-1'
 
     #EnumDataPoint
-    enum_enum_type_name = ''
+    enum_type_name = ''
     enum_value = ''
 
     #AlarmConfig
@@ -81,10 +82,6 @@ class NewSubject(object):
     alarm_erroneous_unit_type_id = 0
     alarm_erroneous_unit_number = 0
     alarm_alarm_id = ''                         #: SID_ALARM_XXXX
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -148,14 +145,19 @@ class NewSubject(object):
                  ),
             )
         elif self.subject_type_id == 'EnumDataPoint':
-            self.parameters.append(
-                (EnumDataPoint,
+            self.parameters.extend(
+                [(EnumDataPoint,
                  {
                      'id': self.subject_name,
-                     'EnumTypeName': self.enum_enum_type_name.upper(),
+                     'EnumTypeName': self.enum_type_name.upper(),
                      'Value': self.enum_value.upper(),
                  }
                  ),
+                (EnumTypes,
+                 {
+                     'Name': self.enum_type_name,
+                 }
+                 ),]
             )
         elif self.subject_type_id == 'AlarmConfig':
             self.parameters.append(
@@ -238,18 +240,3 @@ class NewSubject(object):
                  }
                  ),
             )
-
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        rtn = []
-        for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            x.add()
-            rtn.append(x)
-        #SP = 'SP_' + self.short_name + '_' + self.subject_name.upper()
-        #comment('Use %s in application' %(SP))
-        return rtn

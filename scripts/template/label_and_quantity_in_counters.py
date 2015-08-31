@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class LabelAndQuantityInCounters(object):
+class LabelAndQuantityInCounters(Base):
 
     ''' New label and checkbox in 4.2.5 - Adjustment of counters.  '''
 
@@ -15,10 +16,6 @@ class LabelAndQuantityInCounters(object):
     subject_id = ''               #: link subject and quantity
     label_column_index = 0        #: label column index that to insert in the listview
     number_of_digits = 3          #: length of digital, 3 is int, 5 can display float
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = []
@@ -152,27 +149,6 @@ class LabelAndQuantityInCounters(object):
              ),
         ])
 
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        rtn = []
-        display_listview_item_components_list = []
-        for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            if table == DisplayListViewItem:
-                display_listview_item = x
-                continue
-            if table == DisplayListViewItemComponents:
-                display_listview_item_components_list.append(x)
-                continue
-            x.add()
-            rtn.append(x)
-        self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
-        self.increase_listview_item_index()
-        return rtn
 
     def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
         """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
@@ -205,14 +181,32 @@ class LabelAndQuantityInCounters(object):
         max_idx = table.model.Index - 1
         listviewitem_model = DisplayListViewItem_Model()
         r = listviewitem_model.select().where(ListViewId=table.model.ListViewId)
-        counters_list = []
-        for i in r:
-            counters_list.append([i.id, i.Index])
-        for item in counters_list:
+        id_idx_list = [(i.id, i.Index) for i in r]
+        for item in id_idx_list:
             if item[1] == max_idx:
                 table.update(id=item[0], Index=self.label_column_index)
                 continue
             if item[1] >= self.label_column_index:
                 table.update(id=item[0], Index=item[1]+1)
         
+    def save(self):
+        comment(self.description)
+        self.update_parameters()
+        rtn = []
+        display_listview_item_components_list = []
+        for index, para in enumerate(self.parameters):
+            table = para[0]
+            kwargs = para[1]
+            x = table(**kwargs)
+            if table == DisplayListViewItem:
+                display_listview_item = x
+                continue
+            if table == DisplayListViewItemComponents:
+                display_listview_item_components_list.append(x)
+                continue
+            x.add()
+            rtn.append(x)
+        self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
+        self.increase_listview_item_index()
+        return rtn
 

@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class NewQuantity(object):
+class NewQuantity(Base):
 
     ''' New quantity '''
 
     type_name = ''          #: new quantity type name, start with Q_
     define_name = ''        #: string define for new quantity
     string = ''             #: display string on screen, multiple languages
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -47,26 +44,4 @@ class NewQuantity(object):
                  'Status': 'UnEdit',
              }
              ),
-            # 4. SubjectRelation里的MpcUnits要加上单位类型
-            #(SubjectRelation,
-             #{
-                 #'Name': self.type_name,
-                 #'ObserverTypeId': 'MpcUnits',
-             #}
-             #),
-            # 5. 修改mpcunits.conf.cpp和mpcunits.cpp
         ])
-
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        rtn = []
-        for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            x.add()
-            rtn.append(x)
-        comment('Note: 需要修改UnitTypes.h, mpcunits.conf.cpp和mpcunits.cpp')
-        return rtn

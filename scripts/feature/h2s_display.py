@@ -7,6 +7,15 @@ from ..tables import *
 def h2s_display():
     comment('**************************** Display Database部分 ****************************')
 
+    t = template('AvailableRule')
+    t.description = '''---------- 添加一个Available rule: dosing pump installed ---------- '''
+    t.available_rule_name = 'available rule: dosing pump installed'
+    t.available_rule_type = 'AvalibleIfSet'
+    t.available_rule_checkstate = 1
+    t.available_rule_subject_id = 'dosing_pump_installed'
+    t.save()
+    
+
     comment('在4.5.x里，因为加了两项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state>30的依次后推')
     # >30的都没有重复，批量更新
     table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
@@ -175,7 +184,7 @@ def h2s_display():
     +-----------------------------------------------+
     |                                               |
     | (!)CU 362                                     |
---> |  Dosing pump alarm                            |
+--> |  Dosing pump not ready (102)                  |
     |  Occured at                   2015-05-15 14:01|
     |  Disappeared at                     --   --   |
     |                                               |
@@ -213,7 +222,7 @@ def h2s_display():
     |  ......                                       |
     |                                               |
     |  DDA fault                                    |
---> |  Dosing pump                                  |
+--> |  Analog dosing pump                           |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
@@ -366,21 +375,22 @@ def h2s_display():
     t.save()
 
 
-    t = template('NewEnumData')
+    t = template('NewSubject')
     t.description = '---------- 加Subject, EnumDataPoint: dig_in_func_state_dosing_pump ----------'
-    t.enum_subject_name = 'dig_in_func_state_dosing_pump'
-    t.enum_geni_app_if = False
-    t.enum_subject_save = '-'
-    t.enum_flash_block = '-'
-    t.enum_observer_name = 'digital_input_function_handler'
-    t.enum_observer_type = 'DiFuncHandler'
-    t.enum_subject_relation_name = 'dig_in_func_state_dosing_pump'
-    t.enum_subject_access = 'Read/Write'
+    t.subject_name = 'dig_in_func_state_dosing_pump'
+    t.subject_type_id = 'EnumDataPoint'
+    t.geni_app_if = False
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'digital_input_function_handler'
+    t.observer_type = 'DiFuncHandler'
+    t.subject_relation_name = 'dig_in_func_state_dosing_pump'
+    t.subject_access = 'Read/Write'
 
     t.enum_type_name = 'DIGITAL_INPUT_FUNC_STATE'
     t.enum_value = 'NOT_CONFIGURED'
     t.save()
-    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, t.enum_subject_name.upper()))
+    comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, t.subject_name.upper()))
     comment('modified:   application/display/DigitalInputConfListView.cpp')
     comment('modified:   application/display/state/DigitalInputFunctionState.cpp')
     comment('modified:   application/driver/DiFuncHandler.cpp')
@@ -603,7 +613,7 @@ def h2s_display():
 
     t.float_value = 0
     t.float_min = 0
-    t.float_max = 1000000.0
+    t.float_max = 999999.0
     t.float_quantity_type = 'Q_SMALL_FLOW'
     t.save()
 
@@ -615,21 +625,6 @@ def h2s_display():
     t.subject_relation_name = 'AO_DOSING_PUMP_SETPOINT'
     t.subject_access = 'Write'
     t.save()
-
-    #ao_dosing_pump_setpoint需要小数位，而原来为整数位，需要处理一下，并由FloatToString里对小数位的处理方法，在AnaOutCtrl里修改Min，Max的值
-    #table = DisplayNumberQuantity()
-    #table.update(id=5159, NumberOfDigits=5)    #4.4.3.1 AnalogOutputSetup min NQ
-    #table.update(id=5161, NumberOfDigits=5)    #4.4.3.1 AnalogOutputSetup max NQ
-    #同时，1.10.3 AOStatus里也要显示相应的小数位
-    #table.update(id=5051, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-41 NQ
-    #table.update(id=5056, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-41 NQ
-    #table.update(id=5061, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-41 NQ
-    #table.update(id=5066, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-42 NQ
-    #table.update(id=5071, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-42 NQ
-    #table.update(id=5076, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-42 NQ
-    #table.update(id=5081, NumberOfDigits=5)    #1.10.3 AOStatus AO1 IO351-43 NQ
-    #table.update(id=5086, NumberOfDigits=5)    #1.10.3 AOStatus AO2 IO351-43 NQ
-    #table.update(id=5091, NumberOfDigits=5)    #1.10.3 AOStatus AO3 IO351-43 NQ
 
     comment("modified:   include/AppTypeDefs.h")
     comment("modified:   AnaOutCtrl/AnaOutCtrl.cpp")
@@ -672,6 +667,8 @@ def h2s_display():
     t.listview_id = '1.1 SystemStatus List 1'
     t.subject_id = 'h2s_level_act'
     t.quantity_type =  'Q_PARTS_PER_MILLION'
+    t.available_rule_name = 'Available rule: dosing pump installed'
+    t.available_rule_column_index = 4
     t.save()
 
     t = template('LabelAndQuantity')
@@ -711,6 +708,8 @@ def h2s_display():
     t.subject_id = 'dosing_feed_tank_level'
     t.quantity_type =  'Q_DEPTH'
     t.number_of_digits = 5
+    t.available_rule_name = 'Available rule: dosing pump installed'
+    t.available_rule_column_index = 4
     t.save()
 
     t = template('LabelAndQuantity')
@@ -750,6 +749,8 @@ def h2s_display():
     t.subject_id = 'chemical_total_dosed'
     t.quantity_type = 'Q_VOLUME'
     t.number_of_digits = 7
+    t.available_rule_name = 'Available rule: dosing pump installed'
+    t.available_rule_column_index = 4
     t.save()
 
     t = template('LabelBlank')
@@ -912,7 +913,7 @@ def h2s_display():
     |4.2.14 - H2S Control                           |
     +-----------------------------------------------+
     |                                               |
---> |Dosing pump                                    |
+--> |Dosing pump setting                            |
     |Go to Modules installed                        |
     |                                               |
     |                                               |
@@ -938,11 +939,8 @@ def h2s_display():
     t.label_left_margin = 2
     t.label_right_margin = 1
 
-    t.availabel_rule_name = 'Availabel rule: dosing pump installed'
-    t.availabel_rule_type = 'AvalibleIfSet'
-    t.availabel_rule_checkstate = 1
-    t.availabel_rule_subject_id = 'dosing_pump_installed'
-    t.availabel_rule_column_index = 2
+    t.available_rule_name = 'Available rule: dosing pump installed'
+    t.available_rule_column_index = 2
 
     t.group_name = '4.2.14.1 H2S Dosing pump group'
     t.group_define_name = 'SID_H2S_DOSING_PUMP_SETTING'
@@ -964,7 +962,7 @@ def h2s_display():
     |4.2.14 - H2S Control                           |
     +-----------------------------------------------+
     |                                               |
-    |Dosing pump                                    |
+    |Dosing pump setting                            |
 --> |Go to Modules installed                        |
     |                                               |
     |                                               |
@@ -996,7 +994,7 @@ def h2s_display():
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump                         |
+    |4.2.14.1 - Dosing pump setting                 |
     +-----------------------------------------------+
     |                                               |
 --> |Dosing pump interface                          |
@@ -1031,7 +1029,7 @@ def h2s_display():
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump                         |
+    |4.2.14.1 - Dosing pump setting                 |
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |
@@ -1074,7 +1072,7 @@ def h2s_display():
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump                         |
+    |4.2.14.1 - Dosing pump setting                 |
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |
@@ -1117,7 +1115,7 @@ def h2s_display():
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump                         |
+    |4.2.14.1 - Dosing pump setting                 |
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |
@@ -1149,7 +1147,7 @@ def h2s_display():
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump                         |
+    |4.2.14.1 - Dosing pump setting                 |
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |
@@ -1186,7 +1184,7 @@ def h2s_display():
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump                         |
+    |4.2.14.1 - Dosing pump setting                 |
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |
@@ -1218,7 +1216,7 @@ def h2s_display():
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump                         |
+    |4.2.14.1 - Dosing pump setting                 |
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |

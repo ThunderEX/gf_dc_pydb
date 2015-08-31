@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class LabelAndCheckboxInAO(object):
+class LabelAndCheckboxInAO(Base):
 
     ''' New label and checkbox in AO.  '''
 
@@ -19,10 +20,6 @@ class LabelAndCheckboxInAO(object):
     label_left_margin = 8         #: left margin of label
     label_right_margin = 0        #: right margin of label
     listviewitem_index = 11       #: the index for new label and checkbox, which is blank line before
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -123,21 +120,7 @@ class LabelAndCheckboxInAO(object):
              ),
         ]
 
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        rtn = []
-        for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            x.add()
-            rtn.append(x)
-        self.handle_ao_setting_items()
-        self.replace_blank_line_with_new_added_label_and_checkbox()
-        return rtn
-
+    
     def replace_blank_line_with_new_added_label_and_checkbox(self):
         listviewitem_model = DisplayListViewItem_Model()
         table = DisplayListViewItemComponents()
@@ -186,23 +169,11 @@ class LabelAndCheckboxInAO(object):
                 raise NameError
             #用新的id更新DisplayListViewItemComponents表
             table.update(id=_id, ListViewItemId=new_listviewitem_id)
-            
-            '''
-                   # 11. 在新加的item下面添加label
-            (DisplayListViewItemComponents,
-             {
-                 'ListViewItemId': 1903
-                 'ComponentId': self.label_name,
-                 'ColumnIndex': self.label_column_index,
-             }
-             ),
-            # 12. 在新加的item下面添加数值
-            (DisplayListViewItemComponents,
-             {
-                 'ListViewItemId': 1903
-                 'ComponentId': self.checkbox_name,
-                 'ColumnIndex': self.checkbox_column_index,
-             }
-             ),
-            '''
+
+    def save(self):
+        comment(self.description)
+        self.update_parameters()
+        self.save_with_parameters(self.parameters)
+        self.handle_ao_setting_items()
+        self.replace_blank_line_with_new_added_label_and_checkbox()
 

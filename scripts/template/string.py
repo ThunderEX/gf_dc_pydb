@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class NewString(object):
+class NewString(Base):
 
     ''' Add new string '''
 
     define_name = ''
     string_name = ''
 
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -38,16 +36,3 @@ class NewString(object):
              }
              ),
         ]
-
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        rtn = []
-        for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            x.add()
-            rtn.append(x)
-        return rtn

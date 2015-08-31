@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class Erroneous(object):
+class Erroneous(Base):
 
     ''' Add new erroneous unit type '''
 
@@ -10,10 +11,6 @@ class Erroneous(object):
     name = ''              #: name for the new erroneous unit type
     string_id = ''
     unit_number = 0
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -32,15 +29,3 @@ class Erroneous(object):
              }
              ),
         ]
-
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        rtn = []
-        for index, para in enumerate(self.parameters):
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            x.add()
-            rtn.append(x)
-        return rtn

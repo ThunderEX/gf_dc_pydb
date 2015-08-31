@@ -12,7 +12,6 @@ from quantity import *
 from observer import *
 from subject import *
 from alarm import *
-from enum_data import *
 from string import *
 from system_alarm import *
 from system_alarm_status import *
@@ -22,6 +21,7 @@ from label_and_checkbox_in_ao import *
 from label_and_quantity_in_counters import *
 from geni_convert import *
 from erroneous import *
+from available_rule import *
 
 class Template(object):
     def __init__(self, ):

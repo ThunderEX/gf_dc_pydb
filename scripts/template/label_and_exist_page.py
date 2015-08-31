@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class LabelAndExistPage(object):
+class LabelAndExistPage(Base):
 
     ''' Add new label and click this label will render to a exist page '''
 
@@ -12,10 +13,6 @@ class LabelAndExistPage(object):
     listview_id = ''            #: listview id which will include the new label
     label_left_margin = 2       #: left margin of label
     label_right_margin = 1      #: right margin of label
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -74,7 +71,6 @@ class LabelAndExistPage(object):
         rtn = []
         display_listview_item_components_list = []
         for index, para in enumerate(parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
             table = para[0]
             kwargs = para[1]
             x = table(**kwargs)

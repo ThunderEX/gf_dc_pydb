@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class LabelHeadline(object):
+class LabelHeadline(Base):
 
     ''' New label that only one line text '''
 
@@ -12,10 +13,6 @@ class LabelHeadline(object):
     listview_id = ''              #: listview id which will include the new label and quantity
     label_left_margin = 0         #: left margin of label
     label_right_margin = 0        #: right margin of label
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -90,26 +87,6 @@ class LabelHeadline(object):
              ),
         ]
 
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        rtn = []
-        display_listview_item_components_list = []
-        for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            if table == DisplayListViewItem:
-                display_listview_item = x
-                continue
-            if table == DisplayListViewItemComponents:
-                display_listview_item_components_list.append(x)
-                continue
-            x.add()
-            rtn.append(x)
-        self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
-        return rtn
 
     def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
         """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
@@ -134,5 +111,23 @@ class LabelHeadline(object):
             x.add()
 
 
-
+    def save(self):
+        comment(self.description)
+        self.update_parameters()
+        rtn = []
+        display_listview_item_components_list = []
+        for index, para in enumerate(self.parameters):
+            table = para[0]
+            kwargs = para[1]
+            x = table(**kwargs)
+            if table == DisplayListViewItem:
+                display_listview_item = x
+                continue
+            if table == DisplayListViewItemComponents:
+                display_listview_item_components_list.append(x)
+                continue
+            x.add()
+            rtn.append(x)
+        self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
+        return rtn
 

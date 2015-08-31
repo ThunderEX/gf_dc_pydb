@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 from subject import NewSubject
 
-class SystemAlarmStatus(object):
+class SystemAlarmStatus(Base):
 
     '''
     Add new system alarm status in 4.5.5 - System alarms 
@@ -39,10 +40,6 @@ class SystemAlarmStatus(object):
     warning_icon_name = ''                          # : new warning icon name that added in DisplayComponent.
     subject_id = ''                                 # : link subject and alarm icon and warning icon, should be a AlarmConfig type subject
     listview_id = '4.5.5 SystemAlarms Status List'  # : listview id which will include the new label and icons
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
 
     def update_parameters(self):
         self.parameters = [
@@ -187,7 +184,6 @@ class SystemAlarmStatus(object):
         rtn = []
         display_listview_item_components_list = []
         for index, para in enumerate(parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
             table = para[0]
             kwargs = para[1]
             x = table(**kwargs)
@@ -201,6 +197,7 @@ class SystemAlarmStatus(object):
             rtn.append(x)
         self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
         return rtn
+
 
     def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
         """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""

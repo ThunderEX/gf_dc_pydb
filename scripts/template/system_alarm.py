@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 from subject import NewSubject
 
-class SystemAlarm(object):
+class SystemAlarm(Base):
 
     ''' 
     Add new system alarm in 4.5.1 - System alarms 
@@ -103,10 +104,8 @@ class SystemAlarm(object):
     alarm_alarm_string_id = ''                    #: SID_ALARM_XXXX
 
     def __init__(self):
-        self.parameters = []
         self.alarm_config_subject = NewSubject()
         self.alarm_subject = NewSubject()
-        self.description = 'No description'
 
     def update_parameters(self):
         self.alarm_config_subject.subject_name                                  = self.alarm_config_subject_name
@@ -296,7 +295,6 @@ class SystemAlarm(object):
         rtn = []
         display_listview_item_components_list = []
         for index, para in enumerate(parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
             table = para[0]
             kwargs = para[1]
             x = table(**kwargs)

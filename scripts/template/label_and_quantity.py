@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
+from base import Base
 
-class LabelAndQuantity(object):
+class LabelAndQuantity(Base):
     '''
         New label and quantity
     '''
@@ -14,10 +15,8 @@ class LabelAndQuantity(object):
     subject_id = ''               #: link subject and quantity
     quantity_type = ''            #: quantity type in DisplayNumberQuantity
     number_of_digits = 3          #: length of digital, 3 is int, 5 can display float
-
-    def __init__(self):
-        self.parameters = []
-        self.description = 'No description'
+    available_rule_name = ''
+    available_rule_column_index = 0         #: the column width should be 0
 
     def update_parameters(self):
         self.parameters = [
@@ -147,13 +146,24 @@ class LabelAndQuantity(object):
              ),
         ]
 
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
+        if self.available_rule_name:
+            self.available_rule_parameters = [
+                    (DisplayListViewItemComponents,
+                     {
+                         'ListViewItemId': 0,  #在handle_DisplayListViewItemAndComponents里更新，与label的ListViewItemId相等，而不是外部输入
+                         'ComponentId': self.available_rule_name,
+                         'ColumnIndex': self.available_rule_column_index,      #TODO, 需要判断哪个ColumnWidth为0
+                     }
+                     ),
+                ]
+        else:
+            self.available_rule_parameters = []
+
+
+    def add_label(self, parameters):
         rtn = []
         display_listview_item_components_list = []
-        for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
+        for index, para in enumerate(parameters):
             table = para[0]
             kwargs = para[1]
             x = table(**kwargs)
@@ -188,7 +198,15 @@ class LabelAndQuantity(object):
         for x in display_listview_item_components_list:
             r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
             x.model.ListViewItemId = r.id
+            if self.available_rule_name:
+                for index, para in enumerate(self.available_rule_parameters):
+                    if para[0] == DisplayListViewItemComponents:
+                        self.available_rule_parameters[index][1]['ListViewItemId'] = r.id        #确保rule里的listviewitemid和label的一样，TODO 这里实现可以，但总觉得扩展性不好
             x.add()
 
-
+    def save(self):
+        comment(self.description)
+        self.update_parameters()
+        label_tables = self.add_label(self.parameters)
+        available_rule_tables = self.save_with_parameters(self.available_rule_parameters)
 
