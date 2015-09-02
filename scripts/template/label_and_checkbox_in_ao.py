@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
-from base import Base
+from base import Label
 
-class LabelAndCheckboxInAO(Base):
+class LabelAndCheckboxInAO(Label):
 
     ''' New label and checkbox in AO.  '''
 
@@ -21,8 +21,38 @@ class LabelAndCheckboxInAO(Base):
     label_right_margin = 0        #: right margin of label
     listviewitem_index = 11       #: the index for new label and checkbox, which is blank line before
 
+    available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
+    available_rule_column_index = 0         #: the column width should be 0
+
     def update_parameters(self):
-        self.parameters = [
+        if self.label_string:
+            self.string_parameters = [
+                # 加字符串定义
+                (StringDefines,
+                 {
+                     'DefineName': self.define_name,
+                     'TypeId': 'Value type',
+                 }
+                 ),
+                # label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'DEV_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+                # label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'UK_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+            ]
+
+        self.label_parameters = [
             # 1. 添加label
             (DisplayComponent,
              {
@@ -57,28 +87,6 @@ class LabelAndCheckboxInAO(Base):
                  'Transparent': False,
              }
              ),
-            # 3. 加字符串定义
-            (StringDefines,
-             {
-                 'DefineName': self.define_name,
-                 'TypeId': 'Value type',
-             }
-             ),
-            # 4. label加相应的字符串
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'DEV_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
             # 5. 将字符串和label对应起来
             (DisplayLabel,
              {
@@ -97,13 +105,6 @@ class LabelAndCheckboxInAO(Base):
                  'WordWrap': False,
              }
              ),
-            # 10. 在对应的listview下面新加一个item
-            (DisplayListViewItem,
-             {
-                 'ListViewId': self.listview_id,
-             }
-             ),
- 
             (DisplayModeCheckBox,
              {
                  'id': self.checkbox_name,
@@ -120,60 +121,65 @@ class LabelAndCheckboxInAO(Base):
              ),
         ]
 
+        self.display_listview_parameters = [
+            # 在对应的listview下面新加一个item
+            (DisplayListViewItem,
+             {
+                 'ListViewId': self.listview_id,
+             }
+             ),
+             # 在新加的item下面添加label
+            (DisplayListViewItemComponents,
+             {
+                 'ComponentId': self.label_name,
+                 'ColumnIndex': self.label_column_index,
+             }
+             ),
+            # 在新加的item下面添加数值
+            (DisplayListViewItemComponents,
+             {
+                 'ComponentId': self.checkbox_name,
+                 'ColumnIndex': self.checkbox_column_index,
+             }
+             ),
+            
+        ]
+
+        if self.available_rule_name:
+            self.available_rule_parameters = [
+                    (DisplayListViewItemComponents,
+                     {
+                         'ListViewItemId': 0,  #在handle_DisplayListViewItemAndComponents里更新，与label的ListViewItemId相等，而不是外部输入
+                         'ComponentId': self.available_rule_name,
+                         'ColumnIndex': self.available_rule_column_index,      #TODO, 需要判断哪个ColumnWidth为0
+                     }
+                     ),
+                ]
+
     
-    def replace_blank_line_with_new_added_label_and_checkbox(self):
+    def increase_listview_item_index(self):
+        '''
+            把新加的listviewitem的Index改成中间的Index，并把大于这个值的Index都加1
+        :return: 
+        '''
+        table = DisplayListViewItem(ListViewId=self.listview_id)
+        max_idx = table.model.Index - 1
         listviewitem_model = DisplayListViewItem_Model()
-        table = DisplayListViewItemComponents()
-        # 4.4.3.1 AnalogOutputSetup List 1 func = 5139
-        r = listviewitem_model.get(ListViewId=5139, Index=self.listviewitem_index)
-        if r:
-            listviewitem_id = r.id
-        else:
-            debug(("未找到记录").decode('utf-8'))
-            raise NameError
-        table = DisplayListViewItemComponents(ListViewItemId=listviewitem_id, ComponentId=self.label_name, ColumnIndex=self.label_column_index)
-        table.add()
-        table = DisplayListViewItemComponents(ListViewItemId=listviewitem_id, ComponentId=self.checkbox_name, ColumnIndex=self.checkbox_column_index)
-        table.add()
+        r = listviewitem_model.select().where(ListViewId=table.model.ListViewId)
+        id_idx_list = [(i.id, i.Index) for i in r]
+        for item in id_idx_list:
+            if item[1] == max_idx:       # 新加入的item的Index是最大的，将其改为指定的index
+                table.update(id=item[0], Index=self.listviewitem_index)
+                continue
+            if item[1] >= self.listviewitem_index:  # 其它大于指定index的item，将其index加1
+                table.update(id=item[0], Index=item[1]+1)
         
-
-    def handle_ao_setting_items(self):
-        listviewitem_model = DisplayListViewItem_Model()
-        listviewitemcomponents_model = DisplayListViewItemComponents_Model()
-        table = DisplayListViewItemComponents()
-        
-        #4183-4190是headline，min和max等setting
-        for _id in range(4183, 4190+1):
-            #先找出在DisplayListViewItem里的id
-            r = listviewitemcomponents_model.get(id=_id)
-            if r:
-                listviewitem_id = r.ListViewItemId
-            else:
-                debug(("未找到记录").decode('utf-8'))
-                raise NameError
-            #再找出该id在DisplayListViewItem里对应的index
-            r = listviewitem_model.get(id=listviewitem_id)
-            if r:
-                listview_id = r.ListViewId
-                index = r.Index
-            else:
-                debug(("未找到记录").decode('utf-8'))
-                raise NameError
-            new_index = index + 1
-            #最后还要在DisplayListViewItem里找到index+1后的新id
-            r = listviewitem_model.get(ListViewId=listview_id, Index=new_index)
-            if r:
-                new_listviewitem_id = r.id
-            else:
-                debug(("未找到记录").decode('utf-8'))
-                raise NameError
-            #用新的id更新DisplayListViewItemComponents表
-            table.update(id=_id, ListViewItemId=new_listviewitem_id)
-
     def save(self):
         comment(self.description)
         self.update_parameters()
-        self.save_with_parameters(self.parameters)
-        self.handle_ao_setting_items()
-        self.replace_blank_line_with_new_added_label_and_checkbox()
+        self.save_with_parameters(self.string_parameters)
+        self.save_with_parameters(self.label_parameters)
+        self.handle_DisplayListViewItemAndComponents(self.display_listview_parameters)
+        self.save_with_parameters(self.available_rule_parameters)
+        self.increase_listview_item_index()
 

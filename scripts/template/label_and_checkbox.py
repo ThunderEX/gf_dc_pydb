@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
-from base import Base
+from base import Label
 
-class LabelAndCheckbox(Base):
+class LabelAndCheckbox(Label):
 
     ''' New label and checkbox.  '''
 
@@ -19,11 +19,37 @@ class LabelAndCheckbox(Base):
     checkbox_column_index = 1     #: checkbox column index in the listview
     label_left_margin = 0         #: left margin of label
     label_right_margin = 0        #: right margin of label
-    available_rule_name = ''
+    available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
     available_rule_column_index = 0         #: the column width should be 0
 
     def update_parameters(self):
-        self.parameters = [
+        if self.label_string:
+            self.string_parameters = [
+                # 3. 加字符串定义
+                (StringDefines,
+                 {
+                     'DefineName': self.define_name,
+                     'TypeId': 'Value type',
+                 }
+                 ),
+                # 4. label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'DEV_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'UK_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+            ]
+
+        self.label_parameters = [
             # 1. 添加label
             (DisplayComponent,
              {
@@ -58,33 +84,6 @@ class LabelAndCheckbox(Base):
                  'Transparent': False,
              }
              ),
-        ]
-        if self.label_string:
-            self.parameters.extend([
-            # 3. 加字符串定义
-            (StringDefines,
-             {
-                 'DefineName': self.define_name,
-                 'TypeId': 'Value type',
-             }
-             ),
-            # 4. label加相应的字符串
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'DEV_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            ])
-        self.parameters.extend([
             # 5. 将字符串和label对应起来
             (DisplayLabel,
              {
@@ -103,6 +102,39 @@ class LabelAndCheckbox(Base):
                  'WordWrap': False,
              }
              ),
+        ]
+        if self.checkbox_type == 'ModeCheckBox':
+            self.label_parameters.append(
+                (DisplayModeCheckBox,
+                 {
+                     'id': self.checkbox_name,
+                     'CheckState': self.check_state,
+                 }
+                 ),
+            )
+        elif self.checkbox_type == 'OnOffCheckBox':
+            self.label_parameters.append(
+                (DisplayOnOffCheckBox,
+                 {
+                     'id': self.checkbox_name,
+                     'OnValue': 1,
+                     'OffValue': 0,
+                 }
+                 ),
+            )
+
+        self.label_parameters.append(
+            # checkbox与subject对应
+            (DisplayObserverSingleSubject,
+             {
+                 'id': self.checkbox_name,
+                 'SubjectId': self.subject_id,
+                 'SubjectAccess': 'Read/Write',
+             }
+             ),
+        )
+
+        self.display_listview_parameters = [
             # 10. 在对应的listview下面新加一个item
             (DisplayListViewItem,
              {
@@ -116,44 +148,14 @@ class LabelAndCheckbox(Base):
                  'ColumnIndex': self.label_column_index,
              }
              ),
-            # 12. 在新加的item下面添加数值
+            # 12. 在新加的item下面添加checkbox
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.checkbox_name,
                  'ColumnIndex': self.checkbox_column_index,
              }
              ),
-        ])
-        if self.checkbox_type == 'ModeCheckBox':
-            self.parameters.append(
-                (DisplayModeCheckBox,
-                 {
-                     'id': self.checkbox_name,
-                     'CheckState': self.check_state,
-                 }
-                 ),
-            )
-        elif self.checkbox_type == 'OnOffCheckBox':
-            self.parameters.append(
-                (DisplayOnOffCheckBox,
-                 {
-                     'id': self.checkbox_name,
-                     'OnValue': 1,
-                     'OffValue': 0,
-                 }
-                 ),
-            )
-
-        self.parameters.append(
-            # checkbox与subject对应
-            (DisplayObserverSingleSubject,
-             {
-                 'id': self.checkbox_name,
-                 'SubjectId': self.subject_id,
-                 'SubjectAccess': 'Read/Write',
-             }
-             ),
-        )
+        ]
 
         if self.available_rule_name:
             self.available_rule_parameters = [
@@ -165,59 +167,4 @@ class LabelAndCheckbox(Base):
                      }
                      ),
                 ]
-        else:
-            self.available_rule_parameters = []
-
-    def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
-        '''
-            DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下
-        
-        :param display_listview_item: DisplayListViewItem实例
-        :param display_listview_item_components_list: DisplayListViewItemComponents实例列表
-        '''
-        # index 从0开始遍历一遍
-        for i in range(0, display_listview_item.model.Index):
-            try:
-                r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
-                if r:
-                    # 通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
-                    s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
-                    if s:
-                        for display_listview_item_components in display_listview_item_components_list:
-                            if display_listview_item_components.model.ComponentId == s.ComponentId:
-                                log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
-                                return
-            except:
-                debug(("未找到记录").decode('utf-8'))
-        display_listview_item.add()
-        for x in display_listview_item_components_list:
-            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
-            x.model.ListViewItemId = r.id
-            if self.available_rule_name:
-                for index, para in enumerate(self.available_rule_parameters):
-                    if para[0] == DisplayListViewItemComponents:
-                        self.available_rule_parameters[index][1]['ListViewItemId'] = r.id        #确保rule里的listviewitemid和label的一样，TODO 这里实现可以，但总觉得扩展性不好
-            x.add()
-
-
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        rtn = []
-        display_listview_item_components_list = []
-        for index, para in enumerate(self.parameters):
-            #log(("处理第%d项" % (index + 1)).decode('utf-8'))
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            if table == DisplayListViewItem:
-                display_listview_item = x
-                continue
-            if table == DisplayListViewItemComponents:
-                display_listview_item_components_list.append(x)
-                continue
-            x.add()
-            rtn.append(x)
-        self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
-        return rtn
 

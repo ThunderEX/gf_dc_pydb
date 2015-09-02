@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
-from base import Base
+from base import Label
 
-class LabelAndNewPage(Base):
+class LabelAndNewPage(Label):
 
     ''' Add new label and click this label will render to a new page. New page combines with a group and display. Under the group, it is a listview. '''
 
@@ -14,7 +14,7 @@ class LabelAndNewPage(Base):
     label_left_margin = 8                   #: left margin of label
     label_right_margin = 0                  #: right margin of label
 
-    available_rule_name = ''
+    available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
     available_rule_column_index = 0         #: the column width should be 0
 
     group_name = ''                         #: new group name that added in DisplayComponent.
@@ -31,8 +31,35 @@ class LabelAndNewPage(Base):
     prev_list_id = 0                        # previous listview to the new listview, 0 is '- None -'
     
     def update_parameters(self):
+        if self.label_string:
+            self.string_parameters = [
+                # 加字符串定义
+                (StringDefines,
+                 {
+                     'DefineName': self.label_define_name,
+                     'TypeId': 'Display name',
+                 }
+                 ),
+                # label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'DEV_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+                # label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'UK_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+            ]
+
         self.label_parameters = [
-            # 1. 添加label
+            # 添加label
             (DisplayComponent,
              {
                  'Name': self.label_name,
@@ -49,36 +76,14 @@ class LabelAndNewPage(Base):
                  'Transparent': False,
              }
              ),
-            # 2. 加字符串定义
-            (StringDefines,
-             {
-                 'DefineName': self.label_define_name,
-                 'TypeId': 'Display name',
-             }
-             ),
-            # 3. label加相应的字符串
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'DEV_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            # 4. 将字符串和label对应起来
+            # 将字符串和label对应起来
             (DisplayLabel,
              {
                  'id': self.label_name,
                  'StringId': self.label_define_name,
              }
              ),
-            # 5. 定义label的text排列方式
+            # 定义label的text排列方式
             (DisplayText,
              {
                  'id': self.label_name,
@@ -89,13 +94,16 @@ class LabelAndNewPage(Base):
                  'WordWrap': False,
              }
              ),
-            # 6. 在对应的listview下面新加一个item
+        ]
+
+        self.display_listview_parameters = [
+            # 在对应的listview下面新加一个item
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,
              }
              ),
-            # 7. 在新加的item下面添加label
+            # 在新加的item下面添加label
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.label_name,
@@ -108,14 +116,12 @@ class LabelAndNewPage(Base):
             self.available_rule_parameters = [
                     (DisplayListViewItemComponents,
                      {
-                         'ListViewItemId': 0,  #在handle_DisplayListViewItemAndComponents里更新，与label的ListViewItemId相等，而不是外部输入
+                         'ListViewItemId': 0,                                  #在handle_DisplayListViewItemAndComponents里更新，与label的ListViewItemId相等，而不是外部输入
                          'ComponentId': self.available_rule_name,
                          'ColumnIndex': self.available_rule_column_index,      #TODO, 需要判断哪个ColumnWidth为0
                      }
                      ),
                 ]
-        else:
-            self.available_rule_parameters = []
 
         self.group_parameters = [
             # 1. 添加group，也就是另起一页
@@ -220,50 +226,6 @@ class LabelAndNewPage(Base):
                  )
             )
 
-    def add_label(self, parameters):
-        rtn = []
-        display_listview_item_components_list = []
-        for index, para in enumerate(parameters):
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            if table == DisplayListViewItem:
-                display_listview_item = x
-                continue
-            if table == DisplayListViewItemComponents:
-                display_listview_item_components_list.append(x)
-                continue
-            x.add()
-            rtn.append(x)
-        self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
-        return rtn
-
-    def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
-        """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
-        # index 从0开始遍历一遍
-        for i in range(0, display_listview_item.model.Index):
-            try:
-                r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
-                if r:
-                    # 通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
-                    s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
-                    if s:
-                        for display_listview_item_components in display_listview_item_components_list:
-                            if display_listview_item_components.model.ComponentId == s.ComponentId:
-                                log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
-                                return
-            except:
-                debug(("未找到记录").decode('utf-8'))
-        display_listview_item.add()
-        for x in display_listview_item_components_list:
-            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
-            x.model.ListViewItemId = r.id
-            if self.available_rule_name:
-                for index, para in enumerate(self.available_rule_parameters):
-                    if para[0] == DisplayListViewItemComponents:
-                        self.available_rule_parameters[index][1]['ListViewItemId'] = r.id        #确保rule里的listviewitemid和label的一样，TODO 这里实现可以，但总觉得扩展性不好
-            x.add()
-
     def update_displayid(self, display_component_tables, display_tables):
         '''
             更新DisplayComponent表里的DisplayId，指向一个新的页
@@ -318,7 +280,9 @@ class LabelAndNewPage(Base):
     def save(self):
         comment(self.description)
         self.update_parameters()
-        label_tables = self.add_label(self.label_parameters)
+        self.save_with_parameters(self.string_parameters)
+        label_tables = self.save_with_parameters(self.label_parameters)
+        self.handle_DisplayListViewItemAndComponents(self.display_listview_parameters)
         available_rule_tables = self.save_with_parameters(self.available_rule_parameters)
         group_tables = self.save_with_parameters(self.group_parameters)
         display_tables = self.save_with_parameters(self.display_parameters)

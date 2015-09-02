@@ -663,7 +663,7 @@ def h2s_display():
     t.label_name = '1.1 SystemStatus l1 h2s level'
     t.quantity_name = '1.1 SystemStatus l1 h2s level nq'
     t.define_name = 'SID_H2S_LEVEL'
-    t.string = 'H2S level'
+    t.label_string = 'H2S level'
     t.listview_id = '1.1 SystemStatus List 1'
     t.subject_id = 'h2s_level_act'
     t.quantity_type =  'Q_PARTS_PER_MILLION'
@@ -703,7 +703,7 @@ def h2s_display():
     t.label_name = '1.1 SystemStatus l1 dosing feed tank level'
     t.quantity_name = '1.1 SystemStatus l1 dosing feed tank level nq'
     t.define_name = 'SID_DOSING_FEED_TANK_LEVEL'
-    t.string = 'Dosing feed tank level'
+    t.label_string = 'Dosing feed tank level'
     t.listview_id = '1.1 SystemStatus List 1'
     t.subject_id = 'dosing_feed_tank_level'
     t.quantity_type =  'Q_DEPTH'
@@ -744,7 +744,7 @@ def h2s_display():
     t.label_name = '1.1 SystemStatus l1 chemical total dosed'
     t.quantity_name = '1.1 SystemStatus l1 chemical total dosed nq'
     t.define_name = 'SID_CHEMICAL_TOTAL_DOSED'
-    t.string = 'Chemical total dosed'
+    t.label_string = 'Chemical total dosed'
     t.listview_id = '1.1 SystemStatus List 1'
     t.subject_id = 'chemical_total_dosed'
     t.quantity_type = 'Q_VOLUME'
@@ -823,7 +823,6 @@ def h2s_display():
     t.subject_id = 'dosing_pump_installed'
     t.save()
 
-    #TODO add new subject link to this counter via geni
     t = template('LabelAndQuantityInCounters')
     t.description = '''---------- 4.2.5 - Adjustment of counters页面里新加一行Chemical total dosed ----------
     +----------+-------------+---------+------------+
@@ -857,7 +856,7 @@ def h2s_display():
     t.define_name = 'SID_CHEMICAL_TOTAL_DOSED'
     #t.label_string = 'Total chemical dosed'
     t.subject_id = 'chemical_total_dosed'
-    t.label_column_index = 7    #replace index 7 with new inserted item
+    t.listviewitem_index = 7    #replace index 7 with new inserted item
     t.quantity_type = 'Q_VOLUME'
     t.number_of_digits = 7
     t.save()
@@ -1141,6 +1140,7 @@ def h2s_display():
     '''
     t.listview_id = '4.2.14.1 H2S Dosing pump List'
     t.save()
+
 
     t = template('LabelAndExistPage')
     t.description = '''---------- 4.2.14.1 - Dosing pump 页面里新加一行label: Go to setting of Analog outputs，点击进入4.4.3 Analog outputs ----------

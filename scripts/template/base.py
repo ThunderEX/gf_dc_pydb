@@ -2,20 +2,6 @@
 from ..models import *
 from ..tables import *
 
-def save_decorator(parameters):
-    def decorator(func):
-        def wrapper(self, *args, **kwargs):
-            rtn = []
-            for index, para in enumerate(parameters):
-                table = para[0]
-                kwargs = para[1]
-                x = table(**kwargs)
-                func(x)
-                rtn.append(x)
-            return rtn
-        return wrapper
-    return decorator
-
 class Base(object):
 
     ''' Base class '''
@@ -42,3 +28,55 @@ class Base(object):
         comment(self.description)
         self.update_parameters()
         return self.save_with_parameters(self.parameters)
+
+
+class Label(Base):
+
+    label_parameters = []
+    string_parameters = []
+    display_listview_parameters = []
+    available_rule_parameters = []
+
+    def handle_DisplayListViewItemAndComponents(self, display_listview_parameters):
+        """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
+        display_listview_item_components_list = []
+        for para in display_listview_parameters:
+            table = para[0]
+            kwargs = para[1]
+            x = table(**kwargs)
+            if table == DisplayListViewItem:
+                display_listview_item = x
+            if table == DisplayListViewItemComponents:
+                display_listview_item_components_list.append(x)
+
+        # index 从0开始遍历一遍
+        for i in range(0, display_listview_item.model.Index):
+            try:
+                r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
+                if r:
+                    # 通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
+                    s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
+                    if s:
+                        for display_listview_item_components in display_listview_item_components_list:
+                            if display_listview_item_components.model.ComponentId == s.ComponentId:
+                                log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
+                                return
+            except:
+                debug(("未找到记录").decode('utf-8'))
+        display_listview_item.add()
+        for x in display_listview_item_components_list:
+            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
+            x.model.ListViewItemId = r.id
+            if self.available_rule_name:
+                for index, para in enumerate(self.available_rule_parameters):
+                    if para[0] == DisplayListViewItemComponents:
+                        self.available_rule_parameters[index][1]['ListViewItemId'] = r.id        #确保rule里的listviewitemid和label的一样，TODO 这里实现可以，但总觉得扩展性不好
+            x.add()
+
+    def save(self):
+        comment(self.description)
+        self.update_parameters()
+        self.save_with_parameters(self.string_parameters)
+        self.save_with_parameters(self.label_parameters)
+        self.handle_DisplayListViewItemAndComponents(self.display_listview_parameters)
+        self.save_with_parameters(self.available_rule_parameters)

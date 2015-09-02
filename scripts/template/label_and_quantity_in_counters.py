@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
-from base import Base
+from base import Label
 
-class LabelAndQuantityInCounters(Base):
+class LabelAndQuantityInCounters(Label):
 
     ''' New label and checkbox in 4.2.5 - Adjustment of counters.  '''
 
@@ -14,38 +14,42 @@ class LabelAndQuantityInCounters(Base):
     label_string = ''             #: string for new label, multiple languages
     listview_id = '4.2.5 AdjustCounters List'              #: listview id which will include the new label and quantity
     subject_id = ''               #: link subject and quantity
-    label_column_index = 0        #: label column index that to insert in the listview
+    listviewitem_index = 0        #: label column index that to insert in the listview
     number_of_digits = 3          #: length of digital, 3 is int, 5 can display float
 
+    available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
+    available_rule_column_index = 0         #: the column width should be 0
+
     def update_parameters(self):
-        self.parameters = []
         if self.label_string:
-            self.parameters.extend([
-            # 3. 加字符串定义
-            (StringDefines,
-             {
-                 'DefineName': self.define_name,
-                 'TypeId': 'Value type',
-             }
-             ),
-            # 4. label加相应的字符串
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'DEV_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            ])
-        self.parameters.extend([
-            # 1. 添加label
+            self.string_parameters = [
+                # 加字符串定义
+                (StringDefines,
+                 {
+                     'DefineName': self.define_name,
+                     'TypeId': 'Value type',
+                 }
+                 ),
+                # label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'DEV_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+                # label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'UK_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+            ]
+
+        self.label_parameters = [
+            # 添加label
             (DisplayComponent,
              {
                  'Name': self.label_name,
@@ -62,7 +66,7 @@ class LabelAndQuantityInCounters(Base):
                  'Transparent': False,
              }
              ),
-            # 2. 添加数值
+            # 添加数值
             (DisplayComponent,
              {
                  'Name': self.quantity_name,
@@ -79,15 +83,15 @@ class LabelAndQuantityInCounters(Base):
                  'Transparent': False,
              }
              ),
-            
-            # 5. 将字符串和label对应起来
+
+            # 将字符串和label对应起来
             (DisplayLabel,
              {
                  'id': self.label_name,
                  'StringId': self.define_name,
              }
              ),
-            # 6. 定义label的text排列方式
+            # 定义label的text排列方式
             (DisplayText,
              {
                  'id': self.label_name,
@@ -98,7 +102,7 @@ class LabelAndQuantityInCounters(Base):
                  'WordWrap': False,
              }
              ),
-            # 7. 定义数值的text排列方式
+            # 定义数值的text排列方式
             (DisplayText,
              {
                  'id': self.quantity_name,
@@ -109,7 +113,7 @@ class LabelAndQuantityInCounters(Base):
                  'WordWrap': False,
              }
              ),
-            # 8. 数值与新加单位对应
+            # 数值与新加单位对应
             (DisplayNumberQuantity,
              {
                  'id': self.quantity_name,
@@ -119,7 +123,7 @@ class LabelAndQuantityInCounters(Base):
                  'QuantityFontId': 'DEFAULT_FONT_13_LANGUAGE_INDEP',
              }
              ),
-             # 9. 数值与subject对应
+            # 数值与subject对应
             (DisplayObserverSingleSubject,
              {
                  'id': self.quantity_name,
@@ -127,50 +131,42 @@ class LabelAndQuantityInCounters(Base):
                  'SubjectAccess': 'Read/Write',
              }
              ),           
-            # 10. 在对应的listview下面新加一个item
+        ]
+
+        self.display_listview_parameters = [
+            # 在对应的listview下面新加一个item
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,
              }
              ),
-            # 11. 在新加的item下面添加label
+            # 在新加的item下面添加label
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.label_name,
                  'ColumnIndex': 0,
              }
              ),
-            # 12. 在新加的item下面添加数值
+            # 在新加的item下面添加数值
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.quantity_name,
                  'ColumnIndex': 2,
              }
              ),
-        ])
+        ]
 
+        if self.available_rule_name:
+            self.available_rule_parameters = [
+                    (DisplayListViewItemComponents,
+                     {
+                         'ListViewItemId': 0,  #在handle_DisplayListViewItemAndComponents里更新，与label的ListViewItemId相等，而不是外部输入
+                         'ComponentId': self.available_rule_name,
+                         'ColumnIndex': self.available_rule_column_index,      #TODO, 需要判断哪个ColumnWidth为0
+                     }
+                     ),
+                ]
 
-    def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
-        """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
-        # index 从0开始遍历一遍
-        for i in range(0, display_listview_item.model.Index):
-            try:
-                r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
-                if r:
-                    # 通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
-                    s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
-                    if s:
-                        for display_listview_item_components in display_listview_item_components_list:
-                            if display_listview_item_components.model.ComponentId == s.ComponentId:
-                                log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
-                                return
-            except:
-                debug(("未找到记录").decode('utf-8'))
-        display_listview_item.add()
-        for x in display_listview_item_components_list:
-            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
-            x.model.ListViewItemId = r.id
-            x.add()
 
     def increase_listview_item_index(self):
         '''
@@ -183,30 +179,18 @@ class LabelAndQuantityInCounters(Base):
         r = listviewitem_model.select().where(ListViewId=table.model.ListViewId)
         id_idx_list = [(i.id, i.Index) for i in r]
         for item in id_idx_list:
-            if item[1] == max_idx:
-                table.update(id=item[0], Index=self.label_column_index)
+            if item[1] == max_idx:       # 新加入的item的Index是最大的，将其改为指定的index
+                table.update(id=item[0], Index=self.listviewitem_index)
                 continue
-            if item[1] >= self.label_column_index:
+            if item[1] >= self.listviewitem_index:  # 其它大于指定index的item，将其index加1
                 table.update(id=item[0], Index=item[1]+1)
         
     def save(self):
         comment(self.description)
         self.update_parameters()
-        rtn = []
-        display_listview_item_components_list = []
-        for index, para in enumerate(self.parameters):
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            if table == DisplayListViewItem:
-                display_listview_item = x
-                continue
-            if table == DisplayListViewItemComponents:
-                display_listview_item_components_list.append(x)
-                continue
-            x.add()
-            rtn.append(x)
-        self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
+        self.save_with_parameters(self.string_parameters)
+        self.save_with_parameters(self.label_parameters)
+        self.handle_DisplayListViewItemAndComponents(self.display_listview_parameters)
+        self.save_with_parameters(self.available_rule_parameters)
         self.increase_listview_item_index()
-        return rtn
 
