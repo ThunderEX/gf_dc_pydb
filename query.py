@@ -5,6 +5,17 @@ from scripts.template.tpl import template
 from scripts.tables import *
 from scripts.models import *
 
+def create_table(model):
+    field_dict = model.get_field_dict()
+    field_names = field_dict.keys()
+    # 排序，让id在第一位
+    if 'id' in field_names:
+        id_index = field_names.index('id')
+        if id_index is not 0:
+            field_names[id_index] = field_names[0]
+            field_names[0] = 'id'
+    return PrettyTable(field_names), field_names
+
 def query_by_subject_relation(str):
     s = ""
     if not str.startswith('SP_'):
@@ -20,15 +31,7 @@ def query_by_subject_relation(str):
     subject_relation_id = result.id
 
     model = ObserverSubjects_Model()
-    field_dict = model.get_field_dict()
-    field_names = field_dict.keys()
-    #简单排序，让id在第一位
-    if 'id' in field_names:
-        id_index = field_names.index('id')
-        if id_index is not 0:
-            field_names[id_index] = field_names[0]
-            field_names[0] = 'id'
-    table = PrettyTable(field_names)
+    table, field_names = create_table(model)
 
     results = ObserverSubjects_Model.select().where(SubjectRelationId=subject_relation_id)
     subject_list=[]
@@ -103,6 +106,30 @@ def query_alarm():
     return results
 
 
+def query_observer_by_shortname(short_name):
+    model = ObserverType_Model()
+    print model.__class__.__name__.replace('_Model', '')
+    table, field_names = create_table(model)
+    result = ObserverType_Model.get(ShortName=short_name)
+    type_id = getattr(result, 'id')
+    olist = []
+    for field in field_names:
+        value = getattr(result, field)
+        olist.append(value)
+    table.add_row(olist)
+    print table
+    
+    model = Observer_Model()
+    print model.__class__.__name__.replace('_Model', '')
+    table, field_names = create_table(model)
+    results = model.select().where(TypeId=type_id)
+    for r in results:
+        olist = [getattr(r, field) for field in field_names]
+        table.add_row(olist)
+    print table
+        
+
 if __name__ == '__main__':
     #query_alarm()
-    query_by_subject_relation('SP_AOCSP_CURRENT_NO')
+    #query_by_subject_relation('SP_DICLV_VFD_6_INSTALLED')
+    query_observer_by_shortname('DOCLV')

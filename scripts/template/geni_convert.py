@@ -7,7 +7,6 @@ class NewGeniConvert(Base):
 
     ''' Add new geni convert'''
 
-    #Alarm
     name = ''
     geni_na_support = True
     geni_info = 'DIMLESS_255'
@@ -15,7 +14,6 @@ class NewGeniConvert(Base):
 
     def update_parameters(self):
         self.parameters = [
-            # 1. 加字符串定义
             (GeniConvert,
              {
                  'Name': self.name,

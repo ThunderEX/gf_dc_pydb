@@ -9,12 +9,19 @@ def h2s_display():
 
     t = template('AvailableRule')
     t.description = '''---------- 添加一个Available rule: dosing pump installed ---------- '''
-    t.available_rule_name = 'available rule: dosing pump installed'
+    t.available_rule_name = 'Available rule: dosing pump installed'
     t.available_rule_type = 'AvalibleIfSet'
     t.available_rule_checkstate = 1
     t.available_rule_subject_id = 'dosing_pump_installed'
     t.save()
     
+    t = template('AvailableRule')
+    t.description = '''---------- 添加一个Available rule: analog dosing pump selected ---------- '''
+    t.available_rule_name = 'Available rule: analog dosing pump selected'
+    t.available_rule_type = 'AvalibleIfSet'
+    t.available_rule_checkstate = 1
+    t.available_rule_subject_id = 'dosing_pump_type'
+    t.save()   
 
     comment('在4.5.x里，因为加了两项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state>30的依次后推')
     # >30的都没有重复，批量更新
@@ -397,6 +404,15 @@ def h2s_display():
     comment('modified:   include/AppTypeDefs.h')
 
     t = template('ObserverLinkSubject')
+    t.description = '---------- DigitalInputConfListView与dosing_pump_type挂接 ----------'
+    t.subject_name =  'dosing_pump_type'
+    t.observer_name = 'display_dig_in_conf_listview'
+    t.observer_type = 'DigitalInputConfListView'
+    t.subject_relation_name = 'DOSING_PUMP_TYPE'
+    t.subject_access = 'Read/Write'
+    t.save()
+
+    t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与dig_in_func_state_dosing_pump挂接 ----------'
     t.subject_name =  'dig_in_func_state_dosing_pump'
     t.observer_name = 'nongf_dosing_pump_ctrl'
@@ -486,6 +502,15 @@ def h2s_display():
       mpRelayFuncOutput[RELAY_FUNC_DOSING_PUMP].Attach(pSubject);
       break;
             ''')
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- DigitalOutputConfListView与dosing_pump_type挂接 ----------'
+    t.subject_name =  'dosing_pump_type'
+    t.observer_name = 'display_dig_out_conf_listview'
+    t.observer_type = 'DigitalOutputConfListView'
+    t.subject_relation_name = 'DOSING_PUMP_TYPE'
+    t.subject_access = 'Read/Write'
+    t.save()
 
     t = template('ObserverLinkSubject')
     t.description = '---------- NonGFDosingPumpCtrl与relay_status_relay_func_dosing_pump挂接 ----------'
@@ -598,6 +623,8 @@ def h2s_display():
     t.label_string = 'Dosing pump setpoint'
     t.check_state = 11
     t.listviewitem_index = 11
+    t.available_rule_name = 'Available rule: analog dosing pump selected'
+    t.available_rule_column_index = 2
     t.save()
 
     t = template('NewSubject')
@@ -859,6 +886,8 @@ def h2s_display():
     t.listviewitem_index = 7    #replace index 7 with new inserted item
     t.quantity_type = 'Q_VOLUME'
     t.number_of_digits = 7
+    t.available_rule_name = 'Available rule: dosing pump installed'
+    t.available_rule_column_index = 4
     t.save()
 
 
@@ -1171,79 +1200,13 @@ def h2s_display():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    t.label_name = '4.2.14.1 Dosing pump go to AO'
-    t.label_define_name = 'SID_GO_TO_SETTING_OF_ANALOGUE_OUTPUTS'
-    t.display_id = 143
+    t.label_name = '4.2.14.1 Dosing pump go to IO'
+    t.label_string = 'Go to setting of I/O'
+    t.label_define_name = 'SID_GO_TO_SETTING_OF_IO'
+    t.display_id = 47 # 4.4 IO Group
     t.listview_id = '4.2.14.1 H2S Dosing pump List'
     t.label_left_margin = 1
     t.label_right_margin = 0
-    t.save()
-
-    t = template('LabelBlank')
-    t.description = '''---------- 4.2.14.1 - Dosing pump 页面里新加一行空行 ----------
-    +----------+-------------+---------+------------+
-    |  Status  |  Operation  |  Alarm  |  Settings  |
-    +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump setting                 |
-    +-----------------------------------------------+
-    |                                               |
-    |Dosing pump interface                          |
-    |  Smart Digital DDA                    ☑       |
-    |  Analog dosing pump                   ☐       |
-    |                                               |
-    |Go to setting of analog outputs                |
---> |                                               |
-    |Go to setting of digital outputs               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    +-----------------------------------------------+
-    |GRUNDFOS                       04-05-2015 11:13|
-    +-----------------------------------------------+
-    '''
-    t.listview_id = '4.2.14.1 H2S Dosing pump List'
-    t.save()
-
-    t = template('LabelAndExistPage')
-    t.description = '''---------- 4.2.14.1 - Dosing pump 页面里新加一行label: Go to setting of Digital outputs，点击进入4.4.4 Digital outputs ----------
-    +----------+-------------+---------+------------+
-    |  Status  |  Operation  |  Alarm  |  Settings  |
-    +----------+-------------+---------+------------+
-    |4.2.14.1 - Dosing pump setting                 |
-    +-----------------------------------------------+
-    |                                               |
-    |Dosing pump interface                          |
-    |  Smart Digital DDA                    ☑       |
-    |  Analog dosing pump                   ☐       |
-    |                                               |
-    |Go to setting of analog outputs                |
-    |                                               |
---> |Go to setting of digital outputs               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    +-----------------------------------------------+
-    |GRUNDFOS                       04-05-2015 11:13|
-    +-----------------------------------------------+
-    '''
-    t.label_name = '4.2.14.1 Dosing pump go to DO'
-    t.label_define_name = 'SID_GO_TO_SETTING_OF_DIGITAL_OUTPUTS'
-    t.display_id = 35
-    t.listview_id = '4.2.14.1 H2S Dosing pump List'
-    t.label_left_margin = 1
-    t.label_right_margin = 0
+    t.available_rule_name = 'Available rule: analog dosing pump selected'
+    t.available_rule_column_index = 2
     t.save()

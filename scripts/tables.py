@@ -100,7 +100,6 @@ class BaseTable(object):
         :param **kwargs: 查询的条件
         :return: 
         '''
-        _id = id
         field_dict = self.model.get_field_dict()
         field_names = field_dict.keys()
         #简单排序，让id在第一位
@@ -259,6 +258,9 @@ class Observer(BaseTable):
 @AutoInit
 class ObserverSubjects(BaseTable):
     def init(self, *args, **kwargs):
+        if kwargs.has_key('SubjectAccess') and kwargs['SubjectAccess'] not in ['Not decided', 'Write', 'Read', 'Read/Write']:
+            log(('DisplayObserverSingleSubject的SubjectAccess必须为Not decided, Write, Read, Read/Write').decode("utf-8"))
+            raise NameError
         self.convert_foreignkey('SubjectId', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('ObserverId', Observer_Model, 'Name', 'id')
         self.convert_foreignkey('SubjectRelationId', SubjectRelation_Model, 'Name', 'id')
@@ -520,6 +522,9 @@ class DisplayObserver(BaseTable):
 @AutoInit
 class DisplayObserverSingleSubject(BaseTable):
     def init(self, *args, **kwargs):
+        if kwargs.has_key('SubjectAccess') and kwargs['SubjectAccess'] not in ['Not decided', 'Write', 'Read', 'Read/Write']:
+            log(('DisplayObserverSingleSubject的SubjectAccess必须为Not decided, Write, Read, Read/Write').decode("utf-8"))
+            raise NameError
         self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
         self.convert_foreignkey('SubjectId', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('SubjectAccess', SubjectAccessType_Model, 'Name', 'id')
