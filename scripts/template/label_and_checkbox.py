@@ -13,26 +13,28 @@ class LabelAndCheckbox(Label):
     define_name = ''              #: string define for new label
     label_string = ''             #: string for new label, multiple languages
     listview_id = ''              #: listview id which will include the new label and quantity
-    subject_id = ''               #: link subject and quantity
+    subject_id = ''               #: link subject and checkbox
     check_state = 0               #: ModeCheckBox use this, value means enum define values in AppTypeDefs.h
     label_column_index = 0        #: label column index in the listview
     checkbox_column_index = 1     #: checkbox column index in the listview
     label_left_margin = 0         #: left margin of label
     label_right_margin = 0        #: right margin of label
+    listviewitem_index = 0        #: the index for new label and checkbox, which is blank line before
+
     available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
     available_rule_column_index = 0         #: the column width should be 0
 
     def update_parameters(self):
         if self.label_string:
             self.string_parameters = [
-                # 3. 加字符串定义
+                # 加字符串定义
                 (StringDefines,
                  {
                      'DefineName': self.define_name,
                      'TypeId': 'Value type',
                  }
                  ),
-                # 4. label加相应的字符串
+                # label加相应的字符串
                 (Strings,
                  {
                      'String': self.label_string,
@@ -40,6 +42,7 @@ class LabelAndCheckbox(Label):
                      'Status': 'UnEdit',
                  }
                  ),
+                # label加相应的字符串
                 (Strings,
                  {
                      'String': self.label_string,
@@ -135,20 +138,20 @@ class LabelAndCheckbox(Label):
         )
 
         self.display_listview_parameters = [
-            # 10. 在对应的listview下面新加一个item
+            # 在对应的listview下面新加一个item
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,
              }
              ),
-            # 11. 在新加的item下面添加label
+             # 在新加的item下面添加label
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.label_name,
                  'ColumnIndex': self.label_column_index,
              }
              ),
-            # 12. 在新加的item下面添加checkbox
+            # 在新加的item下面添加数值
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.checkbox_name,
@@ -168,3 +171,12 @@ class LabelAndCheckbox(Label):
                      ),
                 ]
 
+
+    def save(self):
+        comment(self.description)
+        self.update_parameters()
+        self.save_with_parameters(self.string_parameters)
+        self.save_with_parameters(self.label_parameters)
+        self.handle_DisplayListViewItemAndComponents(self.display_listview_parameters)
+        self.save_with_parameters(self.available_rule_parameters)
+        self.increase_listview_item_index()

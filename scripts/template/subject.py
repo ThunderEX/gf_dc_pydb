@@ -202,7 +202,7 @@ class NewSubject(Base):
             comment('Not supported datapoint type')
             raise NameError
 
-        #只有在有Relation时才添加这两张表
+        #只有在有Relation时才添加这两张表，有些DataPoint用不到，比如AlarmConfig
         if len(self.subject_relation_name):
             # 添加SubjectRelation
             self.parameters.append(

@@ -49,7 +49,8 @@ class ObserverLinkSubject(Base):
                 continue
             if table == ObserverSubjects:
                 try:
-                    x.model.SubjectRelationId = TypeId
+                    if TypeId:
+                        x.model.SubjectRelationId = TypeId
                     x.add()
                     rtn.append(x)
                 except:

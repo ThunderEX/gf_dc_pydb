@@ -99,43 +99,45 @@ def h2s_display():
     t.write_state = 30
 
     #加subject: sys_alarm_dda_fault_alarm_conf 类型为AlarmConfig
-    t.alarm_config_subject_name = 'sys_alarm_dda_fault_alarm_conf'
-    t.alarm_config_subject_type_id = 'AlarmConfig'
-    t.alarm_config_geni_app_if = False
-    t.alarm_config_subject_save = 'Value'
-    t.alarm_config_flash_block = 'Config'
-    t.alarm_config_observer_name = 'display_alarm_slippoint'
-    t.alarm_config_observer_type = 'AlarmSlipPoint'
-    t.alarm_config_subject_relation_name = 'sys_alarm_dda_fault'
-    t.alarm_config_subject_access = 'Read/Write'
+    t.alarm_config_subject.subject_name = 'sys_alarm_dda_fault_alarm_conf'
+    t.alarm_config_subject.subject_type_id = 'AlarmConfig'
+    t.alarm_config_subject.geni_app_if = False
+    t.alarm_config_subject.subject_save = 'Value'
+    t.alarm_config_subject.flash_block = 'Config'
+    t.alarm_config_subject.observer_name = 'display_alarm_slippoint'
+    t.alarm_config_subject.observer_type = 'AlarmSlipPoint'
+    t.alarm_config_subject.subject_relation_name = 'sys_alarm_dda_fault'
+    t.alarm_config_subject.subject_access = 'Read/Write'
 
-    t.alarm_config_alarm_enabled = True
-    t.alarm_config_warning_enabled = True
-    t.alarm_config_auto_ack = True
-    t.alarm_config_alarm_delay = 5
-    t.alarm_config_alarm_type = 'BoolDataPoint'
-    t.alarm_config_alarm_criteria = '='
-    t.alarm_config_alarm_limit = '1'
-    t.alarm_config_warning_limit = '0'
-    t.alarm_config_min_limit = '0'
-    t.alarm_config_max_limit = '1'
-    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
-    t.alarm_config_verified = False
+    t.alarm_config_subject.alarm_config_alarm_enabled = True
+    t.alarm_config_subject.alarm_config_warning_enabled = True
+    t.alarm_config_subject.alarm_config_auto_ack = True
+    t.alarm_config_subject.alarm_config_alarm_delay = 5
+    t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_subject.alarm_config_alarm_criteria = '='
+    t.alarm_config_subject.alarm_config_alarm_limit = '1'
+    t.alarm_config_subject.alarm_config_warning_limit = '0'
+    t.alarm_config_subject.alarm_config_min_limit = '0'
+    t.alarm_config_subject.alarm_config_max_limit = '1'
+    t.alarm_config_subject.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_subject.alarm_config_verified = False
 
     #加subject:sys_alarm_dda_fault_alarm_obj
-    t.alarm_subject_name = 'sys_alarm_dda_fault_alarm_obj'
-    t.alarm_subject_type_id = 'AlarmDataPoint'
-    t.alarm_geni_app_if = False
-    t.alarm_subject_save = '-'
-    t.alarm_flash_block = '-'
-    t.alarm_observer_name = 'dda'
-    t.alarm_observer_type = 'DDA'
-    t.alarm_subject_relation_name = 'sys_alarm_dda_fault_alarm_obj'
+    t.alarm_subject.subject_name = 'sys_alarm_dda_fault_alarm_obj'
+    t.alarm_subject.subject_type_id = 'AlarmDataPoint'
+    t.alarm_subject.geni_app_if = False
+    t.alarm_subject.subject_save = '-'
+    t.alarm_subject.flash_block = '-'
+    t.alarm_subject.observer_name = 'dda'
+    t.alarm_subject.observer_type = 'DDA'
+    t.alarm_subject.subject_relation_name = 'sys_alarm_dda_fault_alarm_obj'
 
-    t.alarm_alarm_config_id = 'sys_alarm_dda_fault_alarm_conf'
-    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_erroneous_unit_type_id = 'DOSING_PUMP'
-    t.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_config_id = 'sys_alarm_dda_fault_alarm_conf'
+    t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_subject.alarm_erroneous_unit_type_id = 'DOSING_PUMP'
+    t.alarm_subject.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_016_OTHER'
+
     t.alarm_alarm_string_id = 'SID_ALARM_016_OTHER'    #默认是Other，实际使用时会SetValue一个Alarm_ID
 
     comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DDA_FAULT')
@@ -241,44 +243,46 @@ def h2s_display():
     t.write_state = 31
 
     #加subject: sys_alarm_dosing_pump_alarm_conf 类型为AlarmConfig
-    t.alarm_config_subject_name = 'sys_alarm_dosing_pump_alarm_conf'
-    t.alarm_config_subject_type_id = 'AlarmConfig'
-    t.alarm_config_geni_app_if = False
-    t.alarm_config_subject_save = 'Value'
-    t.alarm_config_flash_block = 'Config'
-    t.alarm_config_observer_name = 'display_alarm_slippoint'
-    t.alarm_config_observer_type = 'AlarmSlipPoint'
-    t.alarm_config_subject_relation_name = 'sys_alarm_dosing_pump'
-    t.alarm_config_subject_access = 'Read/Write'
+    t.alarm_config_subject.subject_name = 'sys_alarm_dosing_pump_alarm_conf'
+    t.alarm_config_subject.subject_type_id = 'AlarmConfig'
+    t.alarm_config_subject.geni_app_if = False
+    t.alarm_config_subject.subject_save = 'Value'
+    t.alarm_config_subject.flash_block = 'Config'
+    t.alarm_config_subject.observer_name = 'display_alarm_slippoint'
+    t.alarm_config_subject.observer_type = 'AlarmSlipPoint'
+    t.alarm_config_subject.subject_relation_name = 'sys_alarm_dosing_pump'
+    t.alarm_config_subject.subject_access = 'Read/Write'
 
-    t.alarm_config_alarm_enabled = True
-    t.alarm_config_warning_enabled = True
-    t.alarm_config_auto_ack = True
-    t.alarm_config_alarm_delay = 5
-    t.alarm_config_alarm_type = 'BoolDataPoint'
-    t.alarm_config_alarm_criteria = '='
-    t.alarm_config_alarm_limit = '1'
-    t.alarm_config_warning_limit = '0'
-    t.alarm_config_min_limit = '0'
-    t.alarm_config_max_limit = '1'
-    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
-    t.alarm_config_verified = False
+    t.alarm_config_subject.alarm_config_alarm_enabled = True
+    t.alarm_config_subject.alarm_config_warning_enabled = True
+    t.alarm_config_subject.alarm_config_auto_ack = True
+    t.alarm_config_subject.alarm_config_alarm_delay = 5
+    t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_subject.alarm_config_alarm_criteria = '='
+    t.alarm_config_subject.alarm_config_alarm_limit = '1'
+    t.alarm_config_subject.alarm_config_warning_limit = '0'
+    t.alarm_config_subject.alarm_config_min_limit = '0'
+    t.alarm_config_subject.alarm_config_max_limit = '1'
+    t.alarm_config_subject.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_subject.alarm_config_verified = False
 
     #SP_DDA_SYS_ALARM_DOSING_PUMP_ALARM_OBJ
     #加subject:sys_alarm_dosing_pump_alarm_obj
-    t.alarm_subject_name = 'sys_alarm_dosing_pump_alarm_obj'
-    t.alarm_subject_type_id = 'AlarmDataPoint'
-    t.alarm_geni_app_if = False
-    t.alarm_subject_save = '-'
-    t.alarm_flash_block = '-'
-    t.alarm_observer_name = 'nongf_dosing_pump_ctrl'
-    t.alarm_observer_type = 'NonGFDosingPumpCtrl'
-    t.alarm_subject_relation_name = 'sys_alarm_dosing_pump_alarm_obj'
+    t.alarm_subject.subject_name = 'sys_alarm_dosing_pump_alarm_obj'
+    t.alarm_subject.subject_type_id = 'AlarmDataPoint'
+    t.alarm_subject.geni_app_if = False
+    t.alarm_subject.subject_save = '-'
+    t.alarm_subject.flash_block = '-'
+    t.alarm_subject.observer_name = 'nongf_dosing_pump_ctrl'
+    t.alarm_subject.observer_type = 'NonGFDosingPumpCtrl'
+    t.alarm_subject.subject_relation_name = 'sys_alarm_dosing_pump_alarm_obj'
 
-    t.alarm_alarm_config_id = 'sys_alarm_dosing_pump_alarm_conf'
-    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_erroneous_unit_type_id = 'SYSTEM'
-    t.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_config_id = 'sys_alarm_dosing_pump_alarm_conf'
+    t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'
+    t.alarm_subject.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_DOSING_PUMP'
+
     t.alarm_alarm_id = 102
     t.alarm_alarm_string_id = 'SID_ALARM_DOSING_PUMP'      #不同于DDA的Alarm，这里只有一个Alarm，所以新加一个字串，固定显示
 
@@ -588,7 +592,7 @@ def h2s_display():
 
 
 
-    t = template('LabelAndCheckboxInAO')
+    t = template('LabelAndCheckbox')
     t.description = '''---------- 4.4.3.x - Function of analog output页面里新加一行Dosing pump setpoint ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
@@ -619,9 +623,14 @@ def h2s_display():
     '''
     t.label_name = '4.4.3.1 AnalogOutputSetup func dosing pump'
     t.checkbox_name = '4.4.3.1 AnalogOutputSetup func dosing pump cb'
+    t.checkbox_type = 'ModeCheckBox'
     t.define_name = 'SID_AO_DOSING_PUMP_SETPOINT'
     t.label_string = 'Dosing pump setpoint'
+    t.listview_id = '4.4.3.1 AnalogOutputSetup List 1 func'
+    t.subject_id = 'display_ao_slippoint_virtual_func'
     t.check_state = 11
+    t.label_left_margin = 8
+    t.label_right_margin = 0
     t.listviewitem_index = 11
     t.available_rule_name = 'Available rule: analog dosing pump selected'
     t.available_rule_column_index = 2
@@ -688,6 +697,7 @@ def h2s_display():
     +-----------------------------------------------+
     '''
     t.label_name = '1.1 SystemStatus l1 h2s level'
+    t.label_left_margin = 2
     t.quantity_name = '1.1 SystemStatus l1 h2s level nq'
     t.define_name = 'SID_H2S_LEVEL'
     t.label_string = 'H2S level'
@@ -728,6 +738,7 @@ def h2s_display():
     +-----------------------------------------------+
     '''
     t.label_name = '1.1 SystemStatus l1 dosing feed tank level'
+    t.label_left_margin = 2
     t.quantity_name = '1.1 SystemStatus l1 dosing feed tank level nq'
     t.define_name = 'SID_DOSING_FEED_TANK_LEVEL'
     t.label_string = 'Dosing feed tank level'
@@ -769,6 +780,7 @@ def h2s_display():
     +-----------------------------------------------+
     '''
     t.label_name = '1.1 SystemStatus l1 chemical total dosed'
+    t.label_left_margin = 2
     t.quantity_name = '1.1 SystemStatus l1 chemical total dosed nq'
     t.define_name = 'SID_CHEMICAL_TOTAL_DOSED'
     t.label_string = 'Chemical total dosed'
@@ -850,7 +862,7 @@ def h2s_display():
     t.subject_id = 'dosing_pump_installed'
     t.save()
 
-    t = template('LabelAndQuantityInCounters')
+    t = template('LabelAndQuantity')
     t.description = '''---------- 4.2.5 - Adjustment of counters页面里新加一行Chemical total dosed ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
@@ -879,12 +891,17 @@ def h2s_display():
     +-----------------------------------------------+
     '''
     t.label_name = '4.2.5 AdjustCounters total chemical dosed'
+    t.label_left_margin = 8
     t.quantity_name = '4.2.5 AdjustCounters total chemical dosed nq'
+    t.quantity_type = 'Q_VOLUME'
+    t.quantity_readonly = False
+    t.quantity_align = 'VCENTER_HCENTER'
     t.define_name = 'SID_CHEMICAL_TOTAL_DOSED'
     #t.label_string = 'Total chemical dosed'
+    t.listview_id = '4.2.5 AdjustCounters List'
     t.subject_id = 'chemical_total_dosed'
+    t.subject_access = 'Read/Write'
     t.listviewitem_index = 7    #replace index 7 with new inserted item
-    t.quantity_type = 'Q_VOLUME'
     t.number_of_digits = 7
     t.available_rule_name = 'Available rule: dosing pump installed'
     t.available_rule_column_index = 4
@@ -1029,9 +1046,9 @@ def h2s_display():
     |  Smart Digital DDA                    ☑       |
     |  Analog dosing pump                   ☐       |
     |                                               |
-    |Go to setting of analog outputs                |
     |                                               |
-    |Go to setting of digital outputs               |
+    |                                               |
+    |                                               |
     |                                               |
     |                                               |
     |                                               |
@@ -1064,9 +1081,10 @@ def h2s_display():
 --> |  Smart Digital DDA                    ☑       |
     |  Analog dosing pump                   ☐       |
     |                                               |
-    |Go to setting of analog outputs                |
     |                                               |
-    |Go to setting of digital outputs               |
+    |                                               |
+    |                                               |
+    |                                               |
     |                                               |
     |                                               |
     |                                               |
@@ -1104,12 +1122,13 @@ def h2s_display():
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |
-    |  Smart Digital DDA                    ☑       |
---> |  Analog dosing pump                   ☐       |
+    |  Smart Digital DDA                    ☐       |
+--> |  Analog dosing pump                   ☑       |
     |                                               |
-    |Go to setting of analog outputs                |
+    |Go to setting of I/O                           |
     |                                               |
-    |Go to setting of digital outputs               |
+    |                                               |
+    |                                               |
     |                                               |
     |                                               |
     |                                               |
@@ -1147,12 +1166,12 @@ def h2s_display():
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |
-    |  Smart Digital DDA                    ☑       |
-    |  Analog dosing pump                   ☐       |
+    |  Smart Digital DDA                    ☐       |
+    |  Analog dosing pump                   ☑       |
 --> |                                               |
-    |Go to setting of analog outputs                |
+    |Go to setting of I/O                           |
     |                                               |
-    |Go to setting of digital outputs               |
+    |                                               |
     |                                               |
     |                                               |
     |                                               |
@@ -1180,12 +1199,12 @@ def h2s_display():
     +-----------------------------------------------+
     |                                               |
     |Dosing pump interface                          |
-    |  Smart Digital DDA                    ☑       |
-    |  Analog dosing pump                   ☐       |
+    |  Smart Digital DDA                    ☐       |
+    |  Analog dosing pump                   ☑       |
     |                                               |
---> |Go to setting of analog outputs                |
+--> |Go to setting of I/O                           |
     |                                               |
-    |Go to setting of digital outputs               |
+    |                                               |
     |                                               |
     |                                               |
     |                                               |

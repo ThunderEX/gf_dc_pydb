@@ -17,8 +17,6 @@ from system_alarm import *
 from system_alarm_status import *
 from observer_link_subject import *
 from alarm_string import *
-from label_and_checkbox_in_ao import *
-from label_and_quantity_in_counters import *
 from geni_convert import *
 from erroneous import *
 from available_rule import *

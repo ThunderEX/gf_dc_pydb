@@ -6,6 +6,13 @@ from ..tables import *
 
 def h2s_factory():
     comment('**************************** Factory部分 ****************************')
+
+    comment('更新版本号')
+    new_ver_code = '6'
+    table = IntDataPoint(id='profile_ver_code', Type='U8', QuantityType='Q_NO_UNIT')
+    _id = table.model.id
+    table.update(id=_id, Min=new_ver_code, Max=new_ver_code, Value=new_ver_code)
+
     t = template('NewQuantity')
     t.description = '---------- 添加quantity:ppm ----------'
     t.type_name = 'Q_PARTS_PER_MILLION'
@@ -726,39 +733,41 @@ def h2s_factory():
 
     t = template('NewAlarm')
     t.description = '''---------- 新加alarm: h2s_sensor_fault_obj ----------'''
-    t.alarm_config_subject_name = 'h2s_sensor_fault_conf'
-    t.alarm_config_subject_type_id = 'AlarmConfig'
-    t.alarm_config_geni_app_if = False
-    t.alarm_config_subject_save = 'Value'
-    t.alarm_config_flash_block = 'Config'
-    t.alarm_config_subject_access = 'Read/Write'
+    t.alarm_config_subject.subject_name = 'h2s_sensor_fault_conf'
+    t.alarm_config_subject.subject_type_id = 'AlarmConfig'
+    t.alarm_config_subject.geni_app_if = False
+    t.alarm_config_subject.subject_save = 'Value'
+    t.alarm_config_subject.flash_block = 'Config'
+    t.alarm_config_subject.subject_access = 'Read/Write'
 
-    t.alarm_config_alarm_enabled = True
-    #t.alarm_config_warning_enabled = True
-    t.alarm_config_auto_ack = True
-    t.alarm_config_alarm_delay = 5
-    t.alarm_config_alarm_type = 'BoolDataPoint'
-    t.alarm_config_alarm_criteria = '='
-    t.alarm_config_alarm_limit = '1'
-    t.alarm_config_warning_limit = '0'
-    t.alarm_config_min_limit = '0'
-    t.alarm_config_max_limit = '1'
-    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
-    t.alarm_config_verified = False
+    t.alarm_config_subject.alarm_config_alarm_enabled = True
+    #t.alarm_config_subject.alarm_config_warning_enabled = True
+    t.alarm_config_subject.alarm_config_auto_ack = True
+    t.alarm_config_subject.alarm_config_alarm_delay = 5
+    t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_subject.alarm_config_alarm_criteria = '='
+    t.alarm_config_subject.alarm_config_alarm_limit = '1'
+    t.alarm_config_subject.alarm_config_warning_limit = '0'
+    t.alarm_config_subject.alarm_config_min_limit = '0'
+    t.alarm_config_subject.alarm_config_max_limit = '1'
+    t.alarm_config_subject.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_subject.alarm_config_verified = False
 
-    t.alarm_subject_name = 'h2s_sensor_fault_obj'
-    t.alarm_subject_type_id = 'AlarmDataPoint'
-    t.alarm_geni_app_if = False
-    t.alarm_subject_save = '-'
-    t.alarm_flash_block = '-'
-    t.alarm_observer_name = 'dda_ctrl'
-    t.alarm_observer_type = 'DDACtrl'
-    t.alarm_subject_relation_name = 'H2S_SENSOR_FAULT_OBJ'
+    t.alarm_subject.subject_name = 'h2s_sensor_fault_obj'
+    t.alarm_subject.subject_type_id = 'AlarmDataPoint'
+    t.alarm_subject.geni_app_if = False
+    t.alarm_subject.subject_save = '-'
+    t.alarm_subject.flash_block = '-'
+    t.alarm_subject.observer_name = 'dda_ctrl'
+    t.alarm_subject.observer_type = 'DDACtrl'
+    t.alarm_subject.subject_relation_name = 'H2S_SENSOR_FAULT_OBJ'
 
-    t.alarm_alarm_config_id = 'h2s_sensor_fault_conf'
-    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_erroneous_unit_type_id = 'SYSTEM'       # in pit_alarm_3, so it is system alarm
-    t.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_config_id = 'h2s_sensor_fault_conf'
+    t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'       # in pit_alarm_3, so it is system alarm
+    t.alarm_subject.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_118_H2S_SENSOR_FAULT'
+
     t.alarm_define_name = 'SID_ALARM_118_H2S_SENSOR_FAULT'
     t.alarm_id = 118
 
@@ -767,39 +776,41 @@ def h2s_factory():
     #这里沿用已有的string，所以不需要新加string
     t = template('NewAlarm')
     t.description = '''---------- 新加alarm: dda_geni_comm_fault_obj ----------'''
-    t.alarm_config_subject_name = 'dda_geni_comm_fault_conf'
-    t.alarm_config_subject_type_id = 'AlarmConfig'
-    t.alarm_config_geni_app_if = False
-    t.alarm_config_subject_save = 'Value'
-    t.alarm_config_flash_block = 'Config'
-    t.alarm_config_subject_access = 'Read/Write'
+    t.alarm_config_subject.subject_name = 'dda_geni_comm_fault_conf'
+    t.alarm_config_subject.subject_type_id = 'AlarmConfig'
+    t.alarm_config_subject.geni_app_if = False
+    t.alarm_config_subject.subject_save = 'Value'
+    t.alarm_config_subject.flash_block = 'Config'
+    t.alarm_config_subject.subject_access = 'Read/Write'
 
-    t.alarm_config_alarm_enabled = True
-    #t.alarm_config_warning_enabled = True
-    t.alarm_config_auto_ack = True
-    t.alarm_config_alarm_delay = 5
-    t.alarm_config_alarm_type = 'BoolDataPoint'
-    t.alarm_config_alarm_criteria = '='
-    t.alarm_config_alarm_limit = '1'
-    t.alarm_config_warning_limit = '0'
-    t.alarm_config_min_limit = '0'
-    t.alarm_config_max_limit = '1'
-    t.alarm_config_quantity_type_id = 'Q_NO_UNIT'
-    t.alarm_config_verified = False
+    t.alarm_config_subject.alarm_config_alarm_enabled = True
+    #t.alarm_config_subject.alarm_config_warning_enabled = True
+    t.alarm_config_subject.alarm_config_auto_ack = True
+    t.alarm_config_subject.alarm_config_alarm_delay = 5
+    t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_subject.alarm_config_alarm_criteria = '='
+    t.alarm_config_subject.alarm_config_alarm_limit = '1'
+    t.alarm_config_subject.alarm_config_warning_limit = '0'
+    t.alarm_config_subject.alarm_config_min_limit = '0'
+    t.alarm_config_subject.alarm_config_max_limit = '1'
+    t.alarm_config_subject.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_subject.alarm_config_verified = False
 
-    t.alarm_subject_name = 'dda_geni_comm_fault_obj'
-    t.alarm_subject_type_id = 'AlarmDataPoint'
-    t.alarm_geni_app_if = False
-    t.alarm_subject_save = '-'
-    t.alarm_flash_block = '-'
-    t.alarm_observer_name = 'dda'
-    t.alarm_observer_type = 'DDA'
-    t.alarm_subject_relation_name = 'DDA_GENI_COMM_FAULT_OBJ'
+    t.alarm_subject.subject_name = 'dda_geni_comm_fault_obj'
+    t.alarm_subject.subject_type_id = 'AlarmDataPoint'
+    t.alarm_subject.geni_app_if = False
+    t.alarm_subject.subject_save = '-'
+    t.alarm_subject.flash_block = '-'
+    t.alarm_subject.observer_name = 'dda'
+    t.alarm_subject.observer_type = 'DDA'
+    t.alarm_subject.subject_relation_name = 'DDA_GENI_COMM_FAULT_OBJ'
 
-    t.alarm_alarm_config_id = 'dda_geni_comm_fault_conf'
-    t.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_erroneous_unit_type_id = 'SYSTEM'
-    t.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_config_id = 'dda_geni_comm_fault_conf'
+    t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'
+    t.alarm_subject.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_226_GENIBUS_ERROR'
+
     t.alarm_define_name = 'SID_ALARM_226_GENIBUS_ERROR'
 
     t.save()

@@ -73,6 +73,22 @@ class Label(Base):
                         self.available_rule_parameters[index][1]['ListViewItemId'] = r.id        #确保rule里的listviewitemid和label的一样，TODO 这里实现可以，但总觉得扩展性不好
             x.add()
 
+    def increase_listview_item_index(self):
+        ''' 把新加的listviewitem的Index改成中间的Index，并把大于这个值的Index都加1 '''
+        if hasattr(self, 'listviewitem_index') and self.listviewitem_index is not 0:
+            table = DisplayListViewItem(ListViewId=self.listview_id)
+            max_idx = table.model.Index - 1
+            listviewitem_model = DisplayListViewItem_Model()
+            r = listviewitem_model.select().where(ListViewId=table.model.ListViewId)
+            id_idx_list = [(i.id, i.Index) for i in r]
+            for item in id_idx_list:
+                if item[1] == max_idx:       # 新加入的item的Index是最大的，将其改为指定的index
+                    table.update(id=item[0], Index=self.listviewitem_index)
+                    continue
+                if item[1] >= self.listviewitem_index:  # 其它大于指定index的item，将其index加1
+                    table.update(id=item[0], Index=item[1]+1)
+
+
     def save(self):
         comment(self.description)
         self.update_parameters()

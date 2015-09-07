@@ -358,6 +358,9 @@ class UpdateQuery(BaseQuery):
         sets = []
         for k, v in self.update_query.iteritems():
             field = self.model._meta.get_field_by_name(k)
+            # string是MSSQL保留字，会报语法错误，需要用[]包起来
+            if k.lower() in ['string', 'value']:
+                k = "[" + k + "]"
             sets.append('%s=%s' % (k, field.lookup_value(None, v)))
 
         return ', '.join(sets)

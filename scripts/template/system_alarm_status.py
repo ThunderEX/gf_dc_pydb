@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
-from base import Base
+from base import Label
 from subject import NewSubject
 
-class SystemAlarmStatus(Base):
+class SystemAlarmStatus(Label):
 
     '''
     Add new system alarm status in 4.5.5 - System alarms 
@@ -41,8 +41,38 @@ class SystemAlarmStatus(Base):
     subject_id = ''                                 # : link subject and alarm icon and warning icon, should be a AlarmConfig type subject
     listview_id = '4.5.5 SystemAlarms Status List'  # : listview id which will include the new label and icons
 
+    available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
+    available_rule_column_index = 0         #: the column width should be 0
+
     def update_parameters(self):
-        self.parameters = [
+        if self.label_string:
+            self.string_parameters = [
+                # 加字符串定义
+                (StringDefines,
+                 {
+                     'DefineName': self.label_define_name,
+                     'TypeId': 'Display name',
+                 }
+                 ),
+                # label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'DEV_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+                # label加相应的字符串
+                (Strings,
+                 {
+                     'String': self.label_string,
+                     'LanguageId': 'UK_LANGUAGE',
+                     'Status': 'UnEdit',
+                 }
+                 ),
+            ]
+
+        self.label_parameters = [
             # 1. 添加label
             (DisplayComponent,
              {
@@ -94,28 +124,6 @@ class SystemAlarmStatus(Base):
                  'Transparent': False,
              }
              ),
-            # 3. 加字符串定义
-            (StringDefines,
-             {
-                 'DefineName': self.label_define_name,
-                 'TypeId': 'Display name',
-             }
-             ),
-            # 4. label加相应的字符串
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'DEV_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
-            (Strings,
-             {
-                 'String': self.label_string,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
             # 5. 将字符串和label对应起来
             (DisplayLabel,
              {
@@ -150,27 +158,30 @@ class SystemAlarmStatus(Base):
                  'SubjectAccess': 'Read',
              }
              ),
-            # 8. 在对应的listview下面新加一个item
+        ]
+
+        self.display_listview_parameters = [
+            # 在对应的listview下面新加一个item
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,
              }
              ),
-            # 9. 在新加的item下面添加label
+            # 在新加的item下面添加label
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.label_name,
                  'ColumnIndex': 0,
              }
              ),
-             # 10. 在新加的item下面添加alarm icon
+             # 在新加的item下面添加alarm icon
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.alarm_icon_name,
                  'ColumnIndex': 1,
              }
              ),
-            # 10. 在新加的item下面添加warning icon
+            # 在新加的item下面添加warning icon
             (DisplayListViewItemComponents,
              {
                  'ComponentId': self.warning_icon_name,
@@ -179,49 +190,14 @@ class SystemAlarmStatus(Base):
              ),
         ]
 
+        if self.available_rule_name:
+            self.available_rule_parameters = [
+                    (DisplayListViewItemComponents,
+                     {
+                         'ListViewItemId': 0,  #在handle_DisplayListViewItemAndComponents里更新，与label的ListViewItemId相等，而不是外部输入
+                         'ComponentId': self.available_rule_name,
+                         'ColumnIndex': self.available_rule_column_index,      #TODO, 需要判断哪个ColumnWidth为0
+                     }
+                     ),
+                ]
 
-    def add_alarm(self, parameters):
-        rtn = []
-        display_listview_item_components_list = []
-        for index, para in enumerate(parameters):
-            table = para[0]
-            kwargs = para[1]
-            x = table(**kwargs)
-            if table == DisplayListViewItem:
-                display_listview_item = x
-                continue
-            if table == DisplayListViewItemComponents:
-                display_listview_item_components_list.append(x)
-                continue
-            x.add()
-            rtn.append(x)
-        self.handle_DisplayListViewItemAndComponents(display_listview_item, display_listview_item_components_list)
-        return rtn
-
-
-    def handle_DisplayListViewItemAndComponents(self, display_listview_item, display_listview_item_components_list):
-        """DisplayListViewItem和DisplayListViewItemComponents是相互关联的，用本函数处理一下"""
-        # index 从0开始遍历一遍
-        for i in range(0, display_listview_item.model.Index):
-            try:
-                r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
-                if r:
-                    # 通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
-                    s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
-                    if s:
-                        for display_listview_item_components in display_listview_item_components_list:
-                            if display_listview_item_components.model.ComponentId == s.ComponentId:
-                                log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
-                                return
-            except:
-                debug(("未找到记录").decode('utf-8'))
-        display_listview_item.add()
-        for x in display_listview_item_components_list:
-            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
-            x.model.ListViewItemId = r.id
-            x.add()
-
-    def save(self):
-        comment(self.description)
-        self.update_parameters()
-        self.add_alarm(self.parameters)
