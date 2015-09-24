@@ -45,20 +45,20 @@ def h2s_display():
     dda_alram_strings = [
         #(210, 'SID_ALARM_210_DDA_OVER_PRESSURE'                   , 'Over pressure (210)'),   #已有
         #(211, 'SID_ALARM_211_DDA_MEAN_PRESSURE_TO_LOW'            , 'Mean pressure to low (211)'),   #已有
-        (35,  'SID_ALARM_35_DDA_GAS_IN_PUMP_HEAD'                 , 'Gas in pump head, deaerating problem (35)'),
+        (35,  'SID_ALARM_035_DDA_GAS_IN_PUMP_HEAD'                 , 'Gas in pump head, deaerating problem (35)'),
         #(208, 'SID_ALARM_208_DDA_CAVITATIONS'                     , 'Cavitations (208)'),   #已有
-        (36,  'SID_ALARM_36_DDA_PRESSURE_VALVE_LEAKAGE'           , 'Pressure valve leakage (36)'),
-        (37,  'SID_ALARM_37_DDA_SUCTION_VALVE_LEAKAGE'            , 'Suction valve leakage (37)'),
-        (38,  'SID_ALARM_38_DDA_VENTING_VALVE_DEFECT'             , 'Venting valve defect (38)'),
+        (36,  'SID_ALARM_036_DDA_PRESSURE_VALVE_LEAKAGE'           , 'Pressure valve leakage (36)'),
+        (37,  'SID_ALARM_037_DDA_SUCTION_VALVE_LEAKAGE'            , 'Suction valve leakage (37)'),
+        (38,  'SID_ALARM_038_DDA_VENTING_VALVE_DEFECT'             , 'Venting valve defect (38)'),
         #(12, 'SID_ALARM_12_DDA_TIME_FOR_SERVICE_IS_EXCEED'       , 'Time for service is exceed (12)'),   #已有
-        (33,  'SID_ALARM_33_DDA_SOON_TIME_FOR_SERVICE'            , 'Soon time for service (33)'),
+        (33,  'SID_ALARM_033_DDA_SOON_TIME_FOR_SERVICE'            , 'Soon time for service (33)'),
         #(17,  'SID_ALARM_17_DDA_CAPACITY_TOO_LOW'                 , 'Capacity too low (17)'),   #已有
         #(19,  'SID_ALARM_19_DDA_DIAPHRAGM_BREAK'                  , 'Diaphragm break (19)'),
         #(51, 'SID_ALARM_51_DDA_BLOCKED_MOTOR_OR_PUMP'            , 'Blocked motor/pump (51)'),   #已有
         #(206, 'SID_ALARM_206_DDA_PRE_EMPTY_TANK'                  , 'Pre empty tank (206)'),   #已有
         #(57, 'SID_ALARM_57_DDA_EMPTY_TANK'                       , 'Empty tank (57)'),   #已有
         #(169,'SID_ALARM_169_DDA_CABLE_BREAKDOWN_ON_FLOW_MONITOR' , 'Cable breakdown on Flow Monitor (169)'),   #已有
-        (47,  'SID_ALARM_47_DDA_CABLE_BREAKDOWN_ON_ANALOGUE'      , 'Cable breakdown on Analogue (47)'),
+        (47,  'SID_ALARM_047_DDA_CABLE_BREAKDOWN_ON_ANALOGUE'      , 'Cable breakdown on Analogue (47)'),
     ]
     for alarm_string in dda_alram_strings:
         t = template('AlarmString')
@@ -112,7 +112,7 @@ def h2s_display():
     t.alarm_config_subject.alarm_config_alarm_enabled = True
     t.alarm_config_subject.alarm_config_warning_enabled = True
     t.alarm_config_subject.alarm_config_auto_ack = True
-    t.alarm_config_subject.alarm_config_alarm_delay = 5
+    t.alarm_config_subject.alarm_config_alarm_delay = 1
     t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
     t.alarm_config_subject.alarm_config_alarm_criteria = '='
     t.alarm_config_subject.alarm_config_alarm_limit = '1'
@@ -209,7 +209,7 @@ def h2s_display():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    t.define_name = 'SID_ALARM_DOSING_PUMP'
+    t.define_name = 'SID_ALARM_102_DOSING_PUMP'
     t.string_name = 'Dosing pump not ready (102)'
     t.save()
 
@@ -238,7 +238,7 @@ def h2s_display():
     '''
     t.label_name = '4.5.1 SystemAlarms (analog dosing pump)'
     t.label_define_name = 'SID_ANALOG_DOSING_PUMP'
-    t.label_string = 'Analog Dosing pump'
+    t.label_string = 'Analog dosing pump'
     t.slippoint_name = '4.5.1 SystemAlarms (analog dosing pump) slippoint'
     t.write_state = 31
 
@@ -256,7 +256,7 @@ def h2s_display():
     t.alarm_config_subject.alarm_config_alarm_enabled = True
     t.alarm_config_subject.alarm_config_warning_enabled = True
     t.alarm_config_subject.alarm_config_auto_ack = True
-    t.alarm_config_subject.alarm_config_alarm_delay = 5
+    t.alarm_config_subject.alarm_config_alarm_delay = 1
     t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
     t.alarm_config_subject.alarm_config_alarm_criteria = '='
     t.alarm_config_subject.alarm_config_alarm_limit = '1'
@@ -281,10 +281,10 @@ def h2s_display():
     t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
     t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'
     t.alarm_subject.alarm_erroneous_unit_number = 0
-    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_DOSING_PUMP'
+    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_102_DOSING_PUMP'
 
     t.alarm_alarm_id = 102
-    t.alarm_alarm_string_id = 'SID_ALARM_DOSING_PUMP'      #不同于DDA的Alarm，这里只有一个Alarm，所以新加一个字串，固定显示
+    t.alarm_alarm_string_id = 'SID_ALARM_102_DOSING_PUMP'      #不同于DDA的Alarm，这里只有一个Alarm，所以新加一个字串，固定显示
 
     comment('在AppTypeDefs.h里插入AC_SYS_ALARM_DOSING_PUMP')
     comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_DOSING_PUMP,                  SID_ANALOG_DOSING_PUMP},')
@@ -425,6 +425,16 @@ def h2s_display():
     t.subject_access = 'Read'
     t.save()
 
+    #TODO remove later
+    #for num in range(1, 7):
+        #t = template('ObserverLinkSubject')
+        #t.description = '---------- Pump与dig_in_func_state_emergency_stop挂接 ----------'
+        #t.subject_name =  'dig_in_func_state_dosing_pump'
+        #t.observer_name = 'pump_' + str(num)
+        #t.observer_type = 'Pump'
+        #t.subject_relation_name = 'EMERGENCY_STOP_DIG_IN_REQUEST'
+        #t.subject_access = 'Read'
+        #t.save()
 
     t = template('NewString')
     t.description = '''---------- 4.4.4.1 - Function of digital outputs页面里新加一行label:Start, dosing pump ----------
@@ -783,7 +793,7 @@ def h2s_display():
     t.label_left_margin = 2
     t.quantity_name = '1.1 SystemStatus l1 chemical total dosed nq'
     t.define_name = 'SID_CHEMICAL_TOTAL_DOSED'
-    t.label_string = 'Chemical total dosed'
+    t.label_string = 'Dosed in total'
     t.listview_id = '1.1 SystemStatus List 1'
     t.subject_id = 'chemical_total_dosed'
     t.quantity_type = 'Q_VOLUME'
@@ -927,7 +937,7 @@ def h2s_display():
     |Variable-frequency drives                      |
     |Anti-blocking                                  |
     |Overflow                                       |
---> |H2S Control                                    |
+--> |H2S control                                    |
     |                                               |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
@@ -935,14 +945,14 @@ def h2s_display():
     '''
     t.label_name = '4.2 AdvancedFunc H2S Contol'
     t.label_define_name = 'SID_H2S_CONTROL'
-    t.label_string = 'H2S Control'
+    t.label_string = 'H2S control'
     t.listview_id = '4.2 AdvancedFunc List 1'
 
     t.group_name = '4.2.14 H2S Contol Group'
     t.group_define_name = 'SID_H2S_CONTROL'
 
     t.root_group_id_name = '4.2.14 H2S Contol Group'
-    t.display_string_name = 'H2S Control'
+    t.display_string_name = 'H2S control'
     t.display_number = '4.2.14'
 
     t.listview_name = '4.2.14 H2S Contol List'
@@ -951,11 +961,11 @@ def h2s_display():
     t.save()
 
     t = template('LabelAndNewPage')
-    t.description = '''---------- 4.2.14 - H2S Control 页面里新加一行label:Dosing pump，点击跳进4.2.14.1 Dosing pump group ----------
+    t.description = '''---------- 4.2.14 - H2S control 页面里新加一行label:Dosing pump，点击跳进4.2.14.1 Dosing pump group ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14 - H2S Control                           |
+    |4.2.14 - H2S control                           |
     +-----------------------------------------------+
     |                                               |
 --> |Dosing pump setting                            |
@@ -1000,11 +1010,11 @@ def h2s_display():
     t.save()
 
     t = template('LabelAndExistPage')
-    t.description = '''---------- 4.2.14 - H2S Control 页面里新加一行label: go to modules installed，点击进入4.1.7 Modules installed ----------
+    t.description = '''---------- 4.2.14 - H2S control 页面里新加一行label: go to modules installed，点击进入4.1.7 Modules installed ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
-    |4.2.14 - H2S Control                           |
+    |4.2.14 - H2S control                           |
     +-----------------------------------------------+
     |                                               |
     |Dosing pump setting                            |

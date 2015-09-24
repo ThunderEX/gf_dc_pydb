@@ -116,6 +116,16 @@ def h2s_factory():
     t.save()
 
     ######################################### Subject ################################################
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与any_pump_running挂接 ----------'
+    t.subject_name =  'any_pump_running'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'ANY_PUMP_RUNNING'
+    t.subject_access = 'Read'
+    t.save()
+
+    
     t = template('NewSubject')
     t.description = '---------- 加Subject: dosing_pump_installed ----------'
     #SP_DDA_dosing_pump_enabled
@@ -126,6 +136,7 @@ def h2s_factory():
     t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'dosing_pump_installed'
+    t.subject_access = 'Read/Write'
 
     t.bool_value = 0
     t.save()
@@ -248,8 +259,8 @@ def h2s_factory():
     t.subject_name = 'h2s_level_act'
     t.subject_type_id = 'IntDataPoint'
     t.geni_app_if = True
-    t.subject_save = 'Value'
-    t.flash_block = 'Log'
+    t.subject_save = '-'
+    t.flash_block = '-'
     t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'h2s_level_act'
@@ -582,6 +593,16 @@ def h2s_factory():
     t.geni_convert_id = 'Flow 0.1L/H'
     t.save()
 
+    t = template('ObserverLinkSubject')
+    t.description = '---------- NonGFDosingPumpCtrl与dosing_ref_act挂接 ----------'
+    t.subject_name =  'dosing_ref_act'
+    t.observer_name = 'nongf_dosing_pump_ctrl'
+    t.observer_type = 'NonGFDosingPumpCtrl'
+    t.subject_relation_name = 'DOSING_REF_ACT'
+    t.subject_access = 'Read/Write'
+    t.save()
+
+
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: set_h2s_level ----------'
@@ -661,15 +682,7 @@ def h2s_factory():
     t.geni_convert_id = 'Flow 0.1L/H'
     t.save()
 
-    t = template('ObserverLinkSubject')
-    t.description = '---------- NonGFDosingPumpCtrl与set_dosing_ref挂接 ----------'
-    t.subject_name =  'set_dosing_ref'
-    t.observer_name = 'nongf_dosing_pump_ctrl'
-    t.observer_type = 'NonGFDosingPumpCtrl'
-    t.subject_relation_name = 'set_dosing_ref'
-    t.subject_access = 'Read/Write'
-    t.save()
-
+    
 
     t = template('NewSubject')
     t.description = '---------- 加Subject: dda_reference，DDA driver和DDACtrl交换数据用----------'
@@ -709,11 +722,17 @@ def h2s_factory():
     t.save()
 
     ######################################### Alarm ################################################
+    t = template('NewString')
+    t.description = '''---------- 新加alarm 类型的string: Dosing pump ----------'''
+    t.define_name = 'SID_UNIT_DOSING_PUMP'
+    t.string_name = 'Dosing pump'
+    t.save()
+
     t = template('Erroneous')
     t.description = '''---------- 新建一个alarm的类型: DOSING_PUMP ----------'''
     t.id = 18
     t.name = 'DOSING_PUMP'
-    t.string_id = 'SID_UNIT_CU361'
+    t.string_id = 'SID_UNIT_DOSING_PUMP'
     t.unit_number = 0
     t.save()
 
@@ -743,7 +762,7 @@ def h2s_factory():
     t.alarm_config_subject.alarm_config_alarm_enabled = True
     #t.alarm_config_subject.alarm_config_warning_enabled = True
     t.alarm_config_subject.alarm_config_auto_ack = True
-    t.alarm_config_subject.alarm_config_alarm_delay = 5
+    t.alarm_config_subject.alarm_config_alarm_delay = 1
     t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
     t.alarm_config_subject.alarm_config_alarm_criteria = '='
     t.alarm_config_subject.alarm_config_alarm_limit = '1'
@@ -786,7 +805,7 @@ def h2s_factory():
     t.alarm_config_subject.alarm_config_alarm_enabled = True
     #t.alarm_config_subject.alarm_config_warning_enabled = True
     t.alarm_config_subject.alarm_config_auto_ack = True
-    t.alarm_config_subject.alarm_config_alarm_delay = 5
+    t.alarm_config_subject.alarm_config_alarm_delay = 1
     t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
     t.alarm_config_subject.alarm_config_alarm_criteria = '='
     t.alarm_config_subject.alarm_config_alarm_limit = '1'
@@ -807,7 +826,7 @@ def h2s_factory():
 
     t.alarm_subject.alarm_alarm_config_id = 'dda_geni_comm_fault_conf'
     t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'
+    t.alarm_subject.alarm_erroneous_unit_type_id = 'DOSING_PUMP'
     t.alarm_subject.alarm_erroneous_unit_number = 0
     t.alarm_subject.alarm_alarm_id = 'SID_ALARM_226_GENIBUS_ERROR'
 

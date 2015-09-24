@@ -27,6 +27,7 @@ class AlarmConfig_Model(FBaseModel):
     AlarmEnabled = BooleanField()
     WarningEnabled = BooleanField()
     AutoAck = BooleanField()
+    AlarmDelay = IntegerField()
     AlarmType = CharField()
     AlarmCriteria = CharField()
     AlarmLimit = CharField()
