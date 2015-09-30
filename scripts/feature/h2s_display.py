@@ -425,16 +425,6 @@ def h2s_display():
     t.subject_access = 'Read'
     t.save()
 
-    #TODO remove later
-    #for num in range(1, 7):
-        #t = template('ObserverLinkSubject')
-        #t.description = '---------- Pump与dig_in_func_state_emergency_stop挂接 ----------'
-        #t.subject_name =  'dig_in_func_state_dosing_pump'
-        #t.observer_name = 'pump_' + str(num)
-        #t.observer_type = 'Pump'
-        #t.subject_relation_name = 'EMERGENCY_STOP_DIG_IN_REQUEST'
-        #t.subject_access = 'Read'
-        #t.save()
 
     t = template('NewString')
     t.description = '''---------- 4.4.4.1 - Function of digital outputs页面里新加一行label:Start, dosing pump ----------
@@ -1239,3 +1229,48 @@ def h2s_display():
     t.available_rule_name = 'Available rule: analog dosing pump selected'
     t.available_rule_column_index = 2
     t.save()
+
+
+    t = template('LabelAndQuantity')
+    t.description = '''---------- 1.1 - System 页面里新加一行label:Dosing pump setpoint ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |1.1 - System                                   |
+    +-----------------------------------------------+
+    |                                               |
+    |  ------------+               +--------------  |
+    |              |               |                |
+    |              |               |                |
+    |              |               |                |
+    |              |               |                |
+    |              |               |                |
+    |              |               |                |
+    |              |               |                |
+    |              +---------------+                |
+    | Parallel-operation time           12:34h      |
+    | Overflow time                     18:51h      |
+    | Overflow volume                       0㎥     |
+    | Number of overrflows                  6       |
+    | Energy                              866kWh    |
+    | H2S level                            12PPM    |
+    | Dosing feed tank level             23.1m      |
+    | Chemical total dosed               32.5㎥     |
+--> | Dosing pump setpoint               5000ml/h   |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '1.1 SystemStatus l1 dosing pump setpoint'
+    t.label_left_margin = 2
+    t.quantity_name = '1.1 SystemStatus l1 h2s dosing pump nq'
+    t.define_name = 'SID_AO_DOSING_PUMP_SETPOINT'
+    #t.label_string = 'Dosing pump setpoint'
+    t.listview_id = '1.1 SystemStatus List 1'
+    t.subject_id = 'dda_reference'
+    t.quantity_type =  'Q_SMALL_FLOW'
+    t.number_of_digits = 5
+    t.available_rule_name = 'Available rule: dosing pump installed'
+    t.available_rule_column_index = 4
+    t.save()
+

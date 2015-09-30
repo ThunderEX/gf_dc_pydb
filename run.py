@@ -5,7 +5,7 @@ from scripts.util.log import *
 
 if __name__ == '__main__':
     option = 'update_database'
-    #option = 'build'
+    option = 'build'
 
     if option == 'update_database':
         copy_database()
@@ -14,6 +14,8 @@ if __name__ == '__main__':
         from scripts.feature.h2s_display import h2s_display
         h2s_factory()
         h2s_display()
+        from scripts.feature.change_string import change_string
+        change_string()
         run_generators(['Factory', 'Langguage'])
     else:
         #vc_build()

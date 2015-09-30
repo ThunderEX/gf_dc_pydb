@@ -36,14 +36,10 @@ def query_by_subject_relation(str):
     results = ObserverSubjects_Model.select().where(SubjectRelationId=subject_relation_id)
     subject_list=[]
     for r in results:
-        olist = []
-        for field in field_names:
-            value = getattr(r, field)
-            if field == 'SubjectId':
-                subject_list.append(value)
-            item = translate(field, value)
-            olist.append(item)
+        olist = [translate(field, getattr(r, field)) for field in field_names]
         table.add_row(olist)
+        if 'SubjectId' in field_names:
+            subject_list.append(getattr(r, 'SubjectId'))
     print table
 
     #print '\n'
@@ -53,11 +49,7 @@ def query_by_subject_relation(str):
         model = ObserverSubjects_Model()
         rs = model.select().where(SubjectId=subject_id)
         for r in rs:
-            olist = []
-            for field in field_names:
-                value = getattr(r, field)
-                item = translate(field, value)
-                olist.append(item)
+            olist = [translate(field, getattr(r, field)) for field in field_names]
             table.add_row(olist)
         #print '\n'
         print table
@@ -81,15 +73,7 @@ def query_alarm():
     _id = id
     model = DisplayAlarmStrings_Model()
     string_model = StringDefines_Model()
-    field_dict = model.get_field_dict()
-    field_names = field_dict.keys()
-    #简单排序，让id在第一位
-    if 'id' in field_names:
-        id_index = field_names.index('id')
-        if id_index is not 0:
-            field_names[id_index] = field_names[0]
-            field_names[0] = 'id'
-    table = PrettyTable(field_names)
+    table, field_names = create_table(model)
     results = model.select()
     if results:
         for result in results:
@@ -112,10 +96,7 @@ def query_observer_by_shortname(short_name):
     table, field_names = create_table(model)
     result = ObserverType_Model.get(ShortName=short_name)
     type_id = getattr(result, 'id')
-    olist = []
-    for field in field_names:
-        value = getattr(result, field)
-        olist.append(value)
+    olist = [getattr(result, field) for field in field_names]
     table.add_row(olist)
     print table
     
@@ -131,5 +112,5 @@ def query_observer_by_shortname(short_name):
 
 if __name__ == '__main__':
     #query_alarm()
-    #query_by_subject_relation('SP_DICLV_VFD_6_INSTALLED')
-    query_observer_by_shortname('DOCLV')
+    query_by_subject_relation('SP_MP204_INSULATION_RESISTANCE')
+    #query_observer_by_shortname('PUMP')

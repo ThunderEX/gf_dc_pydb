@@ -584,13 +584,22 @@ def h2s_factory():
     t.float_value = 0
     t.float_min = 0
     t.float_max = 999999
-    t.float_quantity_type = 'Q_VOLUME'
+    t.float_quantity_type = 'Q_SMALL_FLOW'
 
     t.geni_var_name = 'dosing_ref_act'
     t.geni_class = 14
     t.geni_id = 197
     t.auto_generate = True
     t.geni_convert_id = 'Flow 0.1L/H'
+    t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- DDA与dosing_ref_act挂接 ----------'
+    t.subject_name =  'dosing_ref_act'
+    t.observer_name = 'dda'
+    t.observer_type = 'DDA'
+    t.subject_relation_name = 'DOSING_REF_ACT'
+    t.subject_access = 'Read/Write'
     t.save()
 
     t = template('ObserverLinkSubject')
@@ -673,7 +682,7 @@ def h2s_factory():
     t.float_value = 0
     t.float_min = 0
     t.float_max = 999999
-    t.float_quantity_type = 'Q_VOLUME'
+    t.float_quantity_type = 'Q_SMALL_FLOW'
 
     t.geni_var_name = 'set_dosing_ref'
     t.geni_class = 13
@@ -698,19 +707,11 @@ def h2s_factory():
     t.int_value = '0'
     t.int_type = 'U32'
     t.int_min = '0'
-    t.int_max = '99999'
-    t.int_quantity_type = 'Q_HEIGHT'
+    t.int_max = '9999999'
+    t.int_quantity_type = 'Q_SMALL_FLOW'
     t.int_verified = False
     t.save()
 
-    t = template('ObserverLinkSubject')
-    t.description = '---------- DDA与dda_reference挂接 ----------'
-    t.subject_name =  'dda_reference'
-    t.observer_name = 'dda'
-    t.observer_type = 'DDA'
-    t.subject_relation_name = 'dda_reference'
-    t.subject_access = 'Read/Write'
-    t.save()
 
     t = template('ObserverLinkSubject')
     t.description = '---------- DDA与alarm_reset_event挂接 ----------'
