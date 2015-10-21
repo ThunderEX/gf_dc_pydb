@@ -47,9 +47,9 @@ def h2s_display():
         #(211, 'SID_ALARM_211_DDA_MEAN_PRESSURE_TO_LOW'            , 'Mean pressure to low (211)'),   #已有
         (35,  'SID_ALARM_035_DDA_GAS_IN_PUMP_HEAD'                 , 'Gas in pump head, deaerating problem (35)'),
         #(208, 'SID_ALARM_208_DDA_CAVITATIONS'                     , 'Cavitations (208)'),   #已有
-        (36,  'SID_ALARM_036_DDA_PRESSURE_VALVE_LEAKAGE'           , 'Pressure valve leakage (36)'),
+        (36,  'SID_ALARM_036_DDA_PRESSURE_VALVE_LEAKAGE'           , 'Discharge valve leakage (36)'),
         (37,  'SID_ALARM_037_DDA_SUCTION_VALVE_LEAKAGE'            , 'Suction valve leakage (37)'),
-        (38,  'SID_ALARM_038_DDA_VENTING_VALVE_DEFECT'             , 'Venting valve defect (38)'),
+        (38,  'SID_ALARM_038_DDA_VENTING_VALVE_DEFECT'             , 'Vent valve defective (38)'),
         #(12, 'SID_ALARM_12_DDA_TIME_FOR_SERVICE_IS_EXCEED'       , 'Time for service is exceed (12)'),   #已有
         (33,  'SID_ALARM_033_DDA_SOON_TIME_FOR_SERVICE'            , 'Soon time for service (33)'),
         #(17,  'SID_ALARM_17_DDA_CAPACITY_TOO_LOW'                 , 'Capacity too low (17)'),   #已有
@@ -58,7 +58,7 @@ def h2s_display():
         #(206, 'SID_ALARM_206_DDA_PRE_EMPTY_TANK'                  , 'Pre empty tank (206)'),   #已有
         #(57, 'SID_ALARM_57_DDA_EMPTY_TANK'                       , 'Empty tank (57)'),   #已有
         #(169,'SID_ALARM_169_DDA_CABLE_BREAKDOWN_ON_FLOW_MONITOR' , 'Cable breakdown on Flow Monitor (169)'),   #已有
-        (47,  'SID_ALARM_047_DDA_CABLE_BREAKDOWN_ON_ANALOGUE'      , 'Cable breakdown on Analogue (47)'),
+        (47,  'SID_ALARM_047_DDA_CABLE_BREAKDOWN_ON_ANALOGUE'      , 'Fault, analog input (47)'),
     ]
     for alarm_string in dda_alram_strings:
         t = template('AlarmString')

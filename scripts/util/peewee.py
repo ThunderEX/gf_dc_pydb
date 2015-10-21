@@ -736,6 +736,10 @@ class Model(object):
         return dict(pairs)
 
     @classmethod
+    def raw_execute(cls, sql):
+        cls.database.execute(sql, commit=True)
+
+    @classmethod
     def create_table(cls):
         cls.database.create_table(cls)
 

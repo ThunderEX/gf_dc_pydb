@@ -620,6 +620,22 @@ class Strings(BaseTable):
                     return
         self.get_max_id()
 
+    def update(self, id=0, language_id=0, **kwargs):
+        '''
+            根据id更新数据库
+        
+        :param id: id
+        :param **kwargs: 更新的内容
+        :return: 
+        '''
+        _id = id
+        if _id:
+            self.model.update(**kwargs).where(id=_id, LanguageId=language_id).execute()
+            debug(("表%s成功更新记录，id=%d!" % ((self.model._meta.db_table), _id)).decode('utf-8'))
+            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
+            #debug(("更新记录%d" %(_id)).decode("utf-8"))
+    
+
 
 @AutoInit
 class StringTypes(BaseTable):

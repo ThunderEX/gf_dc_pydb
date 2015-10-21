@@ -112,5 +112,5 @@ def query_observer_by_shortname(short_name):
 
 if __name__ == '__main__':
     #query_alarm()
-    query_by_subject_relation('SP_MP204_INSULATION_RESISTANCE')
+    query_by_subject_relation('SP_DPC_AO_DOSING_PUMP_SETPOINT')
     #query_observer_by_shortname('PUMP')

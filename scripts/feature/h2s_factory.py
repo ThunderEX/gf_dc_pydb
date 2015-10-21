@@ -13,6 +13,10 @@ def h2s_factory():
     _id = table.model.id
     table.update(id=_id, Min=new_ver_code, Max=new_ver_code, Value=new_ver_code)
 
+    comment('添加语言Latvia')
+    table = Languages(id=27, Language='LV_LANGUAGE', iso_name='lv-LV', uk_name='Latvia')
+    table.add()
+
     t = template('NewQuantity')
     t.description = '---------- 添加quantity:ppm ----------'
     t.type_name = 'Q_PARTS_PER_MILLION'
@@ -416,8 +420,8 @@ def h2s_factory():
     t.description = '---------- 加Subject: running_dosing_volume ----------'
     t.subject_name = 'running_dosing_volume'
     t.subject_type_id = 'IntDataPoint'
-    t.subject_save = '-'
-    t.flash_block = '-'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
     t.observer_name = 'dda'
     t.observer_type = 'DDA'
     t.subject_relation_name = 'RUNNING_DOSING_VOLUME'
