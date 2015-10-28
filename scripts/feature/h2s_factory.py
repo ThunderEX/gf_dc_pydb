@@ -121,7 +121,7 @@ def h2s_factory():
 
     ######################################### Subject ################################################
     t = template('ObserverLinkSubject')
-    t.description = '---------- NonGFDosingPumpCtrl与any_pump_running挂接 ----------'
+    t.description = '---------- DDACtrl与any_pump_running挂接 ----------'
     t.subject_name =  'any_pump_running'
     t.observer_name = 'dda_ctrl'
     t.observer_type = 'DDACtrl'
@@ -132,7 +132,6 @@ def h2s_factory():
     
     t = template('NewSubject')
     t.description = '---------- 加Subject: dosing_pump_installed ----------'
-    #SP_DDA_dosing_pump_enabled
     t.subject_name =  'dosing_pump_installed'
     t.subject_type_id = 'BoolDataPoint'
     t.subject_save = 'Value'
@@ -141,17 +140,28 @@ def h2s_factory():
     t.observer_type = 'DDACtrl'
     t.subject_relation_name = 'dosing_pump_installed'
     t.subject_access = 'Read/Write'
+    t.bool_value = 0
+    t.save()
 
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: analog_dosing_pump_installed ----------'
+    t.subject_name =  'analog_dosing_pump_installed'
+    t.subject_type_id = 'BoolDataPoint'
+    t.subject_save = 'Value'
+    t.flash_block = 'Config'
+    t.observer_name = 'dda_ctrl'
+    t.observer_type = 'DDACtrl'
+    t.subject_relation_name = 'ANALOG_DOSING_PUMP_INSTALLED'
     t.bool_value = 0
     t.save()
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_installed挂接 ----------'
-    t.subject_name =  'dosing_pump_installed'
+    t.description = '---------- NonGFDosingPumpCtrl与analog_dosing_pump_installed挂接 ----------'
+    t.subject_name =  'analog_dosing_pump_installed'
     t.observer_name = 'nongf_dosing_pump_ctrl'
     t.observer_type = 'NonGFDosingPumpCtrl'
-    t.subject_relation_name = 'dosing_pump_installed'
-    t.subject_access = 'Read/Write'
+    t.subject_relation_name = 'ANALOG_DOSING_PUMP_INSTALLED'
+    t.subject_access = 'Read'
     t.save()
 
     t = template('NewSubject')
@@ -201,15 +211,6 @@ def h2s_factory():
     t.geni_comment = 'pit_pump_conn_type'
     t.save()
     comment('Note：在AppTypeDefs.h里加入枚举类型%s，值：%s' %(t.enum_type_name, t.subject_name.upper()))
-
-    t = template('ObserverLinkSubject')
-    t.description = '---------- NonGFDosingPumpCtrl与dosing_pump_type挂接 ----------'
-    t.subject_name =  'dosing_pump_type'
-    t.observer_name = 'nongf_dosing_pump_ctrl'
-    t.observer_type = 'NonGFDosingPumpCtrl'
-    t.subject_relation_name = 'dosing_pump_type'
-    t.subject_access = 'Read/Write'
-    t.save()
 
 
     t = template('NewSubject')

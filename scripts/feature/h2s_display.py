@@ -20,7 +20,7 @@ def h2s_display():
     t.available_rule_name = 'Available rule: analog dosing pump selected'
     t.available_rule_type = 'AvalibleIfSet'
     t.available_rule_checkstate = 1
-    t.available_rule_subject_id = 'dosing_pump_type'
+    t.available_rule_subject_id = 'analog_dosing_pump_installed'
     t.save()   
 
     comment('在4.5.x里，因为加了两项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state>30的依次后推')
@@ -408,11 +408,11 @@ def h2s_display():
     comment('modified:   include/AppTypeDefs.h')
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- DigitalInputConfListView与dosing_pump_type挂接 ----------'
-    t.subject_name =  'dosing_pump_type'
+    t.description = '---------- DigitalInputConfListView与analog_dosing_pump_installed挂接 ----------'
+    t.subject_name =  'analog_dosing_pump_installed'
     t.observer_name = 'display_dig_in_conf_listview'
     t.observer_type = 'DigitalInputConfListView'
-    t.subject_relation_name = 'DOSING_PUMP_TYPE'
+    t.subject_relation_name = 'ANALOG_DOSING_PUMP_INSTALLED'
     t.subject_access = 'Read/Write'
     t.save()
 
@@ -508,11 +508,11 @@ def h2s_display():
             ''')
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- DigitalOutputConfListView与dosing_pump_type挂接 ----------'
-    t.subject_name =  'dosing_pump_type'
+    t.description = '---------- DigitalOutputConfListView与analog_dosing_pump_installed挂接 ----------'
+    t.subject_name =  'analog_dosing_pump_installed'
     t.observer_name = 'display_dig_out_conf_listview'
     t.observer_type = 'DigitalOutputConfListView'
-    t.subject_relation_name = 'DOSING_PUMP_TYPE'
+    t.subject_relation_name = 'ANALOG_DOSING_PUMP_INSTALLED'
     t.subject_access = 'Read/Write'
     t.save()
 
