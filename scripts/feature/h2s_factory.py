@@ -380,7 +380,7 @@ def h2s_factory():
     t.float_value = 0.0
     t.float_min = 0
     t.float_max = 999.9
-    t.float_quantity_type = 'Q_DEPTH'
+    t.float_quantity_type = 'Q_HEIGHT'
 
     t.geni_var_name = 'dosing_feed_tank_level'
     t.geni_class = 14

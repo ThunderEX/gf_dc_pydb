@@ -35,7 +35,7 @@ def h2s_display():
     for l in state_list:
         table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
         table.update(id=l[0], WriteState=l[1])
-        comment('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
+        #comment('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
     #1464 | 4.5.2.x PumpAlarms (onoffauto) slippoint, WriteState=30, 有重复，拿出来单独处理
     table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
     table.update(id=1464, WriteState=32)
@@ -691,7 +691,7 @@ def h2s_display():
     | Energy                              866kWh    |
 --> | H2S level                            12PPM    |
     | Dosing feed tank level             23.1m      |
-    | Chemical total dosed               32.5㎥     |
+    | Dosed in total                     32.5㎥     |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
@@ -732,7 +732,7 @@ def h2s_display():
     | Energy                              866kWh    |
     | H2S level                            12PPM    |
 --> | Dosing feed tank level             23.1m      |
-    | Chemical total dosed               32.5㎥     |
+    | Dosed in total                     32.5㎥     |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
@@ -744,7 +744,7 @@ def h2s_display():
     t.label_string = 'Dosing feed tank level'
     t.listview_id = '1.1 SystemStatus List 1'
     t.subject_id = 'dosing_feed_tank_level'
-    t.quantity_type =  'Q_DEPTH'
+    t.quantity_type =  'Q_HEIGHT'
     t.number_of_digits = 5
     t.available_rule_name = 'Available rule: dosing pump installed'
     t.available_rule_column_index = 4
@@ -774,7 +774,7 @@ def h2s_display():
     | Energy                              866kWh    |
     | H2S level                            12PPM    |
     | Dosing feed tank level             23.1m      |
---> | Chemical total dosed               32.5㎥     |
+--> | Dosed in total                     32.5㎥     |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
@@ -863,7 +863,7 @@ def h2s_display():
     t.save()
 
     t = template('LabelAndQuantity')
-    t.description = '''---------- 4.2.5 - Adjustment of counters页面里新加一行Chemical total dosed ----------
+    t.description = '''---------- 4.2.5 - Adjustment of counters页面里新加一行Dosed in total ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
@@ -875,7 +875,7 @@ def h2s_display():
     |  Overflow time                     0:00h      |
     |  Number of overflows                  0       |
     |  Total Volume Overrun Cn              0       |
---> |  Chemical total dosed                20㎥     |
+--> |  Dosed in total                    32.5㎥     |
     |                                               |
     |Pump 1                                         |
     |  Operating hours                   2:02h      |
@@ -1255,7 +1255,7 @@ def h2s_display():
     | Energy                              866kWh    |
     | H2S level                            12PPM    |
     | Dosing feed tank level             23.1m      |
-    | Chemical total dosed               32.5㎥     |
+    | Dosed in total                     32.5㎥     |
 --> | Dosing pump setpoint               5000ml/h   |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
