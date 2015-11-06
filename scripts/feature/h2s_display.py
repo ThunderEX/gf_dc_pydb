@@ -576,6 +576,15 @@ def h2s_display():
     t.save()
 
     t = template('ObserverLinkSubject')
+    t.description = '---------- AnalogInputConfListView与dosing_pump_installed挂接，作为AvailableRule ----------'
+    t.subject_name =  'dosing_pump_installed'
+    t.observer_name = 'display_ana_in_conf_listview'
+    t.observer_type = 'AnalogInputConfListView'
+    t.subject_relation_name = 'DOSING_PUMP_INSTALLED'
+    t.subject_access = 'Read'
+    t.save()
+
+    t = template('ObserverLinkSubject')
     t.description = '---------- DDACtrl与measured_value_chemical_container挂接 ----------'
     t.subject_name =  'measured_value_chemical_container'
     t.observer_name = 'dda_ctrl'

@@ -81,17 +81,15 @@ def vc_build():
 
     start_time = time.time()
     current_dir = os.getcwd()
-    #cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" /build /M4 pc.sln  "Release362|Win32"'
-    #cmd = 'C:\\Windows\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe c:\\Local\\Workspace\\DC_V04.01.00_int\\cu3x1AppPcSim_SRC\\PcMrViewer\\pc.sln /t:CuDll /p:Configuration="Release362"'
-    cmd = 'C:\\Windows\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe pc.sln /t:CuDll /p:Configuration="Release362"'
     tft_cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" /rebuild Tft.vcproj "Release362|Win32"'
     displayviewer_cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" /rebuild DisplayViewer\\src\\DisplayViewer.csproj "Release362|Win32"'
     cu_cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcpackages\\vcbuild.exe" ControlUnit.vcproj "Release362|Win32"'
+    setup_cmd = '"c:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\Common7\\IDE\\devenv.com" pc.sln /Build "Release362|Win32" Setup.vdproj'
     os.chdir(r'..\cu3x1AppPcSim_SRC\PcMrViewer')
-    #result = subprocess.call(cmd)
     result = subprocess.call(tft_cmd)
     result = subprocess.call(displayviewer_cmd)
     result = subprocess.call(cu_cmd)
+    result = subprocess.call(setup_cmd)
     os.chdir(current_dir)
     elapsed_time = time.time() - start_time
     log('Elapsed time for building VC project: %s' % (elapsed_time))

@@ -4,8 +4,10 @@ from scripts.util.log import *
 
 
 if __name__ == '__main__':
-    option = 'update_database'
+    #option = 'update_database'
     option = 'build'
+    #from scripts.feature.change_software_version import change_software_version
+    #change_software_version(simulator_version='Vx4.00.04', controller_version='Vx4.00.04')
 
     if option == 'update_database':
         #copy_database()
@@ -25,6 +27,6 @@ if __name__ == '__main__':
 
         run_generators(['Factory', 'Langguage'])
     else:
-        #vc_build()
-        ghs_build()
-        generate_firmware()
+        vc_build()
+        #ghs_build()
+        #generate_firmware()
