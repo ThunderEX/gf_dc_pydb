@@ -136,10 +136,17 @@ class BaseTable(object):
             #debug(("更新记录%d" %(_id)).decode("utf-8"))
 
     def check_exist(self):
-        ''' 检查记录是否存在 '''
+        '''
+            检查记录是否存在
+        :return: True - 如果存在， False - 不存在
+        '''
         return True if self.model.check_exist() else False
 
     def add(self):
+        '''
+            添加数据
+        :return: 插入数据后的id
+        '''
         if self.check_exist():
             debug(("记录已存在，跳过......").decode("utf-8"))
             debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
@@ -152,9 +159,6 @@ class BaseTable(object):
 # Factory Database
 @AutoInit
 class AlarmConfig(BaseTable):
-
-    """操作表AlarmConfig"""
-
     def init(self, *args, **kwargs):
         self.convert_foreignkey('AlarmConfigId', Subject_Model, 'Name', 'id')
         #self.convert_foreignkey('AlarmType', SubjectTypes_Model, 'Name', 'id', force=True)
@@ -174,8 +178,6 @@ class AlarmDataPoint(BaseTable):
         self.convert_foreignkey('AlarmConfigId', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('AlarmConfig2Id', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('ErroneousUnitTypeId', ErroneousUnitType_Model, 'Name', 'id')
-        # TODO 貌似这里需要多转了一次，用StringDefines里的StringId从DisplayAlarmStrings得到AlarmId
-        #self.convert_foreignkey('AlarmId', DisplayAlarmStrings_Model, 'StringId', 'AlarmId')
         r = StringDefines_Model.get(**{'DefineName': getattr(self.model, 'AlarmId')})
         value = getattr(r, 'id')     #得到StringDefines的id
         r = DisplayAlarmStrings_Model.get(**{'StringId': value})
@@ -246,6 +248,15 @@ class IntDataPoint(BaseTable):
         self.convert_foreignkey('QuantityType', QuantityType_Model, 'Name', 'id')
         if self.model.Type not in ['I16', 'I32', 'U16', 'U32', 'U8']:
             log(('IntDataPoint的Type必须为I16, I32, U16, U32, U8').decode("utf-8"))
+            raise TypeError
+        if self.model.Min and not isinstance(self.model.Min, str):
+            log(('IntDataPoint的Min必须为string类型').decode("utf-8"))
+            raise TypeError
+        if self.model.Max and not isinstance(self.model.Max, str):
+            log(('IntDataPoint的Max必须为string类型').decode("utf-8"))
+            raise TypeError
+        if self.model.Value and not isinstance(self.model.Value, str):
+            log(('IntDataPoint的Value必须为string类型').decode("utf-8"))
             raise TypeError
 
 

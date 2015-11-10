@@ -2,6 +2,16 @@
 
 Template
 ========
+base
+------------------
+
+.. automodule:: scripts.template.base
+
+.. autoclass:: Base
+    :members:
+
+.. autoclass:: Label 
+    :members:
 
 label and checkbox
 ------------------

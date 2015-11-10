@@ -84,9 +84,10 @@ def emergency_stop():
     comment('modified:   application/driver/DiFuncHandler.cpp')
     comment('modified:   include/AppTypeDefs.h')
 
+
     for num in range(1, 7):
         t = template('ObserverLinkSubject')
-        t.description = '---------- Pump与dig_in_func_state_emergency_stop挂接 ----------'
+        t.description = '---------- Pump%d与dig_in_func_state_emergency_stop挂接 ----------' % (num)
         t.subject_name =  'dig_in_func_state_emergency_stop'
         t.observer_name = 'pump_' + str(num)
         t.observer_type = 'Pump'
