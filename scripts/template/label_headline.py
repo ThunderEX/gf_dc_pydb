@@ -11,8 +11,16 @@ class LabelHeadline(Label):
     define_name = ''              #: string define for new label
     label_string = ''             #: string for new label, multiple languages
     listview_id = ''              #: listview id which will include the new label and quantity
+    exclude_from_factory = False  #: hide the lable if true
     label_left_margin = 0         #: left margin of label
     label_right_margin = 0        #: right margin of label
+    label_x1 = 1
+    label_y1 = 0
+    label_x2 = 239
+    label_y2 = 29
+    help_string = 0
+    foreground_colour = None
+    background_colour = None
 
     available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
     available_rule_column_index = 0         #: the column width should be 0
@@ -53,12 +61,12 @@ class LabelHeadline(Label):
                  'ParentComponent': 0,
                  'Visible': True,
                  'ReadOnly': True,
-                 'x1': 1,
-                 'y1': 0,
-                 'x2': 239,
-                 'y2': 29,
+                 'x1': self.label_x1,
+                 'y1': self.label_y1,
+                 'x2': self.label_x2,
+                 'y2': self.label_y2,
                  'DisplayId': 0,
-                 'HelpString': 0,
+                 'HelpString': self.help_string,
                  'Transparent': False,
              }
              ),
@@ -82,12 +90,23 @@ class LabelHeadline(Label):
              }
              ),
         ]
+        if self.foreground_colour:
+            self.label_parameters.append(
+                (DisplayComponentColour,
+                 {
+                     'id': self.label_name,
+                     'ForegroundColour': self.foreground_colour,
+                     'BackgroundColour': self.background_colour,
+                 }
+                 ),
+            )
 
         self.display_listview_parameters = [
             # 在对应的listview下面新加一个item
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,
+                 'ExcludeFromFactory': self.exclude_from_factory,
              }
              ),
             # 在新加的item下面添加label

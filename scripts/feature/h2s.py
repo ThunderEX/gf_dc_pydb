@@ -1818,7 +1818,6 @@ def h2s_display():
     t.display_number = '4.2.14'
 
     t.listview_name = '4.2.14 H2S Contol List'
-    t.listviewid_name = '4.2.14 H2S Contol List'
     t.listview_column_width = [160, 64, 0]
     t.save()
 
@@ -1864,7 +1863,6 @@ def h2s_display():
     t.display_string_name = 'Dosing pump setting'
     t.display_number = '4.2.14.1'
     t.listview_name = '4.2.14.1 H2S Dosing pump List'
-    t.listviewid_name = '4.2.14.1 H2S Dosing pump List'
     t.listview_column_width = [164, 74, 0]
     t.save()
 
@@ -1938,6 +1936,8 @@ def h2s_display():
     t.define_name = 'SID_DOSING_PUMP_INTERFACE'
     t.label_string = 'Dosing pump interface'
     t.listview_id = '4.2.14.1 H2S Dosing pump List'
+    t.foreground_colour = 'GUI_COLOUR_TEXT_HEADLINE_FOREGROUND'
+    t.background_colour = 'GUI_COLOUR_DEFAULT_BACKGROUND'
     t.save()
 
 

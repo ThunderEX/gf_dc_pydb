@@ -20,6 +20,7 @@ class LabelAndCheckbox(Label):
     label_left_margin = 0         #: left margin of label
     label_right_margin = 0        #: right margin of label
     listviewitem_index = 0        #: the index for new label and checkbox, which is blank line before
+    exclude_from_factory = False  #: hide the lable if true
 
     available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
     available_rule_column_index = 0         #: the column width should be 0
@@ -142,6 +143,7 @@ class LabelAndCheckbox(Label):
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,
+                 'ExcludeFromFactory': self.exclude_from_factory,
              }
              ),
              # 在新加的item下面添加label

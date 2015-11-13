@@ -25,10 +25,10 @@ class LabelAndNewPage(Label):
     display_number = ''                     #: the index number of group
 
     listview_name = ''                      #: new listview name that added in DisplayComponent.
-    listviewid_name = ''                    #: the name same as listview_name, used in DisplayListView
     listview_column_width = [160, 64, 0]    #: list of column width of new listview.
     next_list_id = 0                        # next listview to the new listview, 0 is '- None -'
     prev_list_id = 0                        # previous listview to the new listview, 0 is '- None -'
+    exclude_from_factory = False            #: hide the lable if true
     
     def update_parameters(self):
         if self.label_string:
@@ -101,6 +101,7 @@ class LabelAndNewPage(Label):
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,
+                 'ExcludeFromFactory': self.exclude_from_factory,
              }
              ),
             # 在新加的item下面添加label
@@ -207,7 +208,7 @@ class LabelAndNewPage(Label):
              ),
             (DisplayListView,
              {
-                 'id': self.listviewid_name,
+                 'id': self.listview_name,
                  'RowHeight': 15,
                  'SelectedRow': 0,
                  'NextListId': self.next_list_id,
@@ -219,7 +220,7 @@ class LabelAndNewPage(Label):
             self.listview_parameters.append(
                 (DisplayListViewColumns, 
                  { 
-                     'ListViewId': self.listviewid_name, 
+                     'ListViewId': self.listview_name, 
                      'ColumnIndex': index, 
                      'ColumnWidth': column, 
                   }

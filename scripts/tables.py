@@ -601,7 +601,7 @@ class StringDefines(BaseTable):
         stored_id = self.model.id
         self.model.id = None
         if self.model.check_exist():
-            log(("记录已存在，跳过......").decode("utf-8"))
+            log(("记录<%s>已存在，跳过......" % (self.model.DefineName)).decode("utf-8"))
             debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             return
         self.model.id = stored_id

@@ -9,6 +9,7 @@ class NewString(Base):
 
     define_name = ''
     string_name = ''
+    define_type = 'Value type'
 
 
     def update_parameters(self):
@@ -17,7 +18,7 @@ class NewString(Base):
             (StringDefines,
              {
                  'DefineName': self.define_name,
-                 'TypeId': 'Value type',
+                 'TypeId': self.define_type,
              }
              ),
             # 2. label加相应的字符串

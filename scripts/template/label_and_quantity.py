@@ -24,6 +24,7 @@ class LabelAndQuantity(Label):
     subject_id = ''               #: link subject and quantity
     subject_access = 'Read'
     listviewitem_index = 0        #: label column index that to insert in the listview
+    exclude_from_factory = False  #: hide the lable if true
     number_of_digits = 3          #: length of digital, 3 is int, 5 can display float
 
     available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
@@ -146,6 +147,7 @@ class LabelAndQuantity(Label):
             (DisplayListViewItem,
              {
                  'ListViewId': self.listview_id,
+                 'ExcludeFromFactory': self.exclude_from_factory,
              }
              ),
             # 在新加的item下面添加label
