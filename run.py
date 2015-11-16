@@ -6,10 +6,13 @@ from scripts.util.log import *
 def update_database():
     copy_database()
     #import在这里是因为一旦import下面的module，会连上数据库，要确保在copy_database之后
-    from scripts.feature.h2s import h2s
+    from scripts.feature import *
     h2s()
-
-    run_generators(['Factory', 'Langguage'])
+    # mp204_io113()
+    # dry_running_alarm_in_do()
+    # update_ptc_string()
+    # add_language()
+    run_generators(['Factory', 'Langguage', 'WebPage'])
 
 def build():
     vc_build()
