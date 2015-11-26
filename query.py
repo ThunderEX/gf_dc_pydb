@@ -112,5 +112,5 @@ def query_observer_by_shortname(short_name):
 
 if __name__ == '__main__':
     #query_alarm()
-    query_by_subject_relation('SP_AICLV_NO_OF_PUMPS')
+    query_by_subject_relation('SP_IO111_TEMPERATURE_SUPPORT_BEARING')
     #query_observer_by_shortname('PUMP')

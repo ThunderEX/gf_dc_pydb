@@ -30,13 +30,6 @@ class AlarmString(Base):
                  'Status': 'UnEdit',
              }
              ),
-            (Strings,
-             {
-                 'String': self.alarm_string,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
             (DisplayAlarmStrings,
              {
                  'AlarmId': self.alarm_id,

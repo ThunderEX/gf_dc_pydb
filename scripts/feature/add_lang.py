@@ -3,6 +3,8 @@
 from ..template.tpl import template
 from ..util.log import *
 from ..tables import *
+from ..models import *
+from common import *
 
 def add_language():
     # 12 是"Don't translate"，但有单引号，sql报错，索性用数字，省得查询Foreign key
@@ -65,3 +67,10 @@ def add_language():
         t.exclude_from_factory = i[4]
         t.subject_id = 'display_language'
         t.save()
+
+    # for lang in ['Thai_', 'Indonesian_', 'Latvia_',]:
+        # _id = Strings_Model.get(String=lang).id
+        # new_string = lang[:-1]
+        # log('new string is %s' % new_string)
+        # update_string(_id, 'Developer', new_string)
+        # update_string(_id, 'English', new_string)

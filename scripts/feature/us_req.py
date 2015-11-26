@@ -4,6 +4,7 @@ from ..template.tpl import template
 from ..util.log import *
 from ..tables import *
 from ..models import *
+from common import update_string
 
 #1)	Have “Dry Running” as a selectable DO standard.  We have high level alarm as a DO, but here in the US, most customers also want to monitor the ‘Dry Running.”  This can be accomplished through user defined functions, but it is a pain in the rear to do and goes against my selling technique of an easy to use device
 def dry_running_alarm_in_do():
@@ -493,8 +494,7 @@ def update_ptc_string():
     str_list = [[2005, 2006], [2008, 2009], [2011, 2012], [2014, 2015], [2017, 2018], [2020, 2021]]
     for pump_num, id_list in enumerate(str_list):
         for ptc_num, _id in enumerate(id_list):
-            update_string = 'PTC/Thermal %d, pump %d' % (ptc_num+1, pump_num+1)
-            table = Strings()
-            table.update(id=_id, language_id=0, String=update_string)
-            table.update(id=_id, language_id=18, String=update_string)
+            new_string = 'PTC/Thermal %d, pump %d' % (ptc_num+1, pump_num+1)
+            update_string(_id, 'Developer', new_string)
+            update_string(_id, 'English', new_string)
 

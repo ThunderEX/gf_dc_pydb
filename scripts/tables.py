@@ -28,6 +28,7 @@ class BaseTable(object):
         '''
         self.fill_fields(**kwargs)
         self.foreignkey_items = self.get_foreignkey_items(**kwargs)
+        self.not_check_exist = False if 'not_check_exist' not in kwargs.keys() else kwargs['not_check_exist']
 
     def init(self, *args, **kwargs):
         pass
@@ -140,6 +141,8 @@ class BaseTable(object):
             检查记录是否存在
         :return: True - 如果存在， False - 不存在
         '''
+        if self.not_check_exist:
+            return False
         return True if self.model.check_exist() else False
 
     def add(self):
@@ -613,8 +616,8 @@ class StringDefines(BaseTable):
 class Strings(BaseTable):
     def init(self, *args, **kwargs):
         self.convert_foreignkey('LanguageId', Languages_Model, 'Language', 'id')
-        if 'String' in kwargs:
-            self.get_strings_max_id(kwargs['String'])
+        # if 'String' in kwargs:
+            # self.get_strings_max_id(kwargs['String'])
 
     def get_strings_max_id(self, str):
         '''
@@ -646,6 +649,40 @@ class Strings(BaseTable):
             debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
             #debug(("更新记录%d" %(_id)).decode("utf-8"))
     
+
+    def add(self):
+        '''
+            添加数据
+        :return: 插入数据后的id
+        '''
+        can_add = False
+        if self.model.LanguageId == 0:
+            self.get_max_id()
+            # 必须StringDefines里有相应的record才可以添加对应id的字符串
+            try:
+                r = StringDefines_Model.get(id=self.model.id)
+                if r:
+                    can_add = True
+            except:
+                log("必须先添加StringDefines！！！")
+        if can_add:
+            saved_id = self.model.id
+            saved_string = self.model.String
+            self.model.save()
+            # 找出所有language的最大id
+            r = Languages().model.select()
+            id_list = [i.id for i in r]
+            max_id = max(id_list)
+            # 依次加入空字符串
+            for i in range(1, max_id+1):
+                self.model.id = saved_id
+                self.model.LanguageId = i
+                self.model.String = ""
+                # 18 是English，和Dev的字符串一样的
+                if i == 18:
+                    self.model.String = saved_string
+                self.model.save()
+        return self.model.id
 
 
 @AutoInit

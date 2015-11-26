@@ -62,14 +62,6 @@ class SystemAlarmStatus(Label):
                      'Status': 'UnEdit',
                  }
                  ),
-                # label加相应的字符串
-                (Strings,
-                 {
-                     'String': self.label_string,
-                     'LanguageId': 'UK_LANGUAGE',
-                     'Status': 'UnEdit',
-                 }
-                 ),
             ]
 
         self.label_parameters = [

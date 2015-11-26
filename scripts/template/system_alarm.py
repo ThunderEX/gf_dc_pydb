@@ -39,11 +39,11 @@ class SystemAlarm(Label):
     write_state = 0                                 # : write state can help render to new alarm config page, the value should equal the new enum value defined in ALARM_CONFIG_TYPE in AppTypeDefs.h
     listview_id = '4.5.1 SystemAlarms List'         # : listview id which will include the new label and slippoint
 
-    available_rule_name = ''                #: specify the available rule name, this rule should be pre-defined
-    available_rule_column_index = 0         #: the column width should be 0
+    available_rule_name = ''                        #: specify the available rule name, this rule should be pre-defined
+    available_rule_column_index = 0                 #: the column width should be 0
 
-    alarm_alarm_id = 0                            #: specify the id of alarm, which is also the event code in geni profile
-    alarm_alarm_string_id = ''                    #: SID_ALARM_XXXX
+    alarm_alarm_id = 0                              #: specify the id of alarm, which is also the event code in geni profile
+    alarm_alarm_string_id = ''                      #: SID_ALARM_XXXX
 
     alarm_config_subject = NewSubject()
     alarm_subject = NewSubject()
@@ -63,14 +63,6 @@ class SystemAlarm(Label):
                  {
                      'String': self.label_string,
                      'LanguageId': 'DEV_LANGUAGE',
-                     'Status': 'UnEdit',
-                 }
-                 ),
-                # label加相应的字符串
-                (Strings,
-                 {
-                     'String': self.label_string,
-                     'LanguageId': 'UK_LANGUAGE',
                      'Status': 'UnEdit',
                  }
                  ),

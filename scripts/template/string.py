@@ -29,11 +29,4 @@ class NewString(Base):
                  'Status': 'UnEdit',
              }
              ),
-            (Strings,
-             {
-                 'String': self.string_name,
-                 'LanguageId': 'UK_LANGUAGE',
-                 'Status': 'UnEdit',
-             }
-             ),
         ]
