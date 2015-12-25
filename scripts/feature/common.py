@@ -49,7 +49,7 @@ def insert_empty_strings(_language):
         log('Unrecognized language!!')
         raise NameError
     language_id = languages[_language]
-    result = Languages_Model.get(id=language_id)
+    result = Languages().get(id=language_id)
     lang = result.uk_name.encode('ascii', 'ignore')
     comment('为所有字符串的%s语言插入空值' % (lang))
     comment('过程缓慢，请耐心等待...')

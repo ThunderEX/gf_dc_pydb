@@ -52,10 +52,10 @@ class Label(Base):
         # index 从0开始遍历一遍
         for i in range(0, display_listview_item.model.Index):
             try:
-                r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
+                r = DisplayListViewItem().get(ListViewId=display_listview_item.model.ListViewId, Index=i)
                 if r:
                     # 通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
-                    s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
+                    s = DisplayListViewItemComponents().get(ListViewItemId=r.id)
                     if s:
                         for display_listview_item_components in display_listview_item_components_list:
                             if display_listview_item_components.model.ComponentId == s.ComponentId:
@@ -65,7 +65,7 @@ class Label(Base):
                 debug(("未找到记录").decode('utf-8'))
         display_listview_item.add()
         for x in display_listview_item_components_list:
-            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
+            r = DisplayListViewItem().get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
             x.model.ListViewItemId = r.id
             if self.available_rule_name:
                 for index, para in enumerate(self.available_rule_parameters):

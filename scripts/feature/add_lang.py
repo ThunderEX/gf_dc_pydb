@@ -25,10 +25,10 @@ def add_language():
         t.save()
 
     lst = [
-        [24 , 'Lithuanian' , 'lt' , 'SID_LITHUANIAN_' , False] , # Lithuanian 立陶宛
-        [25 , 'Thai'       , 'th' , 'SID_THAI_'       , True]  , # Thai 泰语
-        [26 , 'Indonesian' , 'id' , 'SID_INDONESIAN_' , False] , # Indonesian 印度尼西亚
-        [27 , 'Latvia'     , 'lv' , 'SID_LATVIA_'     , False] , # Latvia 拉脱维亚
+        [24 , 'Lithuanian' , 'lt' , 'SID_LITHUANIAN' , False] , # Lithuanian 立陶宛
+        [25 , 'Thai'       , 'th' , 'SID_THAI'       , True]  , # Thai 泰语
+        [26 , 'Indonesian' , 'id' , 'SID_INDONESIAN' , False] , # Indonesian 印度尼西亚
+        [27 , 'Latvia'     , 'lv' , 'SID_LATVIA'     , False] , # Latvia 拉脱维亚
     ]
     for i in lst:
         t = template('LabelAndCheckbox')
@@ -68,9 +68,5 @@ def add_language():
         t.subject_id = 'display_language'
         t.save()
 
-    # for lang in ['Thai_', 'Indonesian_', 'Latvia_',]:
-        # _id = Strings_Model.get(String=lang).id
-        # new_string = lang[:-1]
-        # log('new string is %s' % new_string)
-        # update_string(_id, 'Developer', new_string)
-        # update_string(_id, 'English', new_string)
+    # enable Croatian language
+    DisplayListViewItem().update(id=2552, ExcludeFromFactory=False)

@@ -178,13 +178,13 @@ def dry_running_alarm_in_do():
         这部分已经到屏幕下方看不见了，所以需要把AlarmRelay List 2~6的东西挪到List1里，再加上Dry running alarm，并把AlarmRelay List 2~6隐藏起来
         '''
 
-    list1_id = DisplayComponent_Model.get(Name='4.4.6 AlarmRelay List 1').id
+    list1_id = DisplayComponent().get(Name='4.4.6 AlarmRelay List 1').id
     DisplayListView().update(id=list1_id, PrevListId=0, NextListId=0)   #不需要4.4.6 AlarmRelay List 1指向其它List
     DisplayComponent().update(id=list1_id, x1=0, x2=239, y1=15, y2=271) #重新调整4.4.6 AlarmRelay List 1的尺寸
 
     #隐藏4.4.6 AlarmRelay List 2~5
     for i in range(2, 6):
-        list_id = DisplayComponent_Model.get(Name='4.4.6 AlarmRelay List %d' % i).id
+        list_id = DisplayComponent().get(Name='4.4.6 AlarmRelay List %d' % i).id
         DisplayComponent().update(id=list_id, ParentComponent=0, Visible=False, x1=0, x2=0, y1=0, y2=0)
 
 
@@ -341,10 +341,10 @@ def dry_running_alarm_in_do():
         # index 从0开始遍历一遍
         for i in range(0, display_listview_item.model.Index):
             try:
-                r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=i)
+                r = DisplayListViewItem().get(ListViewId=display_listview_item.model.ListViewId, Index=i)
                 if r:
                     # 通过id查询DisplayListViewItemComponents里是否已经有挂在该id下的
-                    s = DisplayListViewItemComponents_Model.get(ListViewItemId=r.id)
+                    s = DisplayListViewItemComponents().get(ListViewItemId=r.id)
                     if s:
                         for display_listview_item_components in display_listview_item_components_list:
                             if display_listview_item_components.model.ComponentId == s.ComponentId:
@@ -354,7 +354,7 @@ def dry_running_alarm_in_do():
                 debug(("未找到记录").decode('utf-8'))
         display_listview_item.add()
         for x in display_listview_item_components_list:
-            r = DisplayListViewItem_Model.get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
+            r = DisplayListViewItem().get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)
             x.model.ListViewItemId = r.id
             x.add()
 

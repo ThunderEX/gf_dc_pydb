@@ -93,6 +93,9 @@ class BaseTable(object):
         else:
             debug("不存在键%s" % (attr_name))
 
+    def get(self, **query):
+        return self.model.get(**query)
+
     def query(self, suppress_log=False, **kwargs):
         '''
             查询数据库
