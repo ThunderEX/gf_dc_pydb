@@ -15,7 +15,14 @@ class Database(object):
 
     def __init__(self, database):
         self.database = database
-        self.conn = self.get_connection()
+        self._conn = None
+
+    # connect database only when it's accessed, instead of connect during define
+    @property
+    def conn(self):
+        if self._conn == None:
+            self._conn = self.get_connection()
+        return self._conn
 
     def get_connection(self):
         if os.path.isfile(self.database):
