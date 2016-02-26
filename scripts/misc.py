@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import stat
 import subprocess
 import shutil
 import time
@@ -8,7 +9,7 @@ from util.log import log, debug
 
 def copy_database():
 
-    ''' Copy clean and original factory, DisplayFactory, language database to replace those in input directory. '''
+    """ Copy clean and original factory, DisplayFactory, language database to replace those in input directory. """
 
     f_database = r'.\backup\Factory.mdb'
     d_database = r'.\backup\DisplayFactory.mdb'
@@ -16,26 +17,33 @@ def copy_database():
     f_dest = r'..\cu3x1App_SRC\Control\FactoryGenerator\input\Factory.mdb'
     d_dest = r'..\cu3x1App_SRC\Control\FactoryGenerator\input\DisplayFactory.mdb'
     l_dest = r'..\cu3x1App_SRC\Control\LangGenerator\input\language.mdb'
-    try:
-        shutil.copy(f_database, f_dest)
-        shutil.copy(d_database, d_dest)
-        shutil.copy(l_database, l_dest)
-        debug('copy database done')
-    except:
-        log('Set backup database please')
-        raise NameError
+
+    # if backup not exist, create them first
+    if any(not os.path.isfile(path) for path in [f_database, d_database, l_database]):
+        shutil.copy(f_dest, f_database)
+        shutil.copy(d_dest, d_database)
+        shutil.copy(l_dest, l_database)
+        # remove read-only
+        [os.chmod(path, stat.S_IWRITE) for path in [f_database, d_database, l_database]]
+
+    # remove read-only
+    [os.chmod(path, stat.S_IWRITE) for path in [f_dest, d_dest, l_dest]]
+    shutil.copy(f_database, f_dest)
+    shutil.copy(d_database, d_dest)
+    shutil.copy(l_database, l_dest)
+    debug('copy database done')
 
 
-def change_software_version(new_version=''):
+def change_software_version(new_version):
     if not new_version.startswith('V'):
-        print 'Only accept version format as V04.00.00 or Vx4.00.00'
-        raise NameError
+        print 'Only accept version format as V04.00.00 or Vx4.00.00, input %s' % new_version
+        raise ValueError
     setup_file = r'..\cu3x1AppPcSim_SRC\PcMrViewer\Setup\Setup.vdproj'
     os.chmod(setup_file, 644)
     key_word1 = r'(CU 362 DC Simulator )V[x\d]\d\.\d\d\.\d\d'
     key_word2 = r'(CU 362 Dedicated Controls Simulator )V[x\d]\d\.\d\d\.\d\d'
     # open file with r+b (allow write and binary mode)
-    f = open(setup_file, 'r+b')   
+    f = open(setup_file, 'r+')
     # read entire content of file into memory
     f_content = f.read()
     # basically match middle line and replace it with itself and the extra line
@@ -60,7 +68,7 @@ def change_software_version(new_version=''):
         v[0] = v[0][1:]  # remove 'V'
     new_version = ''.join(v)
     #print new_version
-    f = open(firmware_version_file, 'r+b')   
+    f = open(firmware_version_file, 'r+')
     # read entire content of file into memory
     f_content = f.read()
     # basically match middle line and replace it with itself and the extra line

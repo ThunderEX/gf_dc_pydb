@@ -7,9 +7,10 @@ class NewObserver(Base):
 
     ''' Add new observer '''
 
-    observer_name = ''           #: new observer name, normally it is the instance of class
-    observer_type = ''           #: new observer type, normally it is class name in application
-    short_name = ''              #: short name for new observer
+    observer_name = ''                          #: new observer name, normally it is the instance of class
+    observer_type = ''                          #: new observer type, normally it is class name in application
+    observer_taskid = 'LowPrioPeriodicTask'     #: new observer task id
+    short_name = ''                             #: short name for new observer
     constructor_args = None
 
     def update_parameters(self):
@@ -28,7 +29,7 @@ class NewObserver(Base):
              {
                  'Name': self.observer_name,
                  #'TypeId'          : 96,      #set from ObserverType
-                 'TaskId': 'LowPrioPeriodicTask',
+                 'TaskId': self.observer_taskid,
                  #'TaskOrder'       : None,
                  #'SubjectId'       : None,
                  'ConstructorArgs' : self.constructor_args,

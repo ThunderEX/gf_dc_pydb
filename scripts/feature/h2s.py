@@ -870,6 +870,9 @@ def h2s_display():
     t.save()   
     
 
+    #TODO
+    comment('TODO 在emergency_stop里System Alarm加了一项，所以这里要再挪一个，记着处理')
+    raise NameError
     comment('在4.5.x里，因为加了两项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state>30的依次后推')
     # >30的都没有重复，批量更新
     table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
