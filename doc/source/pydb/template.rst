@@ -3,7 +3,7 @@
 Template
 ========
 base
-------------------
+----
 
 .. automodule:: scripts.template.base
 

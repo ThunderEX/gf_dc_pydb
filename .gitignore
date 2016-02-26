@@ -3,3 +3,6 @@
 *.log
 tools
 doc/build
+
+# PyCharm
+.idea/*
