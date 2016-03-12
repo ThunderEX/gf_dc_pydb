@@ -2,6 +2,8 @@
 from scripts.misc import *
 from scripts.util.log import *
 import scripts.feature as f
+from fw_upgrader import run as fw_upgrader
+from fw_upgrader import guess_local_ip
 
 def update_database():
     copy_database()
@@ -19,7 +21,11 @@ def build():
     ghs_build()
     generate_firmware()
 
+def download():
+    fw_upgrader(guess_local_ip(), 'http://10.208.32.124', 10, 20, True)
+
 if __name__ == '__main__':
-    change_software_version('Vx3.17.00')
-    update_database()
+    # change_software_version('Vx3.17.01')
+    # update_database()
     # build()
+    download()
