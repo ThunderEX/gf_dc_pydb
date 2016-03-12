@@ -11,6 +11,7 @@ from scripts.feature.common import *
 ID_COLUMN = 10
 
 class Cu361Texts(object):
+    """ export texts from excel to database """
     def __init__(self,):
         self.data = xlrd.open_workbook(r'..\cu3x1App_SRC\Control\LangGenerator\input\Cu361Texts.xls')
         self.table = self.data.sheet_by_name(u'Strings for translation')
@@ -72,6 +73,5 @@ class Cu361Texts(object):
 
 if __name__ == '__main__':
     texts = Cu361Texts()
-    texts.export(638)
+    # texts.export(638)
     texts.export_range(2005, 2021)
-    texts.export_range(2076, 2087)
