@@ -1,0 +1,3 @@
+[submodule "scripts/util/fw_upgrader"]
+	path = scripts/util/fw_upgrader
+	url = https://github.com/szwchao/fw_upgrader
