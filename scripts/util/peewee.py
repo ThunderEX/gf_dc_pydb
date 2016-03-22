@@ -2,9 +2,9 @@
 from datetime import datetime
 import os
 import re
-import pypyodbc
+from .pypyodbc import connect as odbc_connect
 import time
-from log import log, debug
+from .log import log, debug
 
 #DATABASE_NAME = os.environ.get('PEEWEE_DATABASE', 'peewee.db')
 #DATABASE_NAME = "test.mdb"
@@ -26,8 +26,8 @@ class Database(object):
 
     def get_connection(self):
         if os.path.isfile(self.database):
-            debug(("连接数据库: " + self.database).decode('utf-8'))
-            return pypyodbc.connect(DATABASE_ENGINE + self.database)
+            debug("连接数据库: " + self.database)
+            return odbc_connect(DATABASE_ENGINE + self.database)
         else:
             # TODO 先不生成数据库
             #log("create database: " + self.database)
@@ -79,7 +79,7 @@ class QueryResultWrapper(object):
 
     def model_from_rowset(self, model_class, row_dict):
         instance = model_class()
-        for attr, value in row_dict.iteritems():
+        for attr, value in row_dict.items():
             if attr in instance._meta.fields:
                 field = instance._meta.fields[attr]
                 setattr(instance, attr, field.python_value(value))
@@ -94,6 +94,21 @@ class QueryResultWrapper(object):
     def __iter__(self):
         return self
 
+    # pyton3 use __next__ instead of next
+    def __next__(self):
+        row = self.cursor.fetchone()
+        if row:
+            row_dict = self._row_to_dict(row, self.cursor)
+            # 强行将id改为小写的键
+            for key in row_dict.keys():
+                if key in ['id', 'ID', 'Id', 'iD']:
+                    value = row_dict[key]
+                    row_dict.pop(key)
+                    row_dict['id'] = value
+            return self.model_from_rowset(self.model, row_dict)
+        else:
+            raise StopIteration
+
     def next(self):
         row = self.cursor.fetchone()
         if row:
@@ -101,8 +116,9 @@ class QueryResultWrapper(object):
             # 强行将id改为小写的键
             for key in row_dict.keys():
                 if key in ['id', 'ID', 'Id', 'iD']:
-                    row_dict['id'] = row_dict[key]
+                    value = row_dict[key]
                     row_dict.pop(key)
+                    row_dict['id'] = value
             return self.model_from_rowset(self.model, row_dict)
         else:
             raise StopIteration
@@ -139,7 +155,7 @@ class BaseQuery(object):
 
     def parse_query_args(self, **query):
         parsed = {}
-        for lhs, rhs in query.iteritems():
+        for lhs, rhs in query.items():
             if self.query_separator in lhs:
                 lhs, op = lhs.rsplit(self.query_separator, 1)
             else:
@@ -204,7 +220,7 @@ class BaseQuery(object):
                 alias_map[model] = ''
 
             if model in self._where:
-                for name, lookup in self._where[model].iteritems():
+                for name, lookup in self._where[model].items():
                     if name == '__raw__':
                         where_with_alias.append(lookup)
                     else:
@@ -363,7 +379,7 @@ class UpdateQuery(BaseQuery):
 
     def parse_update(self):
         sets = []
-        for k, v in self.update_query.iteritems():
+        for k, v in self.update_query.items():
             field = self.model._meta.get_field_by_name(k)
             # string是MSSQL保留字，会报语法错误，需要用[]包起来
             if k.lower() in ['string', 'value']:
@@ -434,7 +450,7 @@ class InsertQuery(BaseQuery):
     def parse_insert(self):
         cols = []
         vals = []
-        for k, v in self.insert_query.iteritems():
+        for k, v in self.insert_query.items():
             field = self.model._meta.get_field_by_name(k)
             # string是MSSQL保留字，会报语法错误，需要用[]包起来
             if k.lower() in ['string', 'value']:
@@ -670,7 +686,7 @@ class BaseModel(type):
             def get_field_by_name(self, name):
                 if name in self.fields:
                     return self.fields[name]
-                print 'Field name <%s> not found' % name
+                print('Field name <%s> not found' % name)
                 raise AttributeError
 
             def get_related_field_for_model(self, model):
@@ -717,8 +733,12 @@ class BaseModel(type):
         return cls
 
 
-class Model(object):
-    __metaclass__ = BaseModel
+# Python 2/3 compatibility helpers. These helpers are used internally and are
+# not exported.
+def with_metaclass(meta, base=object):
+    return meta("NewBase", (base,), {})
+
+class Model(with_metaclass(BaseModel)):
     #database = Database()
 
     def __init__(self, *args, **kwargs):
@@ -776,7 +796,7 @@ class Model(object):
 
     def check_exist(self):
         field_dict = self.get_field_dict()
-        for k, v in field_dict.items():
+        for k in list(field_dict):
             if getattr(self, k) == None:
                 field_dict.pop(k)
         rs = self.select().where(**field_dict)
@@ -785,9 +805,9 @@ class Model(object):
             for r in rs:
                 count = count + 1  # SelectQuery支持迭代，但没有len方法，count()又出错，只能用蠢办法算结果数量
         if count:
-            log(("找到%d条记录于表%s" % (count, self._meta.db_table)).decode('utf-8'))
+            log("找到%d条记录于表%s" % (count, self._meta.db_table))
         else:
-            debug(("表%s没有找到记录" % (self._meta.db_table)).decode('utf-8'))
+            debug("表%s没有找到记录" % (self._meta.db_table))
 
         return count
 
@@ -802,9 +822,9 @@ class Model(object):
         insert = self.insert(**field_dict)
         try:
             self.id = insert.execute()
-            debug(("表%s成功添加记录，id=%d!" % (self._meta.db_table, self.id)).decode('utf-8'))
-            debug(("内容=%s" % (str(field_dict))).decode('utf-8'))
+            debug("表%s成功添加记录，id=%d!" % (self._meta.db_table, self.id))
+            debug("内容=%s" % (str(field_dict)))
         except Exception as e:
-            log(("！！！错误！！！表%s无法添加记录" % (self._meta.db_table)).decode('utf-8'))
+            log("！！！错误！！！表%s无法添加记录" % (self._meta.db_table))
             raise e
         return

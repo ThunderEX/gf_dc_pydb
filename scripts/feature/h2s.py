@@ -3,7 +3,7 @@
 from ..template.tpl import template
 from ..util.log import *
 from ..tables import *
-from common import *
+from .common import *
 
 def h2s_factory():
     comment('**************************** Factory部分 ****************************')

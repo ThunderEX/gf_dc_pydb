@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
-from base import Label
+from .base import Label
 
 class LabelAndNewPage(Label):
 

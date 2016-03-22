@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, sys
-from util.peewee import *
+from .util.peewee import *
 
 factory_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
 display_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'

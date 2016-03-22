@@ -4,7 +4,7 @@ from ..template.tpl import template
 from ..util.log import *
 from ..tables import *
 from ..models import *
-from common import update_string
+from .common import update_string
 
 #1)	Have “Dry Running” as a selectable DO standard.  We have high level alarm as a DO, but here in the US, most customers also want to monitor the ‘Dry Running.”  This can be accomplished through user defined functions, but it is a pain in the rear to do and goes against my selling technique of an easy to use device
 def dry_running_alarm_in_do():
@@ -348,10 +348,10 @@ def dry_running_alarm_in_do():
                     if s:
                         for display_listview_item_components in display_listview_item_components_list:
                             if display_listview_item_components.model.ComponentId == s.ComponentId:
-                                log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
+                                log("DisplayListViewItemComponents已有该记录")
                                 return
             except:
-                debug(("未找到记录").decode('utf-8'))
+                debug("未找到记录")
         display_listview_item.add()
         for x in display_listview_item_components_list:
             r = DisplayListViewItem().get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from util.peewee import *
-from util.log import *
-from util.prettytable import PrettyTable
-from models import *
+from .util.peewee import *
+from .util.log import *
+from .util.prettytable import PrettyTable
+from .models import *
 
 def AutoInit(cls):
     old_init = cls.__init__
@@ -78,17 +78,17 @@ class BaseTable(object):
         :force 强制转换外键，不论该键是不是在foreignkey_items里
         '''
         if not hasattr(self.model, attr_name):
-            log(("没有Field: %s" % (attr_name)).decode("utf-8"))
+            log("没有Field: %s" % (attr_name))
             raise NameError
         if attr_name in self.foreignkey_items and force is not True:
             r = foreign_model.get(**{foreign_attr_from: getattr(self.model, attr_name)})
             value = getattr(r, foreign_attr_to)
-            debug(("转换外键%s = %s" % (attr_name, str(value))).decode("utf-8"))
+            debug("转换外键%s = %s" % (attr_name, str(value)))
             setattr(self.model, attr_name, value)
         elif force is True:
             r = foreign_model.get(**{foreign_attr_from: getattr(self.model, attr_name)})
             value = getattr(r, foreign_attr_to)
-            debug(("转换外键%s = %s" % (attr_name, str(value))).decode("utf-8"))
+            debug("转换外键%s = %s" % (attr_name, str(value)))
             setattr(self.model, attr_name, value)
         else:
             debug("不存在键%s" % (attr_name))
@@ -105,7 +105,7 @@ class BaseTable(object):
         :return: 
         '''
         field_dict = self.model.get_field_dict()
-        field_names = field_dict.keys()
+        field_names = list(field_dict)
         #简单排序，让id在第一位
         if 'id' in field_names:
             id_index = field_names.index('id')
@@ -121,7 +121,7 @@ class BaseTable(object):
                 olist = [getattr(result, field) for field in field_names]
                 table.add_row(olist)
         if not suppress_log:
-            log(table)
+            log(table.get_string())
         return results
 
     def update(self, id=0, **kwargs):
@@ -135,9 +135,8 @@ class BaseTable(object):
         _id = id
         if _id:
             self.model.update(**kwargs).where(id=_id).execute()
-            debug(("表%s成功更新记录，id=%d!" % ((self.model._meta.db_table), _id)).decode('utf-8'))
-            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
-            #debug(("更新记录%d" %(_id)).decode("utf-8"))
+            debug("表%s成功更新记录，id=%d!" % ((self.model._meta.db_table), _id))
+            debug("内容=%s" % (str(self.model.get_field_dict())))
 
     def check_exist(self):
         '''
@@ -154,8 +153,8 @@ class BaseTable(object):
         :return: 插入数据后的id
         '''
         if self.check_exist():
-            debug(("记录已存在，跳过......").decode("utf-8"))
-            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
+            debug("记录已存在，跳过......")
+            debug("内容=%s" % (str(self.model.get_field_dict())))
             return 0
         else:
             self.model.save()
@@ -253,16 +252,16 @@ class IntDataPoint(BaseTable):
         self.convert_foreignkey('id', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('QuantityType', QuantityType_Model, 'Name', 'id')
         if self.model.Type not in ['I16', 'I32', 'U16', 'U32', 'U8']:
-            log(('IntDataPoint的Type必须为I16, I32, U16, U32, U8').decode("utf-8"))
+            log('IntDataPoint的Type必须为I16, I32, U16, U32, U8')
             raise TypeError
         if self.model.Min and not isinstance(self.model.Min, str):
-            log(('IntDataPoint的Min必须为string类型').decode("utf-8"))
+            log('IntDataPoint的Min必须为string类型')
             raise TypeError
         if self.model.Max and not isinstance(self.model.Max, str):
-            log(('IntDataPoint的Max必须为string类型').decode("utf-8"))
+            log('IntDataPoint的Max必须为string类型')
             raise TypeError
         if self.model.Value and not isinstance(self.model.Value, str):
-            log(('IntDataPoint的Value必须为string类型').decode("utf-8"))
+            log('IntDataPoint的Value必须为string类型')
             raise TypeError
 
 
@@ -275,8 +274,8 @@ class Observer(BaseTable):
 @AutoInit
 class ObserverSubjects(BaseTable):
     def init(self, *args, **kwargs):
-        if kwargs.has_key('SubjectAccess') and kwargs['SubjectAccess'] not in ['Not decided', 'Write', 'Read', 'Read/Write']:
-            log(('DisplayObserverSingleSubject的SubjectAccess必须为Not decided, Write, Read, Read/Write').decode("utf-8"))
+        if 'SubjectAccess' in kwargs and kwargs['SubjectAccess'] not in ['Not decided', 'Write', 'Read', 'Read/Write']:
+            log('DisplayObserverSingleSubject的SubjectAccess必须为Not decided, Write, Read, Read/Write')
             raise NameError
         self.convert_foreignkey('SubjectId', Subject_Model, 'Name', 'id')
         self.convert_foreignkey('ObserverId', Observer_Model, 'Name', 'id')
@@ -307,8 +306,8 @@ class QuantityType(BaseTable):
         stored_id = self.model.id
         self.model.id = None
         if self.model.check_exist():
-            log(("记录已存在，跳过......").decode("utf-8"))
-            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
+            log("记录已存在，跳过......")
+            debug("内容=%s" % (str(self.model.get_field_dict())))
             return
         self.model.id = stored_id
         self.model.save()
@@ -375,7 +374,7 @@ class VectorDataPoint(BaseTable):
     def init(self, *args, **kwargs):
         self.convert_foreignkey('id', Subject_Model, 'Name', 'id')
         if self.model.Type not in ['Bool', 'Double', 'EventLog', 'Float', 'I32', 'U16', 'U32', 'U8']:
-            log(('VectorDataPoint的Type必须为Bool, Double, EventLog, Float, I32, U16, U32, U8').decode("utf-8"))
+            log('VectorDataPoint的Type必须为Bool, Double, EventLog, Float, I32, U16, U32, U8')
             raise TypeError
 
 
@@ -539,8 +538,8 @@ class DisplayObserver(BaseTable):
 @AutoInit
 class DisplayObserverSingleSubject(BaseTable):
     def init(self, *args, **kwargs):
-        if kwargs.has_key('SubjectAccess') and kwargs['SubjectAccess'] not in ['Not decided', 'Write', 'Read', 'Read/Write']:
-            log(('DisplayObserverSingleSubject的SubjectAccess必须为Not decided, Write, Read, Read/Write').decode("utf-8"))
+        if 'SubjectAccess' in kwargs and kwargs['SubjectAccess'] not in ['Not decided', 'Write', 'Read', 'Read/Write']:
+            log('DisplayObserverSingleSubject的SubjectAccess必须为Not decided, Write, Read, Read/Write')
             raise NameError
         self.convert_foreignkey('id', DisplayComponent_Model, 'Name', 'id')
         self.convert_foreignkey('SubjectId', Subject_Model, 'Name', 'id')
@@ -576,8 +575,8 @@ class DisplayText(BaseTable):
         r = self.model.select().where(id=self.model.id)
         if r:
             for i in r:
-                log(("id=%d的记录已存在，跳过......" % (i.id)).decode("utf-8"))
-                debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
+                log("id=%d的记录已存在，跳过......" % (i.id))
+                debug("内容=%s" % (str(self.model.get_field_dict())))
                 return
         self.model.save()
         return self.model.id
@@ -607,8 +606,8 @@ class StringDefines(BaseTable):
         stored_id = self.model.id
         self.model.id = None
         if self.model.check_exist():
-            log(("记录<%s>已存在，跳过......" % (self.model.DefineName)).decode("utf-8"))
-            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
+            log("记录<%s>已存在，跳过......" % (self.model.DefineName))
+            debug("内容=%s" % (str(self.model.get_field_dict())))
             return
         self.model.id = stored_id
         self.model.save()
@@ -648,9 +647,8 @@ class Strings(BaseTable):
         _id = id
         if _id:
             self.model.update(**kwargs).where(id=_id, LanguageId=language_id).execute()
-            debug(("表%s成功更新记录，id=%d!" % ((self.model._meta.db_table), _id)).decode('utf-8'))
-            debug(("内容=%s" % (str(self.model.get_field_dict()))).decode('utf-8'))
-            #debug(("更新记录%d" %(_id)).decode("utf-8"))
+            debug("表%s成功更新记录，id=%d!" % ((self.model._meta.db_table), _id))
+            debug("内容=%s" % (str(self.model.get_field_dict())))
     
 
     def add(self):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
-from base import Base
+from .base import Base
 
 class NewSubject(Base):
 

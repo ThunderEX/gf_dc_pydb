@@ -5,7 +5,7 @@ import subprocess
 import shutil
 import time
 import re
-from util.log import log, debug
+from .util.log import log, debug
 
 def copy_database():
 
@@ -36,7 +36,7 @@ def copy_database():
 
 def change_software_version(new_version):
     if not new_version.startswith('V'):
-        print 'Only accept version format as V04.00.00 or Vx4.00.00, input %s' % new_version
+        print('Only accept version format as V04.00.00 or Vx4.00.00, input %s' % new_version)
         raise ValueError
     setup_file = r'..\cu3x1AppPcSim_SRC\PcMrViewer\Setup\Setup.vdproj'
     os.chmod(setup_file, 644)

@@ -7,7 +7,7 @@ from scripts.models import *
 
 def create_table(model):
     field_dict = model.get_field_dict()
-    field_names = field_dict.keys()
+    field_names = list(field_dict)
     # 排序，让id在第一位
     if 'id' in field_names:
         id_index = field_names.index('id')
@@ -40,10 +40,10 @@ def query_by_subject_relation(str):
         table.add_row(olist)
         if 'SubjectId' in field_names:
             subject_list.append(getattr(r, 'SubjectId'))
-    print table
+    print(table)
 
     #print '\n'
-    print '遍历所有由该SubjectRelation找出的subject'
+    print('遍历所有由该SubjectRelation找出的subject')
     for subject_id in subject_list:
         table = PrettyTable(field_names)
         model = ObserverSubjects_Model()
@@ -52,7 +52,7 @@ def query_by_subject_relation(str):
             olist = [translate(field, getattr(r, field)) for field in field_names]
             table.add_row(olist)
         #print '\n'
-        print table
+        print(table)
 
 
 def translate(field, value):
@@ -86,31 +86,31 @@ def query_alarm():
                     value = r.DefineName
                 olist.append(value)
             table.add_row(olist)
-    log(table)
+    log(table.get_string())
     return results
 
 
 def query_observer_by_shortname(short_name):
     model = ObserverType_Model()
-    print model.__class__.__name__.replace('_Model', '')
+    print(model.__class__.__name__.replace('_Model', ''))
     table, field_names = create_table(model)
     result = ObserverType_Model.get(ShortName=short_name)
     type_id = getattr(result, 'id')
     olist = [getattr(result, field) for field in field_names]
     table.add_row(olist)
-    print table
+    print(table)
     
     model = Observer_Model()
-    print model.__class__.__name__.replace('_Model', '')
+    print(model.__class__.__name__.replace('_Model', ''))
     table, field_names = create_table(model)
     results = model.select().where(TypeId=type_id)
     for r in results:
         olist = [getattr(r, field) for field in field_names]
         table.add_row(olist)
-    print table
+    print(table)
         
 
 if __name__ == '__main__':
-    #query_alarm()
+    query_alarm()
     query_by_subject_relation('SP_IO111_TEMPERATURE_SUPPORT_BEARING')
-    #query_observer_by_shortname('PUMP')
+    query_observer_by_shortname('PUMP')

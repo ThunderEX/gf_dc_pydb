@@ -4,7 +4,7 @@ from ..template.tpl import template
 from ..util.log import *
 from ..tables import *
 from ..models import *
-from common import *
+from .common import *
 
 def add_language():
     # 12 是"Don't translate"，但有单引号，sql报错，索性用数字，省得查询Foreign key

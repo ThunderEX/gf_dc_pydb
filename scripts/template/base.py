@@ -59,10 +59,10 @@ class Label(Base):
                     if s:
                         for display_listview_item_components in display_listview_item_components_list:
                             if display_listview_item_components.model.ComponentId == s.ComponentId:
-                                log(("DisplayListViewItemComponents已有该记录").decode('utf-8'))
+                                log("DisplayListViewItemComponents已有该记录")
                                 return
             except:
-                debug(("未找到记录").decode('utf-8'))
+                debug("未找到记录")
         display_listview_item.add()
         for x in display_listview_item_components_list:
             r = DisplayListViewItem().get(ListViewId=display_listview_item.model.ListViewId, Index=display_listview_item.model.Index)

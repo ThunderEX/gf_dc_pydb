@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from ..tables import *
-from common import *
+from .common import *
 
 def update_alarm_205():
     '''

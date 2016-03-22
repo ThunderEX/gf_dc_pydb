@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from ..models import *
 from ..tables import *
-from subject import NewSubject
-from base import Base
+from .subject import NewSubject
+from .base import Base
 
 class NewAlarm(Base):
 
