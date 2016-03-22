@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from .util.peewee import *
 from .util.log import *
-from .util.prettytable import PrettyTable
+from .lib.peewee import *
+from .lib.prettytable import PrettyTable
 from .models import *
 
 def AutoInit(cls):

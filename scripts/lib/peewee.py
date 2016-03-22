@@ -4,7 +4,7 @@ import os
 import re
 from .pypyodbc import connect as odbc_connect
 import time
-from .log import log, debug
+from ..util.log import log, debug
 
 #DATABASE_NAME = os.environ.get('PEEWEE_DATABASE', 'peewee.db')
 #DATABASE_NAME = "test.mdb"

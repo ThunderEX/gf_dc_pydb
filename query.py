@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from scripts.util.log import *
-from scripts.util.prettytable import PrettyTable
+from scripts.lib.prettytable import PrettyTable
 from scripts.template.tpl import template
 from scripts.tables import *
 from scripts.models import *

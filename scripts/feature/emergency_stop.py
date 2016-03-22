@@ -113,9 +113,9 @@ def emergency_stop():
     t.save()
 
     t = template('NewString')
-    t.description = '''---------- 新加alarm的string: H2S sensor fault (118) ----------'''
+    t.description = '''---------- 新加alarm的string: System emergency stop is initiated (103) ----------'''
     t.define_name = 'SID_ALARM_103_EMERGENCY_STOP'
-    t.string_name = 'System Emergency Stop is initiated (103)'
+    t.string_name = 'System emergency stop is initiated (103)'
     t.save()
 
     t = template('NewAlarm')

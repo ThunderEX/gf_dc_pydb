@@ -103,7 +103,7 @@ language_connection = 'Driver={Microsoft Access Driver (*.mdb)};DBQ=../../../cu3
 output_file = open('../models.py', 'w')
 template = """# -*- coding: utf-8 -*-
 import os, sys
-from util.peewee import *
+from .lib.peewee import *
 
 factory_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/Factory.mdb'
 display_database = '../cu3x1App_SRC/Control/FactoryGenerator/input/DisplayFactory.mdb'
