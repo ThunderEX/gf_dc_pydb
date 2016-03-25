@@ -46,6 +46,10 @@ class ObserverLinkSubject(Base):
                 x.add()
                 rtn.append(x)
                 TypeId = x.model.id
+                # 有时候会出现找到好几个SubjectRelation的情况，需要再进行一次精确查找，否则会在convert_foreignkey自动使用第一个匹配的id
+                if not x.model.id:
+                    temp_modle = x.get(Name=x.model.Name, ObserverTypeId=x.model.ObserverTypeId)
+                    TypeId = temp_modle.id
                 continue
             if table == ObserverSubjects:
                 try:

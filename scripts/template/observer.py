@@ -49,6 +49,10 @@ class NewObserver(Base):
                 x.add()
                 rtn.append(x)
                 TypeId = x.model.id
+                # 已有Observer type了
+                if not x.model.id:
+                    temp_modle = ObserverType().get(Name=kwargs['Name'])
+                    TypeId = temp_modle.id
                 continue
             if table == Observer:
                 try:

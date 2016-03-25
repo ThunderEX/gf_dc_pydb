@@ -6,14 +6,13 @@ from ..tables import *
 
 def emergency_stop():
     t = template('NewObserver')
-    t.description = '---------- 加Observer: EmergencyStopCtrl ----------'
+    t.description = '---------- 加Observer: emergency_stop_ctrl ----------'
     t.observer_name = 'emergency_stop_ctrl'
-    t.observer_type = 'EmergencyStopCtrl'
+    t.observer_type = 'DigitalInputAlarmCtrl'
     t.observer_taskid = 'ControllerEventsTask'
-    t.short_name = 'ESC'
+    t.constructor_args = 'false'
+    t.short_name = 'DIAC'
     t.save()
-
-    comment('**************************** Display Database部分 ****************************')
 
     t = template('NewString')
     t.description = '''---------- 4.4.2.4 - Digital inputs and functions页面里新加一行label:Emergency stop ----------
@@ -92,23 +91,13 @@ def emergency_stop():
     comment('modified:   application/driver/DiFuncHandler.cpp')
     comment('modified:   include/AppTypeDefs.h')
 
-    for i in range(1,7):
-        t = template('ObserverLinkSubject')
-        t.description = '---------- Pump%d与dig_in_func_state_emergency_stop挂接 ----------' % (i)
-        t.subject_name =  'dig_in_func_state_emergency_stop'
-        t.observer_name = 'pump_' + str(i)
-        t.observer_type = 'Pump'
-        t.subject_relation_name = 'EMERGENCY_STOP_DIG_IN_REQUEST'
-        t.subject_access = 'Read'
-        t.save()
-
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- EmergencyStopCtrl与dig_in_func_state_emergency_stop挂接 ----------'
+    t.description = '---------- DigitalInputAlarmCtrl与dig_in_func_state_emergency_stop挂接 ----------'
     t.subject_name =  'dig_in_func_state_emergency_stop'
     t.observer_name = 'emergency_stop_ctrl'
-    t.observer_type = 'EmergencyStopCtrl'
-    t.subject_relation_name = 'EMERGENCY_STOP_DIG_IN_REQUEST'
+    t.observer_type = 'DigitalInputAlarmCtrl'
+    t.subject_relation_name = 'DIG_IN_FUNC_STATE'
     t.subject_access = 'Read'
     t.save()
 
@@ -168,8 +157,9 @@ def emergency_stop():
     t.alarm_subject.subject_save = '-'
     t.alarm_subject.flash_block = '-'
     t.alarm_subject.observer_name = 'emergency_stop_ctrl'
-    t.alarm_subject.observer_type = 'EmergencyStopCtrl'
-    t.alarm_subject.subject_relation_name = 'SYS_ALARM_EMERGENCY_STOP_ALARM_OBJ'
+    t.alarm_subject.observer_type = 'DigitalInputAlarmCtrl'
+    t.alarm_subject.subject_relation_name = 'FAULT_OBJ'
+    t.alarm_subject.subject_access = 'Write'
     t.alarm_subject.alarm_alarm_config_id = 'sys_alarm_emergency_stop_alarm_conf'
     t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
     t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'
@@ -180,55 +170,6 @@ def emergency_stop():
     t.save()
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- EmergencyStopCtrl与no_of_pumps挂接 ----------'
-    t.subject_name =  'no_of_pumps'
-    t.observer_name = 'emergency_stop_ctrl'
-    t.observer_type = 'EmergencyStopCtrl'
-    t.subject_relation_name = 'NO_OF_PUMPS'
-    t.subject_access = 'Read'
-    t.save()
-
-    for i in range(1,7):
-        t = template('ObserverLinkSubject')
-        t.description = '---------- EmergencyStopCtrl与relay_status_relay_func_pump_%d挂接 ----------' % i
-        t.subject_name =  'relay_status_relay_func_pump_%d' % i
-        t.observer_name = 'emergency_stop_ctrl'
-        t.observer_type = 'EmergencyStopCtrl'
-        t.subject_relation_name = 'START_RELAY_PUMP_%d' % i
-        t.subject_access = 'Write'
-        t.save()
-
-    for i in range(1,7):
-        t = template('ObserverLinkSubject')
-        t.description = '---------- EmergencyStopCtrl与vfd_%d_relay_status_relay_func_reverse挂接 ----------' % i
-        t.subject_name =  'vfd_%d_relay_status_relay_func_reverse' % i
-        t.observer_name = 'emergency_stop_ctrl'
-        t.observer_type = 'EmergencyStopCtrl'
-        t.subject_relation_name = 'REVERSE_RELAY_PUMP_%d' % i
-        t.subject_access = 'Write'
-        t.save()
-
-    for i in range(1,7):
-        t = template('ObserverLinkSubject')
-        t.description = '---------- EmergencyStopCtrl与vfd_%d_pump_start_request挂接 ----------' % i
-        t.subject_name =  'vfd_%d_pump_start_request' % i
-        t.observer_name = 'emergency_stop_ctrl'
-        t.observer_type = 'EmergencyStopCtrl'
-        t.subject_relation_name = 'VFD_START_REQUEST_PUMP_%d' % i
-        t.subject_access = 'Write'
-        t.save()
-
-    for i in range(1,7):
-        t = template('ObserverLinkSubject')
-        t.description = '---------- EmergencyStopCtrl与operation_mode_actual_pump_%d挂接 ----------' % i
-        t.subject_name =  'operation_mode_actual_pump_%d' % i
-        t.observer_name = 'emergency_stop_ctrl'
-        t.observer_type = 'EmergencyStopCtrl'
-        t.subject_relation_name = 'OPERATION_MODE_ACTUAL_PUMP_%d' % i
-        t.subject_access = 'Write'
-        t.save()
-
-    t = template('ObserverLinkSubject')
     t.description = '---------- AppModeCtrl与sys_alarm_emergency_stop_alarm_obj挂接 ----------'
     t.subject_name =  'sys_alarm_emergency_stop_alarm_obj'
     t.observer_name = 'app_mode_ctrl'
@@ -236,3 +177,44 @@ def emergency_stop():
     t.subject_relation_name = 'EMERGENCY_STOP_ALARM_OBJ'
     t.subject_access = 'Read'
     t.save()
+
+    ####################################### emergency_stop_detect #########################################
+    t = template('NewObserver')
+    t.description = '---------- 加Observer: emergency_stop_detect ----------'
+    t.observer_name = 'emergency_stop_detect'
+    t.observer_type = 'AlarmDetectCtrl'
+    t.observer_taskid = 'ControllerEventsTask'
+    t.short_name = 'ADC'
+    t.save()
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- AlarmDetectCtrl与sys_alarm_emergency_stop_alarm_obj挂接 ----------'
+    t.subject_name =  'sys_alarm_emergency_stop_alarm_obj'
+    t.observer_name = 'emergency_stop_detect'
+    t.observer_type = 'AlarmDetectCtrl'
+    t.subject_relation_name = 'ALARM_OBJ'
+    t.subject_access = 'Not decided'
+    t.save()
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: emergency_stop_alarm_flag ----------'
+    t.subject_name =  'emergency_stop_alarm_flag'
+    t.subject_type_id = 'BoolDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'emergency_stop_detect'
+    t.observer_type = 'AlarmDetectCtrl'
+    t.subject_relation_name = 'ALARM_PRESENT'
+    t.subject_access = 'Not decided'
+    t.bool_value = 0
+    t.save()
+
+    for i in range(1,7):
+        t = template('ObserverLinkSubject')
+        t.description = '---------- Pump%d与emergency_stop_alarm_flag挂接 ----------' % (i)
+        t.subject_name =  'emergency_stop_alarm_flag'
+        t.observer_name = 'pump_' + str(i)
+        t.observer_type = 'Pump'
+        t.subject_relation_name = 'EMERGENCY_STOP_ALARM_FLAG'
+        t.subject_access = 'Read'
+        t.save()
