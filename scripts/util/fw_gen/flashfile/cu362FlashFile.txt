@@ -1,0 +1,80 @@
+0x01
+0xFF
+_FILE+_PRIMARY+_UNIQUE_CODE+_SUM+_COUNTER
+input\cu362.bin
+0x00000000
+0x0037FFEF
+0xAABBCCDD
+0x00000003
+
+/** slut PRIMARY IMAGE **********/
+
+
+/* Startsinfo.                                          */
+/* linie 1: antal filer der skal behandles              */
+/* linie 2: fill værdi i tomme områder                  */
+
+/* Image-info type 1.                                   */
+/* linie 1: Info byte                                   */
+/*      _FILE:                                          */
+/*        kopier bin-fil direkte over til output filen. */
+/* linie 2: Sti til fil                                 */
+/* linie 3: image starts adresse                        */
+/* linie 4: image slut adresse                          */
+
+/* Image-info type 2.                                   */
+/* linie 1: Info byte                                   */
+/*     _FILE+_PRIMARY+_UNIQUE_CODE+_SUM+_COUNTER:       */
+/*        kopier bin fil direkte over til output filen  */
+/*        og indsæt en sum. Indsæt også en unik kode    */
+/*        samt en tælleværdi.                           */
+/* linie 2: Sti til fil                                 */
+/* linie 3: image starts adresse                        */
+/* linie 4: image slut adresse                          */
+/*    Bemærk!!! at der bruges 12 bytes til sum, unik    */
+/*    kode samt tælleværdi. Image må derfor ikke være   */
+/*    større en slut adresse-start adresse + 1 - 12.    */
+/* linie 5: unik kode.                                  */
+/* linie 6: tælleværdi.                                 */
+
+/* Image-info type 3.                                   */
+/* linie 1: Info byte                                   */
+/*     _FILE+_SECONDARY+_UNIQUE_CODE+_SUM+_COUNTER:     */
+/*        kopier bin fil direkte over til output filen  */
+/*        og indsæt en sum. Indsæt også en unik kode    */
+/*        samt en tælleværdi.                           */
+/* linie 2: Sti til fil                                 */
+/* linie 3: image starts adresse                        */
+/* linie 4: image slut adresse                          */
+/*    Bemærk!!! at der bruges 12 bytes til sum, unik    */
+/*    kode samt tælleværdi. Image må derfor ikke være   */
+/*    større en slut adresse-start adresse + 1 - 12.    */
+/* linie 5: unik kode.                                  */
+/* linie 6: tælleværdi.                                 */
+
+/********************************************************/
+/********************************************************/
+/*                                                      */
+/* Fejlmeddelelser.                                     */
+/*                                                      */
+/********************************************************/
+/********************************************************/
+
+/* Could not create output file.                        */
+/*     Ingen forklaring.                                */
+
+/* Could not open FlashFile.txt                         */
+/*     Programmet kunne ikke finde denne fil.           */
+
+/* Could not open <file name>                           */
+/*     Programmet kunne ikke finde en image fil.        */
+/*     Check om stien er korrekt (i denne fil).         */
+
+/* Image size % 4 error!                                */
+/*     Der skal udregnes en sum for type 2 image. Hvis  */
+/*     der er et ulige antal bytes i filen, kan der     */
+/*     ikke udregnes en sum.                            */
+
+/* Image <file name> did not fit in the specifide area. */
+/*     Slut adressen ( i denne fil ) skal være større   */
+/*     for at et image kan være der.                    */

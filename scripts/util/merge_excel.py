@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import xlrd
-from scripts.util.log import *
-from scripts.util.prettytable import PrettyTable
-from scripts.template.tpl import template
-from scripts.tables import *
-from scripts.models import *
-from scripts.feature.common import *
+from .log import *
+from ..tables import *
+from ..models import *
+from ..feature.common import update_string
 
 ID_COLUMN = 10
 
 class Cu361Texts(object):
     """ export texts from excel to database """
-    def __init__(self,):
-        self.data = xlrd.open_workbook(r'..\cu3x1App_SRC\Control\LangGenerator\input\Cu361Texts.xls')
+    def __init__(self, xls):
+        self.data = xlrd.open_workbook(xls)
         self.table = self.data.sheet_by_name(u'Strings for translation')
         self.languages = [
             #language,    column, id
@@ -42,7 +40,7 @@ class Cu361Texts(object):
             ["Slovenian"  , 33   , 22 ,],     #AH
             ["Croatian"   , 34   , 23 ,],     #AI
             ["Lithuanian" , 35   , 24 ,],     #AJ
-            # ["Thai"       , None , 25 ,],     
+            # ["Thai"       , None , 25 ,],
             ["Indonesian" , 36   , 26 ,],     #AK
             ["Latvia"     , 37   , 27 ,],     #AL
         ]
@@ -69,9 +67,13 @@ class Cu361Texts(object):
         rows = self.table.nrows
         max_id = rows - 7
         self.export_range(0, max_id)
-        
+
 
 if __name__ == '__main__':
-    texts = Cu361Texts()
+    from pathlib import PureWindowsPath
+    p = PureWindowsPath(__file__).parents[3]
+    p = PureWindowsPath(p).joinpath(r'cu3x1App_SRC\Control\LangGenerator\input\Cu361Texts.xls')
+    print(p)
+    texts = Cu361Texts(str(p))
     # texts.export(638)
     texts.export_range(2005, 2021)

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from scripts.util.log import *
-from scripts.lib.prettytable import PrettyTable
-from scripts.template.tpl import template
-from scripts.tables import *
-from scripts.models import *
+from .log import *
+from ..lib.prettytable import PrettyTable
+from ..tables import *
+from ..models import *
 
 def create_table(model):
     field_dict = model.get_field_dict()
@@ -99,7 +98,7 @@ def query_observer_by_shortname(short_name):
     olist = [getattr(result, field) for field in field_names]
     table.add_row(olist)
     print(table)
-    
+
     model = Observer_Model()
     print(model.__class__.__name__.replace('_Model', ''))
     table, field_names = create_table(model)
@@ -108,9 +107,9 @@ def query_observer_by_shortname(short_name):
         olist = [getattr(r, field) for field in field_names]
         table.add_row(olist)
     print(table)
-        
+
 
 if __name__ == '__main__':
-    query_alarm()
+    # query_alarm()
     query_by_subject_relation('SP_IO111_TEMPERATURE_SUPPORT_BEARING')
-    query_observer_by_shortname('PUMP')
+    # query_observer_by_shortname('PUMP')
