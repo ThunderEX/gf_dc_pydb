@@ -6,3 +6,4 @@ from .us_req import *
 from .add_lang import *
 from .factory_boot import factory_boot
 from .emergency_stop import emergency_stop
+from .anti_stealing import anti_stealing
