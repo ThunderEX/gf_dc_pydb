@@ -5,6 +5,16 @@ from ..util.log import *
 from ..tables import *
 
 def anti_stealing():
+    """
+    Anti stealing:
+
+    dig_in_func_state_anti_stealing --> anti_stealing_ctrl     -->sys_alarm_anti_stealing_alarm_obj --> anti_stealing_detect  --> anti_stealing_alarm_flag  --> anti_stealing_alarm_do
+                                        DigitalInputAlarmCtrl                                           AlarmDetectCtrl                                         BoolLogic
+
+    --> relay_status_relay_func_anti_stealing -->  relay_function_handler  --> relay_func_output_anti_stealing
+                                                   RelayFuncHandler
+    """
+
     t = template('NewObserver')
     t.description = '---------- 加Observer: anti_stealing_ctrl ----------'
     t.observer_name = 'anti_stealing_ctrl'
@@ -121,7 +131,6 @@ def anti_stealing():
 
 
     # 104已经被占用了，SID_ALARM_104_SOFTWARE_SHUT_DOWN_REQUEST
-    #先加一个字符串'Dosing pump alarm'显示在'3.1 - current alarms'里
     t = template('NewString')
     t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
     +----------+-------------+---------+------------+
@@ -233,7 +242,7 @@ def anti_stealing():
 
 
     t = template('SystemAlarmStatus')
-    t.description = '''---------- 4.5.5 - Status, system alarms页面里新加一行label:Dosing pump ----------
+    t.description = '''---------- 4.5.5 - Status, system alarms页面里新加一行label:Anti stealing ----------
     +----------+-------------+---------+------------+
     |  Status  |  Operation  |  Alarm  |  Settings  |
     +----------+-------------+---------+------------+
@@ -252,7 +261,7 @@ def anti_stealing():
     |                                               |
     |                                               |
     |                                               |
---> |  Dosing pump                             (!)  |
+--> |  Anti stealing                           (!)  |
     +-----------------------------------------------+
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
@@ -361,20 +370,20 @@ def anti_stealing():
     t.int_quantity_type = 'Q_NO_UNIT'
     t.int_verified = False
     t.save()
-    comment("AppTypeDefs.h里添加RELAY_FUNC_DOSING_PUMP")
+    comment("AppTypeDefs.h里添加RELAY_FUNC_ANTI_STEALING")
     comment("DigitalOutputConfListView.cpp里FIRST_USER_IO_INDEX+1")
-    comment("DigitalOutputConfListView.cpp里添加 { SID_DO_START_DOSING_PUMP,          RELAY_FUNC_DOSING_PUMP               }, 注意放在SID_USERDEFINED_FUNCTION_1之前")
-    comment("DigitalOutputFunctionState.cpp.cpp里添加{ RELAY_FUNC_DOSING_PUMP                  , SID_DO_START_DOSING_PUMP                  }")
+    comment("DigitalOutputConfListView.cpp里添加 { SID_DO_ANTI_STEALING,          RELAY_FUNC_ANTI_STEALING               }, 注意放在SID_USERDEFINED_FUNCTION_1之前")
+    comment("DigitalOutputFunctionState.cpp.cpp里添加{ RELAY_FUNC_ANTI_STEALING                  , SID_DO_ANTI_STEALING                  }")
     comment('''RelayFuncHandler.cpp里添加
-    case SUBJECT_ID_RELAY_STATUS_RELAY_FUNC_DOSING_PUMP:
-      mpRelayStatus[RELAY_FUNC_DOSING_PUMP].Update(pSubject);
+    case SUBJECT_ID_RELAY_STATUS_RELAY_FUNC_ANTI_STEALING:
+      mpRelayStatus[RELAY_FUNC_ANTI_STEALING].Update(pSubject);
       break;
     和
-    case SP_RFH_RELAY_FUNC_DOSING_PUMP:
-      mpRelayStatus[RELAY_FUNC_DOSING_PUMP].Attach(pSubject);
+    case SP_RFH_RELAY_FUNC_ANTI_STEALING:
+      mpRelayStatus[RELAY_FUNC_ANTI_STEALING].Attach(pSubject);
       break;
-    case SP_RFH_RELAY_FUNC_OUTPUT_DOSING_PUMP:
-      mpRelayFuncOutput[RELAY_FUNC_DOSING_PUMP].Attach(pSubject);
+    case SP_RFH_RELAY_FUNC_OUTPUT_ANTI_STEALING:
+      mpRelayFuncOutput[RELAY_FUNC_ANTI_STEALING].Attach(pSubject);
       break;
             ''')
 
