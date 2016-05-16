@@ -27,10 +27,10 @@ def anti_stealing():
                                         |      BoolLogic       |
                                         +----------------------+
                                                 |
-                                                |  relay_status_relay_func_anti_stealing
+                                                |  relay_status_relay_func_anti_stealing_alarm
                                                 v
                                         +----------------------+
-                                        |relay_function_handler| --> relay_func_output_anti_stealing
+                                        |relay_function_handler| --> relay_func_output_anti_stealing_alarm
                                         |   RelayFuncHandler   |
                                         +----------------------+
     """
@@ -355,32 +355,32 @@ def anti_stealing():
     |GRUNDFOS                       04-05-2015 11:13|
     +-----------------------------------------------+
     '''
-    t.define_name = 'SID_DO_ANTI_STEALING'
+    t.define_name = 'SID_DO_ANTI_STEALING_ALARM'
     t.string_name = 'Anti stealing alarm'
     t.save()
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject: relay_status_relay_func_anti_stealing ----------'
-    t.subject_name =  'relay_status_relay_func_anti_stealing'
+    t.description = '---------- 加Subject: relay_status_relay_func_anti_stealing_alarm ----------'
+    t.subject_name =  'relay_status_relay_func_anti_stealing_alarm'
     t.subject_type_id = 'BoolDataPoint'
     t.subject_save = '-'
     t.flash_block = '-'
     t.observer_name = 'relay_function_handler'
     t.observer_type = 'RelayFuncHandler'
-    t.subject_relation_name = 'RELAY_FUNC_ANTI_STEALING'
+    t.subject_relation_name = 'RELAY_FUNC_ANTI_STEALING_ALARM'
 
     t.bool_value = 0
     t.save()
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject: relay_func_output_anti_stealing ----------'
-    t.subject_name =  'relay_func_output_anti_stealing'
+    t.description = '---------- 加Subject: relay_func_output_anti_stealing_alarm ----------'
+    t.subject_name =  'relay_func_output_anti_stealing_alarm'
     t.subject_type_id = 'IntDataPoint'
     t.subject_save = '-'
     t.flash_block = '-'
     t.observer_name = 'relay_function_handler'
     t.observer_type = 'RelayFuncHandler'
-    t.subject_relation_name = 'RELAY_FUNC_OUTPUT_ANTI_STEALING'
+    t.subject_relation_name = 'RELAY_FUNC_OUTPUT_ANTI_STEALING_ALARM'
 
     t.int_value = '0'
     t.int_type = 'U32'
@@ -391,18 +391,18 @@ def anti_stealing():
     t.save()
     comment("AppTypeDefs.h里添加RELAY_FUNC_ANTI_STEALING")
     comment("DigitalOutputConfListView.cpp里FIRST_USER_IO_INDEX+1")
-    comment("DigitalOutputConfListView.cpp里添加 { SID_DO_ANTI_STEALING,          RELAY_FUNC_ANTI_STEALING               }, 注意放在SID_USERDEFINED_FUNCTION_1之前")
-    comment("DigitalOutputFunctionState.cpp.cpp里添加{ RELAY_FUNC_ANTI_STEALING                  , SID_DO_ANTI_STEALING                  }")
+    comment("DigitalOutputConfListView.cpp里添加 { SID_DO_ANTI_STEALING_ALARM,          RELAY_FUNC_ANTI_STEALING_ALARM               }, 注意放在SID_USERDEFINED_FUNCTION_1之前")
+    comment("DigitalOutputFunctionState.cpp.cpp里添加{ RELAY_FUNC_ANTI_STEALING_ALARM                  , SID_DO_ANTI_STEALING_ALARM                  }")
     comment('''RelayFuncHandler.cpp里添加
-    case SUBJECT_ID_RELAY_STATUS_RELAY_FUNC_ANTI_STEALING:
-      mpRelayStatus[RELAY_FUNC_ANTI_STEALING].Update(pSubject);
+    case SUBJECT_ID_RELAY_STATUS_RELAY_FUNC_ANTI_STEALING_ALARM:
+      mpRelayStatus[RELAY_FUNC_ANTI_STEALING_ALARM].Update(pSubject);
       break;
     和
-    case SP_RFH_RELAY_FUNC_ANTI_STEALING:
-      mpRelayStatus[RELAY_FUNC_ANTI_STEALING].Attach(pSubject);
+    case SP_RFH_RELAY_FUNC_ANTI_STEALING_ALARM:
+      mpRelayStatus[RELAY_FUNC_ANTI_STEALING_ALARM].Attach(pSubject);
       break;
-    case SP_RFH_RELAY_FUNC_OUTPUT_ANTI_STEALING:
-      mpRelayFuncOutput[RELAY_FUNC_ANTI_STEALING].Attach(pSubject);
+    case SP_RFH_RELAY_FUNC_OUTPUT_ANTI_STEALING_ALARM:
+      mpRelayFuncOutput[RELAY_FUNC_ANTI_STEALING_ALARM].Attach(pSubject);
       break;
             ''')
 
@@ -427,8 +427,8 @@ def anti_stealing():
 
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- anti_stealing_alarm_do与relay_status_relay_func_anti_stealing挂接 ----------'
-    t.subject_name =  'relay_status_relay_func_anti_stealing'
+    t.description = '---------- anti_stealing_alarm_do与relay_status_relay_func_anti_stealing_alarm挂接 ----------'
+    t.subject_name =  'relay_status_relay_func_anti_stealing_alarm'
     t.observer_name = 'anti_stealing_alarm_do'
     t.observer_type = 'BoolLogic'
     t.subject_relation_name = 'OUTPUT'
