@@ -6,13 +6,33 @@ from ..tables import *
 
 def anti_stealing():
     """
-    Anti stealing:
+    Anti stealing: flowchart
 
-    dig_in_func_state_anti_stealing --> anti_stealing_ctrl     -->sys_alarm_anti_stealing_alarm_obj --> anti_stealing_detect  --> anti_stealing_alarm_flag  --> anti_stealing_alarm_do
-                                        DigitalInputAlarmCtrl                                           AlarmDetectCtrl                                         BoolLogic
-
-    --> relay_status_relay_func_anti_stealing -->  relay_function_handler  --> relay_func_output_anti_stealing
-                                                   RelayFuncHandler
+                                        +---------------------+
+    dig_in_func_state_anti_stealing --> |anti_stealing_ctrl   |
+                                        |DigitalInputAlarmCtrl|
+                                        +---------------------+
+                                                |
+                                                |  sys_alarm_anti_stealing_alarm_obj
+                                                v
+                                        +---------------------+
+                                        |anti_stealing_detect |
+                                        |  AlarmDetectCtrl    |
+                                        +---------------------+
+                                                |
+                                                |  anti_stealing_alarm_flag
+                                                v
+                                        +----------------------+
+                                        |anti_stealing_alarm_do|
+                                        |      BoolLogic       |
+                                        +----------------------+
+                                                |
+                                                |  relay_status_relay_func_anti_stealing
+                                                v
+                                        +----------------------+
+                                        |relay_function_handler| --> relay_func_output_anti_stealing
+                                        |   RelayFuncHandler   |
+                                        +----------------------+
     """
 
     t = template('NewObserver')
@@ -201,7 +221,7 @@ def anti_stealing():
 
     t.alarm_config_subject.alarm_config_alarm_enabled = True
     t.alarm_config_subject.alarm_config_warning_enabled = False
-    t.alarm_config_subject.alarm_config_auto_ack = False
+    t.alarm_config_subject.alarm_config_auto_ack = True
     t.alarm_config_subject.alarm_config_alarm_delay = 1
     t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
     t.alarm_config_subject.alarm_config_alarm_criteria = '='
@@ -238,7 +258,6 @@ def anti_stealing():
       mpAlarmDP[AC_SYS_ALARM_ANTI_STEALING][0].Attach(pSubject);
       break;
             ''')
-    t.save()
 
 
     t = template('SystemAlarmStatus')

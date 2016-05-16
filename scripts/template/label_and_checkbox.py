@@ -17,7 +17,7 @@ class LabelAndCheckbox(Label):
     check_state = 0               #: ModeCheckBox use this, value means enum define values in AppTypeDefs.h
     label_column_index = 0        #: label column index in the listview
     checkbox_column_index = 1     #: checkbox column index in the listview
-    label_left_margin = 0         #: left margin of label
+    label_left_margin = 0         #: left margin of label, margin > 0 means cursor can move on this
     label_right_margin = 0        #: right margin of label
     listviewitem_index = 0        #: the index for new label and checkbox, which is blank line before
     exclude_from_factory = False  #: hide the lable if true
