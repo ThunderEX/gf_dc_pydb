@@ -186,86 +186,14 @@ def grinder_func():
     +-----------------------------------------------+
     '''
     t.label_name = '4.2.15 Grinder control go to IO'
-    t.label_string = 'Go to setting of I/O'
-    t.label_define_name = 'SID_GO_TO_SETTING_OF_IO'
+    t.label_string = 'Go to settings of I/O'
+    t.label_define_name = 'SID_GO_TO_SETTINGS_OF_IO'
     t.display_id = 47 # 4.4 IO Group
     t.listview_id = '4.2.15 Grinder Contol List'
     t.label_left_margin = 1
     t.label_right_margin = 0
     t.save()
 
-
-def grinder_alarm():
-    ######################################### Alarm ##################################################
-    # TODO specify alarm code
-
-    t = template('NewString')
-    t.description = '''---------- 新加alarm的string: Grinder blocked (???) ----------'''
-    t.define_name = 'SID_ALARM_108_GRINDER_BLOCKED'
-    t.string_name = 'Grinder blocked (108)'
-    t.save()
-
-    t = template('NewAlarm')
-    t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
-    +----------+-------------+---------+------------+
-    |  Status  |  Operation  |  Alarm  |  Settings  |
-    +----------+-------------+---------+------------+
-    |3.1 - Current alarms                           |
-    +-----------------------------------------------+
-    |                                               |
-    | (!)CU 362                                     |
---> |  Grinder blocked (???)                        |
-    |  Occured at                   2015-05-15 14:01|
-    |  Disappeared at                     --   --   |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    |                                               |
-    +-----------------------------------------------+
-    |GRUNDFOS                       2016-02-23 11:13|
-    +-----------------------------------------------+
-    '''
-    t.alarm_config_subject.subject_name = 'sys_alarm_grinder_blocked_alarm_conf'
-    t.alarm_config_subject.subject_type_id = 'AlarmConfig'
-    t.alarm_config_subject.geni_app_if = False
-    t.alarm_config_subject.subject_save = 'Value'
-    t.alarm_config_subject.flash_block = 'Config'
-    t.alarm_config_subject.subject_access = 'Read/Write'
-    t.alarm_config_subject.alarm_config_alarm_enabled = True
-    #t.alarm_config_subject.alarm_config_warning_enabled = True
-    t.alarm_config_subject.alarm_config_auto_ack = False
-    t.alarm_config_subject.alarm_config_alarm_delay = 1
-    t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
-    t.alarm_config_subject.alarm_config_alarm_criteria = '='
-    t.alarm_config_subject.alarm_config_alarm_limit = '1'
-    t.alarm_config_subject.alarm_config_warning_limit = '0'
-    t.alarm_config_subject.alarm_config_min_limit = '0'
-    t.alarm_config_subject.alarm_config_max_limit = '1'
-    t.alarm_config_subject.alarm_config_quantity_type_id = 'Q_NO_UNIT'
-    t.alarm_config_subject.alarm_config_verified = False
-
-    t.alarm_subject.subject_name = 'sys_alarm_grinder_blocked_alarm_obj'
-    t.alarm_subject.subject_type_id = 'AlarmDataPoint'
-    t.alarm_subject.geni_app_if = False
-    t.alarm_subject.subject_save = '-'
-    t.alarm_subject.flash_block = '-'
-    t.alarm_subject.observer_name = 'grinder_ctrl'
-    t.alarm_subject.observer_type = 'GrinderCtrl'
-    t.alarm_subject.subject_relation_name = 'SYSTEM_ALARM_GRINDER_BLOCKED'
-    t.alarm_subject.subject_access = 'Write'
-    t.alarm_subject.alarm_alarm_config_id = 'sys_alarm_grinder_blocked_alarm_conf'
-    t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
-    t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'
-    t.alarm_subject.alarm_erroneous_unit_number = 0
-    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_108_GRINDER_BLOCKED'
-    t.alarm_define_name = 'SID_ALARM_108_GRINDER_BLOCKED'
-    t.alarm_id = 108
-    t.save()
 
 def grinder_io():
     ######################################### I/O ##################################################
@@ -295,26 +223,26 @@ def grinder_io():
     |                                               |
     |                                               |
     |                                               |
---> |  Flow switch, grinder                 ☐       |
+--> |  Inflow switch, grinder               ☐       |
     |                                               |
     +-----------------------------------------------+
     |GRUNDFOS                       2016-02-23 11:13|
     +-----------------------------------------------+
     '''
-    t.define_name = 'SID_DI_GRINDER_FLOW_SWITCH'
-    t.string_name = 'Flow switch, grinder'
+    t.define_name = 'SID_DI_GRINDER_INFLOW_SWITCH'
+    t.string_name = 'Inflow switch, grinder'
     t.save()
 
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject: dig_in_func_input_grinder_flow_switch ----------'
-    t.subject_name = 'dig_in_func_input_grinder_flow_switch'
+    t.description = '---------- 加Subject: dig_in_func_input_grinder_inflow_switch ----------'
+    t.subject_name = 'dig_in_func_input_grinder_inflow_switch'
     t.subject_type_id = 'IntDataPoint'
     t.subject_save = '-'
     t.flash_block = '-'
     t.observer_name = 'digital_input_function_handler'
     t.observer_type = 'DiFuncHandler'
-    t.subject_relation_name = 'DIG_IN_FUNC_INPUT_GRINDER_FLOW_SWITCH'
+    t.subject_relation_name = 'DIG_IN_FUNC_INPUT_GRINDER_INFLOW_SWITCH'
     t.subject_access = 'Read/Write'
 
     t.int_value = '0'
@@ -327,42 +255,43 @@ def grinder_io():
 
 
     t = template('NewSubject')
-    t.description = '---------- 加Subject, EnumDataPoint: dig_in_func_state_grinder_flow_switch ----------'
-    t.subject_name = 'dig_in_func_state_grinder_flow_switch'
+    t.description = '---------- 加Subject, EnumDataPoint: dig_in_func_state_grinder_inflow_switch ----------'
+    t.subject_name = 'dig_in_func_state_grinder_inflow_switch'
     t.subject_type_id = 'EnumDataPoint'
     t.geni_app_if = False
     t.subject_save = '-'
     t.flash_block = '-'
     t.observer_name = 'digital_input_function_handler'
     t.observer_type = 'DiFuncHandler'
-    t.subject_relation_name = 'DIG_IN_FUNC_STATE_GRINDER_FLOW_SWITCH'
+    t.subject_relation_name = 'DIG_IN_FUNC_STATE_GRINDER_INFLOW_SWITCH'
     t.subject_access = 'Read/Write'
 
     t.enum_type_name = 'DIGITAL_INPUT_FUNC_STATE'
     t.enum_value = 'NOT_CONFIGURED'
     t.save()
-    comment('Note：在AppTypeDefs.h里枚举DIGITAL_INPUT_FUNC_TYPE里加入：DIGITAL_INPUT_FUNC_GRINDER_FLOW_SWITCH')
+    comment('Note：在AppTypeDefs.h里枚举DIGITAL_INPUT_FUNC_TYPE里加入：DIGITAL_INPUT_FUNC_GRINDER_INFLOW_SWITCH')
     comment('''application/display/DigitalInputConfListView.cpp 添加：
-            {SID_DI_GRINDER_FLOW_SWITCH, DIGITAL_INPUT_FUNC_GRINDER_FLOW_SWITCH},''')
+            {SID_DI_GRINDER_INFLOW_SWITCH, DIGITAL_INPUT_FUNC_GRINDER_INFLOW_SWITCH},''')
     comment('''application/display/state/DigitalInputFunctionState.cpp 添加：
-            {DIGITAL_INPUT_FUNC_GRINDER_FLOW_SWITCH, SID_DI_GRINDER_FLOW_SWITCH},''')
+            {DIGITAL_INPUT_FUNC_GRINDER_INFLOW_SWITCH, SID_DI_GRINDER_INFLOW_SWITCH},''')
     comment('''application/driver/DiFuncHandler.cpp 的SetSubjectPointer里添加：
-    case SP_DIFH_DIG_IN_FUNC_STATE_GRINDER_FLOW_SWITCH:
-      mpDiFuncState[DIGITAL_INPUT_FUNC_GRINDER_FLOW_SWITCH].Attach(pSubject);
+    case SP_DIFH_DIG_IN_FUNC_STATE_GRINDER_INFLOW_SWITCH:
+      mpDiFuncState[DIGITAL_INPUT_FUNC_GRINDER_INFLOW_SWITCH].Attach(pSubject);
       break;
-    case SP_DIFH_DIG_IN_FUNC_INPUT_GRINDER_FLOW_SWITCH:
-      mpDiFuncInput[DIGITAL_INPUT_FUNC_GRINDER_FLOW_SWITCH].Attach(pSubject);
+    case SP_DIFH_DIG_IN_FUNC_INPUT_GRINDER_INFLOW_SWITCH:
+      mpDiFuncInput[DIGITAL_INPUT_FUNC_GRINDER_INFLOW_SWITCH].Attach(pSubject);
       break;''')
 
 
     t = template('ObserverLinkSubject')
-    t.description = '---------- GrinderCtrl与dig_in_func_state_grinder_flow_switch挂接 ----------'
-    t.subject_name =  'dig_in_func_state_grinder_flow_switch'
+    t.description = '---------- GrinderCtrl与dig_in_func_state_grinder_inflow_switch挂接 ----------'
+    t.subject_name =  'dig_in_func_state_grinder_inflow_switch'
     t.observer_name = 'grinder_ctrl'
     t.observer_type = 'GrinderCtrl'
-    t.subject_relation_name = 'GRINDER_FLOW_SWITCH_DIG_IN_REQUEST'
+    t.subject_relation_name = 'GRINDER_INFLOW_SWITCH_DIG_IN_REQUEST'
     t.subject_access = 'Read'
     t.save()
+
 
     t = template('NewString')
     t.description = '''---------- 4.4.2.4 - Digital inputs and functions页面里新加一行label: Current overload, grinder ----------
@@ -455,6 +384,101 @@ def grinder_io():
     t.observer_name = 'grinder_ctrl'
     t.observer_type = 'GrinderCtrl'
     t.subject_relation_name = 'GRINDER_CURRENT_OVERLOAD_DIG_IN_REQUEST'
+    t.subject_access = 'Read'
+    t.save()
+
+
+    t = template('NewString')
+    t.description = '''---------- 4.4.2.4 - Digital inputs and functions页面里新加一行label: Over temperature, grinder ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.4.2.4 - Digital iutputs and functions        |
+    +-----------------------------------------------+
+    |Select input logic                             |
+    |  NO (normally open)                   ☑       |
+    |  NC (normally closed)                 ☐       |
+    |                                               |
+    |Function, DI1 (IO351B-41)                      |
+    |  Not used                             ☐       |
+    |  Automatic/manual, pump 1             ☐       |
+    |  Manual start, pump 1                 ☐       |
+    |  Automatic/manual, pump 2             ☐       |
+    |  Manual start, pump 2                 ☐       |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+--> |  Over temperature, grinder            ☐       |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       2016-02-23 11:13|
+    +-----------------------------------------------+
+    '''
+    t.define_name = 'SID_DI_GRINDER_OVER_TEMPERATURE'
+    t.string_name = 'Over temperature, grinder'
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject: dig_in_func_input_grinder_over_temperature ----------'
+    t.subject_name = 'dig_in_func_input_grinder_over_temperature'
+    t.subject_type_id = 'IntDataPoint'
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'digital_input_function_handler'
+    t.observer_type = 'DiFuncHandler'
+    t.subject_relation_name = 'DIG_IN_FUNC_INPUT_GRINDER_OVER_TEMPERATURE'
+    t.subject_access = 'Read/Write'
+
+    t.int_value = '0'
+    t.int_type = 'U32'
+    t.int_min = '0'
+    t.int_max = '30'
+    t.int_quantity_type = 'Q_NO_UNIT'
+    t.int_verified = False
+    t.save()
+
+
+    t = template('NewSubject')
+    t.description = '---------- 加Subject, EnumDataPoint: dig_in_func_state_grinder_over_temperature ----------'
+    t.subject_name = 'dig_in_func_state_grinder_over_temperature'
+    t.subject_type_id = 'EnumDataPoint'
+    t.geni_app_if = False
+    t.subject_save = '-'
+    t.flash_block = '-'
+    t.observer_name = 'digital_input_function_handler'
+    t.observer_type = 'DiFuncHandler'
+    t.subject_relation_name = 'DIG_IN_FUNC_STATE_GRINDER_OVER_TEMPERATURE'
+    t.subject_access = 'Read/Write'
+
+    t.enum_type_name = 'DIGITAL_INPUT_FUNC_STATE'
+    t.enum_value = 'NOT_CONFIGURED'
+    t.save()
+    comment('Note：在AppTypeDefs.h里枚举DIGITAL_INPUT_FUNC_TYPE里加入：DIGITAL_INPUT_FUNC_GRINDER_OVER_TEMPERATURE')
+    comment('''application/display/DigitalInputConfListView.cpp 添加：
+            {SID_DI_GRINDER_OVER_TEMPERATURE, DIGITAL_INPUT_FUNC_GRINDER_OVER_TEMPERATURE},''')
+    comment('''application/display/state/DigitalInputFunctionState.cpp 添加：
+            {DIGITAL_INPUT_FUNC_GRINDER_OVER_TEMPERATURE, SID_DI_GRINDER_OVER_TEMPERATURE},''')
+    comment('''application/driver/DiFuncHandler.cpp 的SetSubjectPointer里添加：
+    case SP_DIFH_DIG_IN_FUNC_STATE_GRINDER_OVER_TEMPERATURE:
+      mpDiFuncState[DIGITAL_INPUT_FUNC_GRINDER_OVER_TEMPERATURE].Attach(pSubject);
+      break;
+    case SP_DIFH_DIG_IN_FUNC_INPUT_GRINDER_OVER_TEMPERATURE:
+      mpDiFuncInput[DIGITAL_INPUT_FUNC_GRINDER_OVER_TEMPERATURE].Attach(pSubject);
+      break;''')
+
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- GrinderCtrl与dig_in_func_state_grinder_over_temperature挂接 ----------'
+    t.subject_name =  'dig_in_func_state_grinder_over_temperature'
+    t.observer_name = 'grinder_ctrl'
+    t.observer_type = 'GrinderCtrl'
+    t.subject_relation_name = 'GRINDER_OVER_TEMPERATURE_DIG_IN_REQUEST'
     t.subject_access = 'Read'
     t.save()
 
@@ -745,7 +769,6 @@ def grinder_io():
     t.save()
 
 
-def grinder_io_bak():
     # subject to set availabel rule in DO
     t = template('ObserverLinkSubject')
     t.description = '---------- DigitalOutputConfListView与grinder_enabled挂接 ----------'
@@ -757,6 +780,272 @@ def grinder_io_bak():
     t.save()
     comment("修改DigitalOutputConfListView.cpp，添加available")
 
+def grinder_test():
+    pass
+
+def grinder_alarm():
+    ######################################### Alarm ##################################################
+    t = template('NewObserver')
+    t.description = '---------- 加Observer: grinder_over_temperature_ctrl ----------'
+    t.observer_name = 'grinder_over_temperature_ctrl'
+    t.observer_type = 'DigitalInputAlarmCtrl'
+    t.observer_taskid = 'ControllerEventsTask'
+    t.constructor_args = 'false'
+    t.short_name = 'DIAC'
+    t.save()
+
+
+    t = template('ObserverLinkSubject')
+    t.description = '---------- DigitalInputAlarmCtrl与dig_in_func_state_grinder_over_temperature挂接 ----------'
+    t.subject_name =  'dig_in_func_state_grinder_over_temperature'
+    t.observer_name = 'grinder_over_temperature_ctrl'
+    t.observer_type = 'DigitalInputAlarmCtrl'
+    t.subject_relation_name = 'DIG_IN_FUNC_STATE'
+    t.subject_access = 'Read'
+    t.save()
+
+
+    comment('在4.5.x里，因为加了一项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state依次后推')
+    num_of_added_items = 1
+    #1464 | 4.5.2.x PumpAlarms (onoffauto) slippoint, WriteState=30是Pump alarm里第一项
+    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
+    result = table.get(id=1464)
+    first_write_state_in_pump_alarm = result.WriteState
+    new_write_state_in_sys_alarm = first_write_state_in_pump_alarm
+    comment("新加System Alarm位置为：%d" % (new_write_state_in_sys_alarm))
+
+    results = table.query(WriteState__gte = first_write_state_in_pump_alarm, suppress_log=True)  #query >= first_write_state_in_pump_alarm
+    state_list = []
+    for result in results:
+        _id = getattr(result, 'id')
+        # 4293 | 4.4.2 DigitalInputs DI9 IO351-43 WDP WriteState=30
+        # 4375 | wizard.14 DigitalInputs DI9 IO351-43 WDP WriteState=30
+        if _id in [4293, 4375]:
+            continue
+        value = getattr(result, 'WriteState')
+        # 都向后移num_of_added_items个位置
+        state_list.append([_id, value + num_of_added_items])
+    for l in state_list:
+        table.update(id=l[0], WriteState=l[1])
+        # comment('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
+
+    # TODO specify alarm code
+    t = template('NewString')
+    t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |3.1 - Current alarms                           |
+    +-----------------------------------------------+
+    |                                               |
+    | (!)CU 362                                     |
+--> |  Grinder over temperature (109)               |
+    |  Occured at                   2015-05-15 14:01|
+    |  Disappeared at                     --   --   |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.define_name = 'SID_ALARM_109_GRINDER_OVER_TEMPERATURE'
+    t.string_name = 'Grinder over temperature (109)'
+    t.save()
+    
+
+    t = template('SystemAlarm')
+    t.description = '''---------- 4.5.1 - System alarms页面里新加一行label: Grinder over temperature ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.5.1 - System alarms                          |
+    +-----------------------------------------------+
+    |                                               |
+    |Select system alarm                            |
+    |  Overflow                                     |
+    |  High level                                   |
+    |  Alarm level                                  |
+    |  Dry running                                  |
+    |  Float switch                                 |
+    |  Level sensor                                 |
+    |  ......                                       |
+    |                                               |
+--> |  Grinder over temperature                     |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '4.5.1 SystemAlarms (grinder over temperature)'
+    t.label_define_name = 'SID_GRINDER_OVER_TEMPERATURE'
+    t.label_string = 'Grinder over temperature'
+    t.slippoint_name = '4.5.1 SystemAlarms (grinder over temperature) slippoint'
+    t.write_state = new_write_state_in_sys_alarm
+
+    t.alarm_config_subject.subject_name = 'sys_alarm_grinder_over_temperature_alarm_conf'
+    t.alarm_config_subject.subject_type_id = 'AlarmConfig'
+    t.alarm_config_subject.geni_app_if = False
+    t.alarm_config_subject.subject_save = 'Value'
+    t.alarm_config_subject.flash_block = 'Config'
+    t.alarm_config_subject.observer_name = 'display_alarm_slippoint'
+    t.alarm_config_subject.observer_type = 'AlarmSlipPoint'
+    t.alarm_config_subject.subject_relation_name = 'SYS_ALARM_GRINDER_OVER_TEMPERATURE'
+    t.alarm_config_subject.subject_access = 'Read/Write'
+
+    t.alarm_config_subject.alarm_config_alarm_enabled = True
+    t.alarm_config_subject.alarm_config_warning_enabled = False
+    t.alarm_config_subject.alarm_config_auto_ack = True
+    t.alarm_config_subject.alarm_config_alarm_delay = 1
+    t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_subject.alarm_config_alarm_criteria = '='
+    t.alarm_config_subject.alarm_config_alarm_limit = '1'
+    t.alarm_config_subject.alarm_config_warning_limit = '0'
+    t.alarm_config_subject.alarm_config_min_limit = '0'
+    t.alarm_config_subject.alarm_config_max_limit = '1'
+    t.alarm_config_subject.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_subject.alarm_config_verified = False
+
+    t.alarm_subject.subject_name = 'sys_alarm_grinder_over_temperature_alarm_obj'
+    t.alarm_subject.subject_type_id = 'AlarmDataPoint'
+    t.alarm_subject.geni_app_if = False
+    t.alarm_subject.subject_save = '-'
+    t.alarm_subject.flash_block = '-'
+    t.alarm_subject.observer_name = 'grinder_over_temperature_ctrl'
+    t.alarm_subject.observer_type = 'DigitalInputAlarmCtrl'
+    t.alarm_subject.subject_relation_name = 'FAULT_OBJ'
+    t.alarm_subject.subject_access = 'Write'
+    t.alarm_subject.alarm_alarm_config_id = 'sys_alarm_grinder_over_temperature_alarm_conf'
+    t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'
+    t.alarm_subject.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_109_grinder_over_temperature'
+    t.alarm_alarm_string_id = 'SID_ALARM_109_grinder_over_temperature'
+    t.alarm_alarm_id = 109
+    t.save()
+
+    comment('在AppTypeDefs.h里插入AC_SYS_ALARM_GRINDER_OVER_TEMPERATURE')
+    comment('在AlarmState.cpp里插入一行{AC_SYS_ALARM_GRINDER_OVER_TEMPERATURE,                  SID_DI_GRINDER_OVER_TEMPERATURE},')
+    comment('''在AlarmSlipPoint.cpp里插入
+    case SP_ASP_SYS_ALARM_GRINDER_OVER_TEMPERATURE:
+      mpAlarmDP[AC_SYS_ALARM_GRINDER_OVER_TEMPERATURE][0].Attach(pSubject);
+      break;
+            ''')
+
+
+    t = template('SystemAlarmStatus')
+    t.description = '''---------- 4.5.5 - Status, system alarms页面里新加一行label:Grinder over temperature ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |4.5.5 - Status, system alarms                  |
+    +-----------------------------------------------+
+    |                                               |
+    |  Overflow                                (!)  |
+    |  High level                              (!)  |
+    |  Alarm level                             (!)  |
+    |  Dry running                             (!)  |
+    |  Float switch                            (!)  |
+    |  Level sensor                            (!)  |
+    |  ......                                       |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+--> |  Grinder over temperature                (!)  |
+    +-----------------------------------------------+
+    |GRUNDFOS                       04-05-2015 11:13|
+    +-----------------------------------------------+
+    '''
+    t.label_name = '4.5.5 SystemAlarms Status (grinder over temperature)'
+    t.label_define_name = 'SID_GRINDER_OVER_TEMPERATURE'
+    t.label_string = 'grinder over temperature'
+    t.alarm_icon_name = '4.5.5 SystemAlarms Status (grinder over temperature) alarm icon'
+    t.warning_icon_name = '4.5.5 SystemAlarms Status (grinder over temperature) warning icon'
+    t.subject_id = 'SYS_ALARM_GRINDER_OVER_TEMPERATURE_ALARM_CONF'
+    t.save()
+
+
+def grinder_bak():
+    # TODO specify alarm code
+    t = template('NewString')
+    t.description = '''---------- 新加alarm的string: Grinder blocked (108) ----------'''
+    t.define_name = 'SID_ALARM_108_GRINDER_BLOCKED'
+    t.string_name = 'Grinder blocked (108)'
+    t.save()
+
+
+    t = template('NewAlarm')
+    t.description = '''---------- 3.1 - Current alarms页面里新加一个alarm ----------
+    +----------+-------------+---------+------------+
+    |  Status  |  Operation  |  Alarm  |  Settings  |
+    +----------+-------------+---------+------------+
+    |3.1 - Current alarms                           |
+    +-----------------------------------------------+
+    |                                               |
+    | (!)CU 362                                     |
+--> |  Grinder blocked (???)                        |
+    |  Occured at                   2015-05-15 14:01|
+    |  Disappeared at                     --   --   |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    |                                               |
+    +-----------------------------------------------+
+    |GRUNDFOS                       2016-02-23 11:13|
+    +-----------------------------------------------+
+    '''
+    t.alarm_config_subject.subject_name = 'sys_alarm_grinder_blocked_alarm_conf'
+    t.alarm_config_subject.subject_type_id = 'AlarmConfig'
+    t.alarm_config_subject.geni_app_if = False
+    t.alarm_config_subject.subject_save = 'Value'
+    t.alarm_config_subject.flash_block = 'Config'
+    t.alarm_config_subject.subject_access = 'Read/Write'
+    t.alarm_config_subject.alarm_config_alarm_enabled = True
+    #t.alarm_config_subject.alarm_config_warning_enabled = True
+    t.alarm_config_subject.alarm_config_auto_ack = False
+    t.alarm_config_subject.alarm_config_alarm_delay = 1
+    t.alarm_config_subject.alarm_config_alarm_type = 'BoolDataPoint'
+    t.alarm_config_subject.alarm_config_alarm_criteria = '='
+    t.alarm_config_subject.alarm_config_alarm_limit = '1'
+    t.alarm_config_subject.alarm_config_warning_limit = '0'
+    t.alarm_config_subject.alarm_config_min_limit = '0'
+    t.alarm_config_subject.alarm_config_max_limit = '1'
+    t.alarm_config_subject.alarm_config_quantity_type_id = 'Q_NO_UNIT'
+    t.alarm_config_subject.alarm_config_verified = False
+
+    t.alarm_subject.subject_name = 'sys_alarm_grinder_blocked_alarm_obj'
+    t.alarm_subject.subject_type_id = 'AlarmDataPoint'
+    t.alarm_subject.geni_app_if = False
+    t.alarm_subject.subject_save = '-'
+    t.alarm_subject.flash_block = '-'
+    t.alarm_subject.observer_name = 'grinder_ctrl'
+    t.alarm_subject.observer_type = 'GrinderCtrl'
+    t.alarm_subject.subject_relation_name = 'SYSTEM_ALARM_GRINDER_BLOCKED'
+    t.alarm_subject.subject_access = 'Write'
+    t.alarm_subject.alarm_alarm_config_id = 'sys_alarm_grinder_blocked_alarm_conf'
+    t.alarm_subject.alarm_alarm_config2_id = 'dummy_alarm_conf'
+    t.alarm_subject.alarm_erroneous_unit_type_id = 'SYSTEM'
+    t.alarm_subject.alarm_erroneous_unit_number = 0
+    t.alarm_subject.alarm_alarm_id = 'SID_ALARM_108_GRINDER_BLOCKED'
+    t.alarm_define_name = 'SID_ALARM_108_GRINDER_BLOCKED'
+    t.alarm_id = 108
+    t.save()
+
+
 def grinder():
     grinder_func()
     grinder_io()
+    grinder_alarm()
+    # grinder_test()

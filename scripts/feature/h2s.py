@@ -870,23 +870,29 @@ def h2s_display():
     t.save()   
     
 
-    comment('在4.5.x里，因为加了两项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state>30的依次后推')
-    # >30的都没有重复，批量更新
+    comment('在4.5.x里，因为加了两项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state依次后推')
+    num_of_added_items = 2
+    #1464 | 4.5.2.x PumpAlarms (onoffauto) slippoint, WriteState=30是Pump alarm里第一项
     table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
-    results = table.query(WriteState__gte = 31)  #query >=30
+    result = table.get(id=1464)
+    first_write_state_in_pump_alarm = result.WriteState
+    new_write_state_in_sys_alarm = first_write_state_in_pump_alarm
+    comment("新加System Alarm位置为：%d" % (new_write_state_in_sys_alarm))
+
+    results = table.query(WriteState__gte = first_write_state_in_pump_alarm, suppress_log=True)  #query >= first_write_state_in_pump_alarm
     state_list = []
     for result in results:
         _id = getattr(result, 'id')
+        # 4293 | 4.4.2 DigitalInputs DI9 IO351-43 WDP WriteState=30
+        # 4375 | wizard.14 DigitalInputs DI9 IO351-43 WDP WriteState=30
+        if _id in [4293, 4375]:
+            continue
         value = getattr(result, 'WriteState')
-        state_list.append([_id, value+2])
+        # 都向后移num_of_added_items个位置
+        state_list.append([_id, value + num_of_added_items])
     for l in state_list:
-        table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
         table.update(id=l[0], WriteState=l[1])
-        #comment('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
-    #1464 | 4.5.2.x PumpAlarms (onoffauto) slippoint, WriteState=30, 有重复，拿出来单独处理
-    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
-    table.update(id=1464, WriteState=32)
-
+        # comment('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
 
     comment('加DDA的一系列Alarm')
     dda_alram_strings = [
@@ -943,7 +949,7 @@ def h2s_display():
     t.label_define_name = 'SID_DDA_FAULT'
     t.label_string = 'DDA fault'
     t.slippoint_name = '4.5.1 SystemAlarms (dda) slippoint'
-    t.write_state = 30
+    t.write_state = new_write_state_in_sys_alarm
 
     #加subject: sys_alarm_dda_fault_alarm_conf 类型为AlarmConfig
     t.alarm_config_subject.subject_name = 'sys_alarm_dda_fault_alarm_conf'
@@ -1089,7 +1095,7 @@ def h2s_display():
     t.label_define_name = 'SID_ANALOG_DOSING_PUMP'
     t.label_string = 'Analog dosing pump'
     t.slippoint_name = '4.5.1 SystemAlarms (analog dosing pump) slippoint'
-    t.write_state = 31
+    t.write_state = new_write_state_in_sys_alarm
 
     #加subject: sys_alarm_dosing_pump_alarm_conf 类型为AlarmConfig
     t.alarm_config_subject.subject_name = 'sys_alarm_dosing_pump_alarm_conf'
