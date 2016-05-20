@@ -9,24 +9,9 @@ if py3:
 else: 
     uni_chr = unichr
 
-# fn = 'dclog.log'
-# logging.basicConfig(level=logging.DEBUG,
-                    # format='%(asctime)s %(filename)s [line:%(lineno)d]    %(message)s',
-                    # datefmt='%Y/%m/%d %H:%M:%S',
-                    # encoding="UTF-8",
-                    # filename=fn,
-                    # filemode='w')
-#定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
-# console = logging.StreamHandler()
-# console.setLevel(logging.INFO)
-#formatter = logging.Formatter('%(filename)s [line:%(lineno)d]     %(message)s')
-# formatter = logging.Formatter('%(message)s')
-# console.setFormatter(formatter)
-# logging.getLogger('').addHandler(console)
-
 def setup_logger(logger_name, log_file, level=logging.DEBUG):
     l = logging.getLogger(logger_name)
-    formatter = logging.Formatter('%(asctime)s %(filename)s [line:%(lineno)d]    %(message)s')
+    formatter = logging.Formatter('%(asctime)s    %(message)s')
     fileHandler = logging.FileHandler(log_file, mode='w', encoding='UTF-8')
     fileHandler.setFormatter(formatter)
     streamHandler = logging.StreamHandler()

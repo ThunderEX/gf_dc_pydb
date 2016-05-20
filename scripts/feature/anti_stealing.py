@@ -3,8 +3,10 @@
 from ..template.tpl import template
 from ..util.log import *
 from ..tables import *
+from .common import *
 
 def anti_stealing():
+    comment(
     """
     Anti stealing: flowchart
 
@@ -34,6 +36,7 @@ def anti_stealing():
                                         |   RelayFuncHandler   |
                                         +----------------------+
     """
+    )
 
     t = template('NewObserver')
     t.description = '---------- 加Observer: anti_stealing_ctrl ----------'
@@ -133,30 +136,7 @@ def anti_stealing():
 
     ####################################### anti_stealing_alarm #########################################
 
-    comment('在4.5.x里，因为加了一项在4.5.1 System Alarm里，导致后面的4.5.2 Pump Alarm等内容错位，需要先将write_state依次后推')
-    num_of_added_items = 1
-    #1464 | 4.5.2.x PumpAlarms (onoffauto) slippoint, WriteState=30是Pump alarm里第一项
-    table = WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay()
-    result = table.get(id=1464)
-    first_write_state_in_pump_alarm = result.WriteState
-    new_write_state_in_sys_alarm = first_write_state_in_pump_alarm
-    comment("新加System Alarm位置为：%d" % (new_write_state_in_sys_alarm))
-
-    results = table.query(WriteState__gte = first_write_state_in_pump_alarm, suppress_log=True)  #query >= first_write_state_in_pump_alarm
-    state_list = []
-    for result in results:
-        _id = getattr(result, 'id')
-        # 4293 | 4.4.2 DigitalInputs DI9 IO351-43 WDP WriteState=30
-        # 4375 | wizard.14 DigitalInputs DI9 IO351-43 WDP WriteState=30
-        if _id in [4293, 4375]:
-            continue
-        value = getattr(result, 'WriteState')
-        # 都向后移num_of_added_items个位置
-        state_list.append([_id, value + num_of_added_items])
-    for l in state_list:
-        table.update(id=l[0], WriteState=l[1])
-        # comment('更新表WriteValueToDataPointAtKeyPressAndJumpToSpecificDisplay，id=%d, WriteState=%d' %(l[0], l[1]))
-
+    new_write_state_in_sys_alarm = append_sys_alarm(1)
 
     # 104已经被占用了，SID_ALARM_104_SOFTWARE_SHUT_DOWN_REQUEST
     t = template('NewString')
